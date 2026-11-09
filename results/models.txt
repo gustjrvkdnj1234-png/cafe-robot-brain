@@ -1,0 +1,4 @@
+﻿NAME          ID              SIZE      MODIFIED       
+gemma4:26b    001e5dafc3c7    18 GB     1 second ago      
+gemma4:12b    6114515d63c1    8.0 GB    16 minutes ago    
+gemma4:e4b    dc35e8d9c606    6.6 GB    24 minutes ago    

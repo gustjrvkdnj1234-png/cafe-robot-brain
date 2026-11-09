@@ -1,0 +1,23 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# 로컬 로그 (Windows 경로·사용자 폴더명 포함)
+logs/
+
+# 모델 가중치 / 대용량 바이너리
+*.gguf
+*.safetensors
+*.bin
+models/
+# 50MB 초과 파일은 .gitignore로 크기 필터가 불가하므로 커밋 전에 수동 확인
+
+# 비밀 정보
+.env
+.env.*
+*.pem
+*.key
+credentials*
+*secret*
+*token*
