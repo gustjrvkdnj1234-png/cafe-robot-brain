@@ -9,8 +9,19 @@ exam). Roughly what one engineer would build in a day:
     inside "녹차라떼"), plus jamo-level fuzzy matching for typos
   * multi-item splitting on separators / quantity words between menu mentions
   * option regexes (temperature, size, shots, sweetness, milk, quantity)
-  * menu-rule validation -> ask_clarification(impossible)
+  * menu-rule validation -> ask_clarification(impossible); syrup on coffee
+    points to the self-service bar
+  * not-offered options (decaf, bean choice, whipped cream, lactose-free)
+    -> ask_clarification(off_menu)
+  * staff hand-off keywords (order status, time promises, bulk orders,
+    carriers/bags, ice cups, other services) -> call_staff
+  * conditional requests "X 있으면 X, 없으면 Y" -> X if valid, else Y,
+    else the category default item / X without the unavailable option
+  * takeout / dine-in remembered from any user turn -> confirm_order
   * modify / cancel / confirm intents resolved against the current order state
+
+All defaults come from data/menu.json (same source as the scorer and the
+model's system prompt).
 
 Usage:
     python scripts/vending_machine.py "아아 두 잔이랑 치즈케이크 하나"
@@ -40,12 +51,46 @@ RE_OAT = re.compile(r"(오트|귀리|oat)", re.I)
 RE_SWEET_LESS = re.compile(
     r"(덜\s*달|안\s*달|달지\s*않|당도\s*(?:를|는)?\s*(?:낮|적|줄|약)|시럽\s*(?:을|은)?\s*(?:적게|조금|덜|빼|줄|반)|저당|반\s*당)")
 RE_SWEET_MORE = re.compile(
-    r"(더\s*달|많이\s*달|달게|달달하게|당도\s*(?:를|는)?\s*(?:높|올|많)|시럽\s*(?:을)?\s*(?:추가|많이|더))")
+    r"(더\s*달|많이\s*달|달게|달달하게|당도\s*(?:를|는)?\s*(?:높|올|많)|"
+    r"(?:시럽|설탕)\s*(?:을|를|좀|도)?\s*(?:추가|많이|더|넣|듬뿍|넉넉))")
 RE_SHOT_MINUS = re.compile(r"(샷\s*(?:을|은|는)?\s*(?:하나|한\s*개|1\s*개?)?\s*(?:빼|덜|줄|적게)|연하게)")
 RE_SHOT_PLUS3 = re.compile(r"샷\s*(?:을|은|는)?\s*(?:세|셋|3)\s*(?:개|번)?\s*(?:추가|더|넣)")
 RE_SHOT_PLUS2 = re.compile(r"((?:투|더블)\s*샷|샷\s*(?:을|은|는)?\s*(?:두|둘|2)\s*(?:개|번)?\s*(?:추가|더|넣))")
 RE_SHOT_PLUS1 = re.compile(r"(샷\s*(?:을|은|는)?\s*(?:하나|한\s*개|1\s*개?)?\s*(?:추가|추|더|넣)|진하게)")
-SHOT_PATTERNS = (RE_SHOT_PLUS3, RE_SHOT_PLUS2, RE_SHOT_PLUS1, RE_SHOT_MINUS)
+_HALF = r"(?:반|절반|0\.5|1/2)"
+RE_SHOT_HALF_MINUS = re.compile(
+    r"(샷\s*(?:을|은|는)?\s*" + _HALF + r"\s*(?:개|샷)?\s*(?:만)?\s*(?:빼|덜|줄)|" + _HALF + r"\s*샷\s*(?:만)?\s*(?:빼|덜|줄))")
+RE_SHOT_HALF_PLUS = re.compile(
+    r"(샷\s*(?:을|은|는)?\s*" + _HALF + r"\s*(?:개|샷)?\s*(?:만)?\s*(?:추가|더|넣)|" + _HALF + r"\s*샷\s*(?:만)?\s*(?:추가|더|넣))")
+SHOT_PATTERNS = (RE_SHOT_HALF_MINUS, RE_SHOT_HALF_PLUS, RE_SHOT_PLUS3, RE_SHOT_PLUS2, RE_SHOT_PLUS1, RE_SHOT_MINUS)
+
+# ---- staff hand-off (rule A)
+RE_STAFF_STATUS = re.compile(
+    r"(언제\s*(?:나와|나오|돼|되|받)|아직\s*(?:이에요|인가요|안\s*나|멀었|이야|에요|임|이요)|얼마나\s*(?:더\s*)?걸|"
+    r"나왔나요|준비\s*(?:됐|되었|다\s*됐)|몇\s*분\s*(?:걸|기다|더|이면)|기다려야|늦어지)")
+RE_STAFF_TIME = re.compile(r"(\d+\s*분\s*(?:안에|내로|뒤에|후에|까지|만에)|\d+\s*시\s*(?:까지|에|쯤)|시간\s*맞춰|픽업|배달)")
+RE_STAFF_BULK = re.compile(r"(단체|대량|(?<!\d)\d{2,}\s*(?:잔|개|명)|예약\s*주문)")
+RE_STAFF_SERVICE = re.compile(
+    r"(캐리어|봉투|쇼핑백|비닐|얼음\s*컵|컵\s*홀더|화장실|와이파이|wifi|비밀번호|테이블\s*(?:좀\s*)?(?:닦|치워|정리)|"
+    r"충전|물티슈|담요|빨대|냅킨|휴지)", re.I)
+
+# ---- dine option (rule C)
+RE_TAKEOUT = re.compile(r"(포장|테이크\s*아웃|take\s*out|가져\s*갈|가지고\s*갈|들고\s*갈|싸\s*(?:주|가))", re.I)
+RE_DINE_IN = re.compile(r"(먹고\s*갈|매장(?:에서|이요|으로)|여기서\s*(?:먹|마시)|드시고\s*갈)")
+
+# ---- conditional requests (rule D)
+RE_COND_FULL = re.compile(
+    r"^(?P<x>.*?)(?:이|가)?\s*(?:있으면|되면|가능하면|있다면|된다면|있어요\??|돼요\??|되나요\??|있나요\??)\s*(?P<x2>.*?)"
+    r"[,.\s]*(?:없으면|안\s*되면|안되면|아니면|불가능하면|없다면|아님)\s*(?P<y>.*)$")
+RE_COND_FALLBACK_ONLY = re.compile(r"^(?P<x>.*?)\s*(?:없으면|안\s*되면|안되면|불가능하면|없다면)\s*(?P<y>.*)$")
+RE_ANY = re.compile(r"(아무\s*거나|아무거나|아무\s*\S*나|비슷한|기본\s*(?:메뉴|걸로)|대충)")
+RE_PLAIN = re.compile(r"(그냥|일반|기본|보통|걍)")
+CATEGORY_HINTS = [("latte", r"(라떼|라테)"), ("ade", r"에이드"), ("tea", r"(티|차)$|(티|차)\b"),
+                  ("dessert", r"(케이크|케익|케잌)"), ("coffee", r"(커피|브루|아메)")]
+
+# ---- not offered (rule F), keywords from data/menu.json
+NOT_OFFERED = [(x["key"], x["ko"], re.compile("|".join(re.escape(k) for k in x["keywords"]), re.I))
+               for x in load_menu()["not_offered"]]
 
 
 def strip_shots(s: str) -> str:
@@ -69,7 +114,8 @@ RE_MODIFY = re.compile(r"(바꿔|바꾸|바꿀|변경|말고|대신|수정|사�
 RE_INSTEAD = re.compile(r"(말고|대신)")
 RE_CONFIRM = re.compile(
     r"(이대로|그대로\s*(?:해|주문)|그게\s*다|그거면\s*(?:돼|됐|충분)|다\s*(?:예요|에요|입니다|이에요)|결제|계산|"
-    r"주문\s*(?:할게|하겠|해\s*주|완료|끝|넣어|확정)|이상입니다|이상이요|끝|됐어요|됐습니다|더\s*없|충분)")
+    r"주문\s*(?:할게|하겠|해\s*주|완료|끝|넣어|확정)|이상입니다|이상이요|끝|됐어요|됐습니다|더\s*없|충분|"
+    r"마칠|마무리|다\s*시켰|이게\s*(?:다|전부)|전부\s*(?:예요|에요|입니다)|확정)")
 
 RE_SEPARATOR = re.compile(r"(,|\+|/|그리고|이랑|하고|에다가|랑|및|&|\band\b)")
 RE_OPTION_PREFIX = re.compile(r"(아이스|핫|따뜻한|따듯한|뜨거운|차가운|시원한|큰|라지|레귤러|오트)\s*$")
@@ -216,7 +262,11 @@ class VendingMachine:
             o["size"] = "large"
         elif RE_REGULAR.search(seg):
             o["size"] = "regular"
-        if RE_SHOT_MINUS.search(seg):
+        if RE_SHOT_HALF_MINUS.search(seg):
+            o["shots_delta"] = -0.5
+        elif RE_SHOT_HALF_PLUS.search(seg):
+            o["shots_delta"] = 0.5
+        elif RE_SHOT_MINUS.search(seg):
             o["shots_delta"] = -1
         elif RE_SHOT_PLUS3.search(seg):
             o["shots_delta"] = 3
@@ -282,14 +332,97 @@ class VendingMachine:
     def clar(reason: str, question: str) -> dict:
         return {"name": "ask_clarification", "arguments": {"question": question, "reason": reason}}
 
-    def predict_text(self, text: str, state: list | None = None) -> list[dict]:
+    @staticmethod
+    def staff(reason: str) -> dict:
+        return {"name": "call_staff", "arguments": {"reason": reason}}
+
+    @staticmethod
+    def dine_option(turns: list[str]) -> str:
+        opt = load_menu()["defaults"]["dine_option"]
+        for t in turns:
+            if RE_TAKEOUT.search(t):
+                opt = "takeout"
+            elif RE_DINE_IN.search(t):
+                opt = "dine_in"
+        return opt
+
+    def predict_text(self, text: str, state: list | None = None, history: list[str] | None = None) -> list[dict]:
+        """text = current utterance; history = all user turns so far (incl. text)."""
         state = state or []
         text = text.strip()
+        history = history or [text]
+
+        # A. things only staff can decide
+        if RE_STAFF_STATUS.search(text) or RE_STAFF_TIME.search(text) or RE_STAFF_BULK.search(text):
+            return [self.staff(f"손님 문의: {text}")]
+        service = RE_STAFF_SERVICE.search(text)
+        if service:
+            if not self.find_menus(text):
+                return [self.staff(f"서비스 요청: {service.group(0)}")]
+            return self._core(text, state, history) + [self.staff(f"서비스 요청: {service.group(0)}")]
+
+        # D. conditional requests
+        cond = self._conditional(text)
+        if cond is not None:
+            return cond
+        return self._core(text, state, history)
+
+    def _category_of(self, text: str) -> str | None:
+        mentions = self.find_menus(text)
+        if mentions:
+            return self.items[mentions[0]["menu"]]["category"]
+        for cat, pat in CATEGORY_HINTS:
+            if re.search(pat, text):
+                return cat
+        return None
+
+    def _conditional(self, text: str):
+        m = RE_COND_FULL.match(text) or RE_COND_FALLBACK_ONLY.match(text)
+        if not m:
+            return None
+        x = (m.group("x") + " " + (m.groupdict().get("x2") or "")).strip()
+        y = m.group("y").strip()
+
+        def only_adds(calls):
+            if not calls or any(c["name"] != "add_item" for c in calls):
+                return None
+            seen, out = set(), []
+            for c in calls:  # "자몽에이드 있으면 자몽에이드로" mentions the item twice
+                key = json.dumps(c["arguments"], ensure_ascii=False, sort_keys=True)
+                if key not in seen:
+                    seen.add(key)
+                    out.append(c)
+            return out
+
+        ok = only_adds(self._core(x, [], [x]))
+        if ok:
+            return ok
+        if self.find_menus(y):
+            ok = only_adds(self._core(y, [], [y]))
+            if ok:
+                return ok
+        cat = self._category_of(x)
+        if RE_ANY.search(y) and cat:
+            return [{"name": "add_item", "arguments": {"menu": load_menu()["category_default_items"][cat]}}]
+        if RE_PLAIN.search(y) or not y:
+            xm = self.find_menus(x)
+            if xm:  # same item without the unavailable option
+                return [{"name": "add_item", "arguments": {"menu": xm[0]["menu"], **xm[0]["implies"]}}]
+            if cat:
+                return [{"name": "add_item", "arguments": {"menu": load_menu()["category_default_items"][cat]}}]
+        return [self.clar("ambiguous", "어떤 메뉴로 드릴까요?")]
+
+    def _core(self, text: str, state: list, history: list[str]) -> list[dict]:
         mentions = self.find_menus(text)
         no_shot = strip_shots(text)
 
+        # F. options the cafe does not offer at all
+        for key, ko, pat in NOT_OFFERED:
+            if pat.search(text):
+                return [self.clar("off_menu", f"죄송하지만 {ko}는 준비되어 있지 않아요. 다른 걸로 드릴까요?")]
+
         if not mentions and RE_CONFIRM.search(text) and not RE_CANCEL.search(no_shot):
-            return [{"name": "confirm_order", "arguments": {}}]
+            return [{"name": "confirm_order", "arguments": {"dine_option": self.dine_option(history)}}]
 
         if state:
             in_state = [m for m in mentions if any(it.get("menu") == m["menu"] for it in state)]
@@ -305,7 +438,9 @@ class VendingMachine:
 
         if not mentions:
             if RE_CONFIRM.search(text):
-                return [{"name": "confirm_order", "arguments": {}}]
+                return [{"name": "confirm_order", "arguments": {"dine_option": self.dine_option(history)}}]
+            if (RE_TAKEOUT.search(text) or RE_DINE_IN.search(text)) and len(text) <= 15:
+                return []  # only "포장이요" etc.: nothing to do until the order is confirmed
             if self._is_generic(text):
                 return [self.clar("ambiguous", "어떤 메뉴로 드릴까요?")]
             return [self.clar("off_menu", "죄송하지만 메뉴에 없는 상품이에요. 다른 메뉴로 드릴까요?")]
@@ -383,16 +518,21 @@ class VendingMachine:
                 o["quantity"] = each_qty
             bad = self.violations(men["menu"], o)
             if bad:
-                clars.append(self.clar("impossible", f"죄송하지만 {men['menu']}는 그 옵션으로는 안 돼요. 다르게 드릴까요?"))
+                if bad == ["sweetness"] and self.items[men["menu"]]["category"] == "coffee":
+                    q = f"{men['menu']}는 당도 조절이 안 돼요. 시럽은 셀프바에서 넣으실 수 있어요."
+                else:
+                    q = f"죄송하지만 {men['menu']}는 그 옵션으로는 안 돼요. 다르게 드릴까요?"
+                clars.append(self.clar("impossible", q))
                 continue
             args = {"menu": men["menu"], **{k2: v for k2, v in o.items() if not (k2 == "quantity" and v == 1)}}
             calls.append({"name": "add_item", "arguments": args})
         return calls + clars[:1]
 
     def predict(self, case: dict) -> list[dict]:
-        """Exam-case interface: uses the last user turn and the order state."""
+        """Exam-case interface: last user turn + order state; earlier user turns
+        are only used to remember takeout / dine-in."""
         user_turns = [m["content"] for m in case["conversation"] if m["role"] == "user"]
-        return self.predict_text(user_turns[-1] if user_turns else "", case.get("order_state") or [])
+        return self.predict_text(user_turns[-1] if user_turns else "", case.get("order_state") or [], user_turns)
 
 
 def main():

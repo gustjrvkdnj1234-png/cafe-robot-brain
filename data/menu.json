@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "currency_note": "prices are out of scope for this experiment",
   "categories": {
     "coffee": "커피",
@@ -8,6 +8,38 @@
     "ade": "에이드",
     "dessert": "디저트"
   },
+  "category_default_items": {
+    "coffee": "아메리카노",
+    "latte": "카페라떼",
+    "tea": "얼그레이",
+    "ade": "레몬에이드",
+    "dessert": "치즈케이크"
+  },
+  "defaults": {
+    "temperature": "hot",
+    "temperature_note": "예외: 콜드브루와 아이스만 되는 메뉴(에이드)는 iced, 디저트는 온도 없음",
+    "size": "regular",
+    "shots_delta": 0,
+    "sweetness": "normal",
+    "milk": "regular",
+    "quantity": 1,
+    "dine_option": "dine_in"
+  },
+  "not_offered": [
+    {"key": "decaf", "ko": "디카페인", "keywords": ["디카페인", "디카프", "decaf"]},
+    {"key": "bean_selection", "ko": "원두 선택", "keywords": ["원두"]},
+    {"key": "whipped_cream", "ko": "휘핑크림", "keywords": ["휘핑", "생크림 올려"]},
+    {"key": "lactose_free", "ko": "락토프리 우유", "keywords": ["락토프리", "락토 프리", "유당"]}
+  ],
+  "self_service_bar": "커피에 넣을 시럽과 설탕은 셀프바에 있다.",
+  "staff_only": [
+    "이미 들어간 주문의 준비 상태(언제 나오는지 등)",
+    "몇 분 안에 된다는 식의 시간 약속, 픽업·배달 시간",
+    "단체·대량 주문의 가능 여부와 시간",
+    "캐리어, 봉투 같은 포장 물품",
+    "얼음컵",
+    "그 밖에 메뉴 주문이 아닌 서비스 요청(화장실, 와이파이, 테이블 정리 등)"
+  ],
   "items": [
     {"name": "에스프레소", "name_en": "espresso", "category": "coffee",
      "temperatures": ["hot"], "default_temperature": "hot",
@@ -62,10 +94,11 @@
   "options": {
     "temperature": {"values": ["hot", "iced"], "ko": {"hot": "따뜻하게", "iced": "아이스"}},
     "size": {"values": ["regular", "large"], "default": "regular", "ko": {"regular": "레귤러", "large": "라지"}},
-    "shots_delta": {"type": "integer", "default": 0, "min": -1, "max": 3, "ko": "에스프레소 샷 추가(+)/빼기(-)"},
+    "shots_delta": {"type": "number", "step": 0.5, "default": 0, "min": -1, "max": 3, "ko": "에스프레소 샷 추가(+)/빼기(-), 0.5(반 샷) 단위"},
     "sweetness": {"values": ["less", "normal", "more"], "default": "normal", "ko": {"less": "덜 달게", "normal": "보통", "more": "더 달게"}},
     "milk": {"values": ["regular", "oat"], "default": "regular", "ko": {"regular": "일반 우유", "oat": "오트밀크"}},
-    "quantity": {"type": "integer", "default": 1, "min": 1, "max": 20}
+    "quantity": {"type": "integer", "default": 1, "min": 1, "max": 20},
+    "dine_option": {"values": ["dine_in", "takeout"], "default": "dine_in", "ko": {"dine_in": "매장", "takeout": "포장"}}
   },
   "constraints": [
     "에스프레소는 사이즈 선택이 없고(레귤러만) 아이스가 안 된다.",
@@ -73,7 +106,8 @@
     "차(얼그레이, 캐모마일, 유자차)에는 에스프레소 샷을 넣을 수 없다.",
     "디저트는 온도·사이즈 옵션이 없다(샷·당도·우유도 없음).",
     "오트밀크는 라떼 종류(카페라떼, 바닐라라떼, 카라멜마키아또, 카페모카)만 된다.",
-    "당도 조절은 라떼, 차, 에이드만 된다."
+    "당도 조절은 라떼, 차, 에이드만 된다. 커피(에스프레소, 아메리카노, 콜드브루)는 당도·시럽 옵션이 없다.",
+    "샷은 0.5(반 샷) 단위로 더하거나 뺄 수 있다."
   ],
   "aliases": [
     {"alias": "아아", "menu": "아메리카노", "implies": {"temperature": "iced"}},
