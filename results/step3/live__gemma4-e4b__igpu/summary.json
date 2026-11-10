@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "model": "gemma4:e4b",
+    "exam": "data/exam_live.jsonl",
+    "mode": "igpu",
+    "think": false,
+    "options": {
+      "temperature": 0,
+      "seed": 42,
+      "num_ctx": 8192,
+      "num_predict": "auto"
+    },
+    "ollama_version": "0.40.15",
+    "n_cases": 20,
+    "ids": null,
+    "started": "2026-11-10T13:39:46",
+    "finished": "2026-11-10T13:40:24",
+    "errors": 0,
+    "empty_outputs": 0,
+    "peak_memory_this_session": {
+      "runner_private_gb": 8.57,
+      "runner_rss_gb": 8.1,
+      "gpu_shared_gb": 7.01,
+      "sys_used_gb": 21.26,
+      "pagefile_used_gb": 0.33,
+      "sys_avail_min_gb": 10.24,
+      "pagefile_start_gb": 0.33,
+      "samples": 9
+    },
+    "api_ps_after": [
+      {
+        "name": "gemma4:e4b",
+        "size": 529834965,
+        "size_vram": 529834965
+      }
+    ],
+    "mean_gen_tps": 37.06,
+    "mean_wall_s": 1.862
+  },
+  "summary": {
+    "n": 20,
+    "exact": 0.4,
+    "partial": 0.6179,
+    "tool_names_match": 0.6,
+    "group_consistency": 0.4,
+    "by_category": {
+      "ambiguous": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "call_staff": {
+        "n": 3,
+        "exact": 0.3333,
+        "partial": 0.5
+      },
+      "conditional": {
+        "n": 3,
+        "exact": 0,
+        "partial": 0.0
+      },
+      "impossible": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "multi_item": {
+        "n": 1,
+        "exact": 0,
+        "partial": 0.5
+      },
+      "off_menu": {
+        "n": 6,
+        "exact": 0.6667,
+        "partial": 0.8333
+      },
+      "options": {
+        "n": 4,
+        "exact": 0.25,
+        "partial": 0.7143
+      },
+      "slang": {
+        "n": 1,
+        "exact": 0,
+        "partial": 0.5
+      }
+    }
+  }
+}

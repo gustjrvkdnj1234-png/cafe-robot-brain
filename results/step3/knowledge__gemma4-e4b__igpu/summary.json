@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "model": "gemma4:e4b",
+    "exam": "data/exam_knowledge.jsonl",
+    "mode": "igpu",
+    "think": false,
+    "options": {
+      "temperature": 0,
+      "seed": 42,
+      "num_ctx": 8192,
+      "num_predict": "auto"
+    },
+    "ollama_version": "0.40.15",
+    "n_cases": 300,
+    "ids": null,
+    "started": "2026-11-10T13:40:24",
+    "finished": "2026-11-10T13:42:25",
+    "errors": 0,
+    "empty_outputs": 0,
+    "peak_memory_this_session": {
+      "runner_private_gb": 11.62,
+      "runner_rss_gb": 11.14,
+      "gpu_shared_gb": 7.07,
+      "sys_used_gb": 23.55,
+      "pagefile_used_gb": 0.33,
+      "sys_avail_min_gb": 7.94,
+      "pagefile_start_gb": 0.33,
+      "samples": 27
+    },
+    "api_ps_after": [
+      {
+        "name": "gemma4:e4b",
+        "size": 529834965,
+        "size_vram": 529834965
+      }
+    ],
+    "mean_gen_tps": 27.4,
+    "mean_wall_s": 0.409
+  },
+  "summary": {
+    "n": 300,
+    "accuracy": 0.54,
+    "always_D_baseline": 0.3,
+    "unparsed": 0,
+    "by_source": {
+      "kmmlu": {
+        "n": 200,
+        "accuracy": 0.455,
+        "always_D_baseline": 0.335
+      },
+      "mmlu": {
+        "n": 100,
+        "accuracy": 0.71,
+        "always_D_baseline": 0.23
+      }
+    }
+  }
+}

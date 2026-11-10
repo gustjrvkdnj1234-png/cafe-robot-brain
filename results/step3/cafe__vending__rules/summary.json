@@ -1,0 +1,105 @@
+{
+  "meta": {
+    "model": "vending",
+    "exam": "data/exam_cafe.jsonl",
+    "mode": "rules",
+    "think": null,
+    "options": null,
+    "ollama_version": null,
+    "n_cases": 120,
+    "ids": null,
+    "started": "2026-11-10T13:36:27",
+    "finished": "2026-11-10T13:36:27",
+    "errors": 0,
+    "empty_outputs": 0,
+    "peak_memory_this_session": null,
+    "vending_machine_blob": "a6d693cf211540a499c2b83c7261106952e018f0",
+    "vending_machine_frozen": true,
+    "vending_freeze_check": {
+      "scripts/vending_machine.py": {
+        "blob": "a6d693cf211540a499c2b83c7261106952e018f0",
+        "frozen_blob": "a6d693cf211540a499c2b83c7261106952e018f0",
+        "matches": true
+      },
+      "data/menu.json": {
+        "blob": "a898ac58530839da92bab1d27353c03ddce44dc0",
+        "frozen_blob": "a898ac58530839da92bab1d27353c03ddce44dc0",
+        "matches": true
+      },
+      "scripts/cafe_common.py": {
+        "blob": "043454654f0323850bb57d1e4df6ce21318de675",
+        "frozen_blob": "043454654f0323850bb57d1e4df6ce21318de675",
+        "matches": true
+      }
+    }
+  },
+  "summary": {
+    "n": 120,
+    "exact": 0.95,
+    "partial": 0.9577,
+    "tool_names_match": 0.9583,
+    "group_consistency": 0.8919,
+    "by_category": {
+      "ambiguous": {
+        "n": 10,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "basic": {
+        "n": 10,
+        "exact": 0.9,
+        "partial": 0.9
+      },
+      "call_staff": {
+        "n": 10,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "conditional": {
+        "n": 10,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "impossible": {
+        "n": 10,
+        "exact": 0.9,
+        "partial": 0.9
+      },
+      "modify_cancel": {
+        "n": 9,
+        "exact": 0.6667,
+        "partial": 0.6667
+      },
+      "multi_item": {
+        "n": 9,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "off_menu": {
+        "n": 10,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "options": {
+        "n": 10,
+        "exact": 0.9,
+        "partial": 0.9929
+      },
+      "slang": {
+        "n": 10,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "takeout": {
+        "n": 10,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "unavailable": {
+        "n": 12,
+        "exact": 1,
+        "partial": 1.0
+      }
+    }
+  }
+}

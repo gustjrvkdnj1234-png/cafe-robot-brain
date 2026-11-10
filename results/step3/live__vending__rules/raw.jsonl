@@ -1,0 +1,20 @@
+{"id": "L01", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 원두 선택는 준비되어 있지 않아요. 다른 걸로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.005169700365513563}
+{"id": "L02", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 디카페인는 준비되어 있지 않아요. 다른 걸로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.0013048998080193996}
+{"id": "L03", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced"}}], "content": "", "wall_s": 0.003994999919086695}
+{"id": "L04", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced"}}], "content": "", "wall_s": 0.0014366996474564075}
+{"id": "L05", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 휘핑크림는 준비되어 있지 않아요. 다른 걸로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.005142000038176775}
+{"id": "L06", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 메뉴에 없는 상품이에요. 다른 메뉴로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.005870300345122814}
+{"id": "L07", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "아메리카노는 당도 조절이 안 돼요. 시럽은 셀프바에서 넣으실 수 있어요.", "reason": "impossible"}}], "content": "", "wall_s": 0.006495799869298935}
+{"id": "L08", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 락토프리 우유는 준비되어 있지 않아요. 다른 걸로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.0038048001006245613}
+{"id": "L09", "tool_calls": [{"name": "add_item", "arguments": {"menu": "카페라떼", "shots_delta": 0.5}}], "content": "", "wall_s": 0.001845099963247776}
+{"id": "L10", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "hot", "shots_delta": 0.5}}], "content": "", "wall_s": 0.008928699884563684}
+{"id": "L11", "tool_calls": [{"name": "call_staff", "arguments": {"reason": "손님 문의: 아아 20잔이요. 이거 10분내로좀 받아야하는데, 가능한가요? 안 되면 다른 곳 갑니다."}}], "content": "", "wall_s": 6.100162863731384e-06}
+{"id": "L12", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 원두 선택는 준비되어 있지 않아요. 다른 걸로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.0035868999548256397}
+{"id": "L13", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced", "shots_delta": 1}}], "content": "", "wall_s": 0.006141100078821182}
+{"id": "L14", "tool_calls": [{"name": "add_item", "arguments": {"menu": "바닐라라떼", "sweetness": "less", "quantity": 2}}], "content": "", "wall_s": 0.005287500098347664}
+{"id": "L15", "tool_calls": [{"name": "add_item", "arguments": {"menu": "바닐라라떼", "temperature": "iced"}}], "content": "", "wall_s": 0.006384099833667278}
+{"id": "L16", "tool_calls": [{"name": "add_item", "arguments": {"menu": "바닐라라떼", "temperature": "iced"}}], "content": "", "wall_s": 0.0010827002115547657}
+{"id": "L17", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced", "size": "large"}}], "content": "", "wall_s": 0.003774000331759453}
+{"id": "L18", "tool_calls": [{"name": "call_staff", "arguments": {"reason": "서비스 요청: 캐리어"}}], "content": "", "wall_s": 0.002469200175255537}
+{"id": "L19", "tool_calls": [{"name": "add_item", "arguments": {"menu": "유자차"}}, {"name": "add_item", "arguments": {"menu": "유자차"}}], "content": "", "wall_s": 0.004255600273609161}
+{"id": "L20", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 에스프레소는 그 옵션으로는 안 돼요. 다르게 드릴까요?", "reason": "impossible"}}, {"name": "call_staff", "arguments": {"reason": "서비스 요청: 얼음 컵"}}], "content": "", "wall_s": 0.014245300088077784}

@@ -32,6 +32,57 @@ from cafe_common import ROOT, build_system_prompt, load_tools
 from score import is_knowledge, knowledge_table_md, load_jsonl, score_run
 
 OPTIONS = {"temperature": 0, "seed": 42}
+# same as Step 1: iGPU mode = server default (OLLAMA_IGPU_ENABLE=1), CPU mode = num_gpu 0
+MODE_OPTIONS = {"igpu": {}, "cpu": {"num_gpu": 0}}
+
+
+class MemorySampler:
+    """Background thread: peak runner (llama-server) memory, GPU shared memory, min free RAM, page file."""
+
+    def __init__(self, interval_s: float = 3.0):
+        import threading
+        from bench_baseline import gpu_memory, runner_memory, system_memory
+        self._fns = (runner_memory, gpu_memory, system_memory)
+        self.interval_s = interval_s
+        self.peak = {"runner_private_gb": 0.0, "runner_rss_gb": 0.0, "gpu_shared_gb": 0.0,
+                     "sys_used_gb": 0.0, "pagefile_used_gb": 0.0, "sys_avail_min_gb": None}
+        self.start_pagefile_gb = None
+        self.samples = 0
+        self._stop = threading.Event()
+        self._t = threading.Thread(target=self._loop, daemon=True)
+
+    def _sample(self):
+        runner_memory, gpu_memory, system_memory = self._fns
+        d = {**runner_memory(), **gpu_memory(), **system_memory()}
+        if self.start_pagefile_gb is None:
+            self.start_pagefile_gb = d.get("pagefile_used_gb")
+        for k in ("runner_private_gb", "runner_rss_gb", "gpu_shared_gb", "sys_used_gb", "pagefile_used_gb"):
+            if d.get(k) is not None:
+                self.peak[k] = max(self.peak[k], d[k])
+        av = d.get("sys_avail_gb")
+        if av is not None and (self.peak["sys_avail_min_gb"] is None or av < self.peak["sys_avail_min_gb"]):
+            self.peak["sys_avail_min_gb"] = av
+        self.samples += 1
+
+    def _loop(self):
+        while not self._stop.is_set():
+            try:
+                self._sample()
+            except Exception:  # noqa: BLE001
+                pass
+            self._stop.wait(self.interval_s)
+
+    def start(self):
+        self._t.start()
+        return self
+
+    def stop(self) -> dict:
+        self._stop.set()
+        self._t.join(timeout=90)
+        out = {k: (round(v, 2) if isinstance(v, float) else v) for k, v in self.peak.items()}
+        out["pagefile_start_gb"] = round(self.start_pagefile_gb, 2) if self.start_pagefile_gb is not None else None
+        out["samples"] = self.samples
+        return out
 
 KNOW_PROMPT = {
     "ko": "다음 객관식 문제의 정답을 고르세요. 설명 없이 A, B, C, D 중 알파벳 하나만 답하세요.\n\n{q}\n\n{choices}\n\n정답:",
@@ -89,14 +140,14 @@ def slug(s: str) -> str:
     return re.sub(r"[^A-Za-z0-9._-]+", "-", s).strip("-")
 
 
-def chat(host, model, messages, tools, think, num_ctx, num_predict, timeout):
+def chat(host, model, messages, tools, think, num_ctx, num_predict, timeout, mode="igpu"):
     payload = {
         "model": model,
         "messages": messages,
         "stream": False,
         "think": think,
         "keep_alive": "10m",
-        "options": {**OPTIONS, "num_ctx": num_ctx, "num_predict": num_predict},
+        "options": {**OPTIONS, **MODE_OPTIONS[mode], "num_ctx": num_ctx, "num_predict": num_predict},
     }
     if tools:
         payload["tools"] = tools
@@ -129,11 +180,11 @@ def run_case_ollama(case, a, tools):
         choices = "\n".join(f"{L}. {c}" for L, c in zip("ABCD", case["choices"]))
         messages = [{"role": "user", "content": KNOW_PROMPT[case["lang"]].format(q=case["question"], choices=choices)}]
         num_predict = a.num_predict or (4096 if a.think else 16)
-        d = chat(a.host, a.model, messages, None, a.think, a.num_ctx, num_predict, a.timeout)
+        d = chat(a.host, a.model, messages, None, a.think, a.num_ctx, num_predict, a.timeout, a.mode)
     else:
         messages = [{"role": "system", "content": build_system_prompt(case.get("order_state"))}] + case["conversation"]
         num_predict = a.num_predict or (4096 if a.think else 512)
-        d = chat(a.host, a.model, messages, tools, a.think, a.num_ctx, num_predict, a.timeout)
+        d = chat(a.host, a.model, messages, tools, a.think, a.num_ctx, num_predict, a.timeout, a.mode)
     msg = d.get("message") or {}
     return {
         "tool_calls": tool_calls_of(msg),
@@ -162,6 +213,10 @@ def main():
     ap.add_argument("--num-predict", type=int, default=None)
     ap.add_argument("--timeout", type=int, default=600)
     ap.add_argument("--show-prompt", action="store_true", help="print the exact messages for the first selected case and exit")
+    ap.add_argument("--mode", choices=sorted(MODE_OPTIONS), default="igpu",
+                    help="igpu = server default with OLLAMA_IGPU_ENABLE=1; cpu = num_gpu 0 (ignored for vending)")
+    ap.add_argument("--run-dir", help="fixed output folder; if it already has raw.jsonl, finished cases are skipped (resume)")
+    ap.add_argument("--no-memory", action="store_true", help="do not sample memory")
     a = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")
 
@@ -206,11 +261,37 @@ def main():
 
     started = datetime.now()
     mode = "think" if a.think else "nothink"
-    run_dir = ROOT / a.out_dir / f"{exam_path.stem}__{slug(a.model)}__{'rules' if vending else mode}__{started:%Y%m%d-%H%M%S}"
+    hw_mode = "rules" if vending else a.mode
+    if a.run_dir:
+        run_dir = Path(a.run_dir)
+        run_dir = run_dir if run_dir.is_absolute() else ROOT / run_dir
+    else:
+        run_dir = ROOT / a.out_dir / f"{exam_path.stem}__{slug(a.model)}__{'rules' if vending else mode + '-' + a.mode}__{started:%Y%m%d-%H%M%S}"
     run_dir.mkdir(parents=True, exist_ok=True)
+    raw_path = run_dir / "raw.jsonl"
 
-    raw = []
+    # resume: keep finished cases (errored ones are retried)
+    wanted_ids = {c["id"] for c in exam}
+    done = {}
+    if raw_path.exists():
+        for line in raw_path.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                try:
+                    r = json.loads(line)
+                except json.JSONDecodeError:
+                    continue  # a half-written last line from a crash
+                if r.get("id") in wanted_ids and "error" not in r:
+                    done[r["id"]] = r
+        if done:
+            print(f"resume: {len(done)}/{len(exam)} cases already done in {rel(run_dir)}", flush=True)
+    raw_path.write_text("".join(json.dumps(done[c["id"]], ensure_ascii=False) + "\n" for c in exam if c["id"] in done),
+                        encoding="utf-8")
+
+    sampler = None if (vending or a.no_memory) else MemorySampler().start()
+    raw_f = raw_path.open("a", encoding="utf-8")
     for k, case in enumerate(exam, 1):
+        if case["id"] in done:
+            continue
         rec = {"id": case["id"]}
         try:
             if vending:
@@ -220,24 +301,38 @@ def main():
                 rec.update(run_case_ollama(case, a, tools))
         except Exception as e:  # noqa: BLE001
             rec.update({"tool_calls": [], "content": "", "error": repr(e)[:500]})
-        raw.append(rec)
+        done[case["id"]] = rec
+        raw_f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+        raw_f.flush()
         shown = json.dumps(rec.get("tool_calls"), ensure_ascii=False) if not is_knowledge(case) else repr(rec.get("content"))
         print(f"[{k}/{len(exam)}] {case['id']}: {shown[:200]}{'  ERROR ' + rec['error'] if 'error' in rec else ''}", flush=True)
+    raw_f.close()
+    memory = sampler.stop() if sampler else None
+    raw = [done[c["id"]] for c in exam]
 
     scores, summary = score_run(load_jsonl(exam_path), raw)
     finished = datetime.now()
     meta = {
         "model": a.model,
         "exam": rel(exam_path),
+        "mode": hw_mode,
         "think": None if vending else a.think,
-        "options": None if vending else {**OPTIONS, "num_ctx": a.num_ctx, "num_predict": a.num_predict or "auto"},
+        "options": None if vending else {**OPTIONS, **MODE_OPTIONS[a.mode], "num_ctx": a.num_ctx, "num_predict": a.num_predict or "auto"},
         "ollama_version": ollama_version,
         "n_cases": len(exam),
         "ids": a.ids.split(",") if a.ids else None,
         "started": started.isoformat(timespec="seconds"),
         "finished": finished.isoformat(timespec="seconds"),
         "errors": sum(1 for r in raw if "error" in r),
+        "empty_outputs": sum(1 for r in raw if "error" not in r and not r.get("tool_calls") and not (r.get("content") or "").strip()),
+        "peak_memory_this_session": memory,
     }
+    if not vending:
+        try:
+            meta["api_ps_after"] = [{"name": m.get("name"), "size": m.get("size"), "size_vram": m.get("size_vram")}
+                                    for m in requests.get(f"{a.host}/api/ps", timeout=10).json().get("models", [])]
+        except Exception:  # noqa: BLE001
+            pass
     if vending:
         meta["vending_machine_blob"] = freeze["files"]["scripts/vending_machine.py"]["blob"]
         meta["vending_machine_frozen"] = freeze["all_frozen"]
@@ -250,10 +345,10 @@ def main():
     def dump_jsonl(path, rows):
         path.write_text("\n".join(json.dumps(r, ensure_ascii=False) for r in rows) + "\n", encoding="utf-8")
 
-    dump_jsonl(run_dir / "raw.jsonl", raw)
+    dump_jsonl(raw_path, raw)
     dump_jsonl(run_dir / "scores.jsonl", scores)
     (run_dir / "summary.json").write_text(json.dumps({"meta": meta, "summary": summary}, ensure_ascii=False, indent=2), encoding="utf-8")
-    md = [f"# {meta['exam']} / {a.model} ({'rules' if vending else mode})", "",
+    md = [f"# {meta['exam']} / {a.model} ({'rules' if vending else mode + ', ' + a.mode})", "",
           f"- {meta['started']} ~ {meta['finished']}, cases: {meta['n_cases']}, errors: {meta['errors']}"]
     if "mean_gen_tps" in meta:
         md.append(f"- mean generation speed: {meta['mean_gen_tps']} tok/s, mean wall time per case: {meta['mean_wall_s']} s")

@@ -1,0 +1,120 @@
+{"id": "B1-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노"}}], "content": "", "wall_s": 0.002352799754589796}
+{"id": "B1-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노"}}], "content": "", "wall_s": 0.00018370011821389198}
+{"id": "B1-3", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노"}}], "content": "", "wall_s": 5.8200210332870483e-05}
+{"id": "B1-4", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노"}}], "content": "", "wall_s": 0.0008755000308156013}
+{"id": "B2-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "치즈케이크"}}], "content": "", "wall_s": 0.0018429998308420181}
+{"id": "B2-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "치즈케이크"}}], "content": "", "wall_s": 0.00022540008649230003}
+{"id": "B2-3", "tool_calls": [{"name": "add_item", "arguments": {"menu": "치즈케이크"}}], "content": "", "wall_s": 0.0024409000761806965}
+{"id": "B3-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "유자차"}}], "content": "", "wall_s": 0.001899499911814928}
+{"id": "B3-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "유자차"}}], "content": "", "wall_s": 0.00044899992644786835}
+{"id": "B3-3", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 메뉴에 없는 상품이에요. 다른 메뉴로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.0014367997646331787}
+{"id": "O1-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced", "size": "large"}}], "content": "", "wall_s": 0.0025347997434437275}
+{"id": "O1-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced", "size": "large"}}], "content": "", "wall_s": 0.001115699764341116}
+{"id": "O1-3", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced", "size": "large"}}], "content": "", "wall_s": 0.0004120999947190285}
+{"id": "O1-4", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced"}}], "content": "", "wall_s": 0.0012419000267982483}
+{"id": "O2-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "바닐라라떼", "shots_delta": 1, "sweetness": "less"}}], "content": "", "wall_s": 0.0024007996544241905}
+{"id": "O2-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "바닐라라떼", "shots_delta": 1, "sweetness": "less"}}], "content": "", "wall_s": 0.0004214998334646225}
+{"id": "O2-3", "tool_calls": [{"name": "add_item", "arguments": {"menu": "바닐라라떼", "shots_delta": 1, "sweetness": "less"}}], "content": "", "wall_s": 0.002319099847227335}
+{"id": "O3-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "카페라떼", "temperature": "iced", "shots_delta": 0.5}}], "content": "", "wall_s": 0.002366499975323677}
+{"id": "O3-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "카페라떼", "temperature": "iced", "shots_delta": 0.5}}], "content": "", "wall_s": 0.0011428999714553356}
+{"id": "O3-3", "tool_calls": [{"name": "add_item", "arguments": {"menu": "카페라떼", "temperature": "iced", "shots_delta": 0.5}}], "content": "", "wall_s": 0.0001896996982395649}
+{"id": "S1-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced", "quantity": 2}}], "content": "", "wall_s": 0.0021081999875605106}
+{"id": "S1-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced", "quantity": 2}}], "content": "", "wall_s": 0.0005009998567402363}
+{"id": "S1-3", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced", "quantity": 2}}], "content": "", "wall_s": 3.42000275850296e-05}
+{"id": "S1-4", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced", "quantity": 2}}], "content": "", "wall_s": 0.00015399977564811707}
+{"id": "S2-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "바닐라라떼", "temperature": "iced"}}], "content": "", "wall_s": 0.0006300997920334339}
+{"id": "S2-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "바닐라라떼", "temperature": "iced"}}], "content": "", "wall_s": 0.0001534000039100647}
+{"id": "S2-3", "tool_calls": [{"name": "add_item", "arguments": {"menu": "바닐라라떼", "temperature": "iced"}}], "content": "", "wall_s": 0.0008044000715017319}
+{"id": "S3-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "카라멜마키아또"}}], "content": "", "wall_s": 0.0005435002967715263}
+{"id": "S3-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "카라멜마키아또"}}], "content": "", "wall_s": 0.00014750007539987564}
+{"id": "S3-3", "tool_calls": [{"name": "add_item", "arguments": {"menu": "카라멜마키아또"}}], "content": "", "wall_s": 0.002563000191003084}
+{"id": "M1-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced"}}, {"name": "add_item", "arguments": {"menu": "치즈케이크"}}], "content": "", "wall_s": 0.0016812002286314964}
+{"id": "M1-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced"}}, {"name": "add_item", "arguments": {"menu": "치즈케이크"}}], "content": "", "wall_s": 0.0008327998220920563}
+{"id": "M1-3", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced"}}, {"name": "add_item", "arguments": {"menu": "치즈케이크"}}], "content": "", "wall_s": 0.00019429996609687805}
+{"id": "M2-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "카페라떼", "quantity": 2}}, {"name": "add_item", "arguments": {"menu": "레몬에이드"}}], "content": "", "wall_s": 0.0018108999356627464}
+{"id": "M2-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "카페라떼", "quantity": 2}}, {"name": "add_item", "arguments": {"menu": "레몬에이드"}}], "content": "", "wall_s": 8.750008419156075e-05}
+{"id": "M2-3", "tool_calls": [{"name": "add_item", "arguments": {"menu": "카페라떼", "quantity": 2}}, {"name": "add_item", "arguments": {"menu": "레몬에이드"}}], "content": "", "wall_s": 0.000660100020468235}
+{"id": "M3-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced", "quantity": 2}}, {"name": "call_staff", "arguments": {"reason": "서비스 요청: 캐리어"}}], "content": "", "wall_s": 0.007863699924200773}
+{"id": "M3-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced", "quantity": 2}}, {"name": "call_staff", "arguments": {"reason": "서비스 요청: 캐리어"}}], "content": "", "wall_s": 0.002536499872803688}
+{"id": "M3-3", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced", "quantity": 2}}, {"name": "call_staff", "arguments": {"reason": "서비스 요청: 캐리어"}}], "content": "", "wall_s": 0.005672900006175041}
+{"id": "X1-1", "tool_calls": [{"name": "modify_item", "arguments": {"item_index": 1, "changes": {"size": "large"}}}], "content": "", "wall_s": 0.0026685004122555256}
+{"id": "X1-2", "tool_calls": [{"name": "modify_item", "arguments": {"item_index": 1, "changes": {"size": "large"}}}], "content": "", "wall_s": 0.0009519001469016075}
+{"id": "X1-3", "tool_calls": [{"name": "modify_item", "arguments": {"item_index": 1, "changes": {"size": "large"}}}], "content": "", "wall_s": 0.00202009966596961}
+{"id": "X2-1", "tool_calls": [{"name": "remove_item", "arguments": {"item_index": 2}}], "content": "", "wall_s": 0.0007452000863850117}
+{"id": "X2-2", "tool_calls": [{"name": "remove_item", "arguments": {"item_index": 2}}], "content": "", "wall_s": 4.970002919435501e-05}
+{"id": "X2-3", "tool_calls": [{"name": "remove_item", "arguments": {"item_index": 2}}], "content": "", "wall_s": 0.002002399880439043}
+{"id": "X3-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "바닐라라떼", "shots_delta": -0.5}}], "content": "", "wall_s": 0.0010044998489320278}
+{"id": "X3-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "바닐라라떼", "shots_delta": -0.5}}], "content": "", "wall_s": 0.0002331002615392208}
+{"id": "X3-3", "tool_calls": [{"name": "add_item", "arguments": {"menu": "바닐라라떼", "shots_delta": -0.5}}], "content": "", "wall_s": 0.0009126001968979836}
+{"id": "I1-1", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 레몬에이드는 그 옵션으로는 안 돼요. 다르게 드릴까요?", "reason": "impossible"}}], "content": "", "wall_s": 0.000664799939841032}
+{"id": "I1-2", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 레몬에이드는 그 옵션으로는 안 돼요. 다르게 드릴까요?", "reason": "impossible"}}], "content": "", "wall_s": 0.0010986998677253723}
+{"id": "I1-3", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 레몬에이드는 그 옵션으로는 안 돼요. 다르게 드릴까요?", "reason": "impossible"}}], "content": "", "wall_s": 5.609961226582527e-05}
+{"id": "I1-4", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 레몬에이드는 그 옵션으로는 안 돼요. 다르게 드릴까요?", "reason": "impossible"}}], "content": "", "wall_s": 0.001643999945372343}
+{"id": "I2-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "얼그레이"}}, {"name": "add_item", "arguments": {"menu": "에스프레소", "shots_delta": 1}}], "content": "", "wall_s": 0.0018036998808383942}
+{"id": "I2-2", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 얼그레이는 그 옵션으로는 안 돼요. 다르게 드릴까요?", "reason": "impossible"}}], "content": "", "wall_s": 6.440002471208572e-05}
+{"id": "I2-3", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 얼그레이는 그 옵션으로는 안 돼요. 다르게 드릴까요?", "reason": "impossible"}}], "content": "", "wall_s": 0.0020572002977132797}
+{"id": "I3-1", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "아메리카노는 당도 조절이 안 돼요. 시럽은 셀프바에서 넣으실 수 있어요.", "reason": "impossible"}}], "content": "", "wall_s": 0.0016340999864041805}
+{"id": "I3-2", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "아메리카노는 당도 조절이 안 돼요. 시럽은 셀프바에서 넣으실 수 있어요.", "reason": "impossible"}}], "content": "", "wall_s": 0.001154799945652485}
+{"id": "I3-3", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "아메리카노는 당도 조절이 안 돼요. 시럽은 셀프바에서 넣으실 수 있어요.", "reason": "impossible"}}], "content": "", "wall_s": 0.001821999903768301}
+{"id": "A1-1", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "어떤 메뉴로 드릴까요?", "reason": "ambiguous"}}], "content": "", "wall_s": 0.001079600304365158}
+{"id": "A1-2", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "어떤 메뉴로 드릴까요?", "reason": "ambiguous"}}], "content": "", "wall_s": 0.0009703999385237694}
+{"id": "A1-3", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "어떤 메뉴로 드릴까요?", "reason": "ambiguous"}}], "content": "", "wall_s": 0.0005402998067438602}
+{"id": "A1-4", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "어떤 메뉴로 드릴까요?", "reason": "ambiguous"}}], "content": "", "wall_s": 0.001492599956691265}
+{"id": "A2-1", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "어떤 메뉴로 드릴까요?", "reason": "ambiguous"}}], "content": "", "wall_s": 0.0023052003234624863}
+{"id": "A2-2", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "어떤 메뉴로 드릴까요?", "reason": "ambiguous"}}], "content": "", "wall_s": 0.0013692998327314854}
+{"id": "A2-3", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "어떤 메뉴로 드릴까요?", "reason": "ambiguous"}}], "content": "", "wall_s": 0.0016411002725362778}
+{"id": "A3-1", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "어떤 메뉴를 취소할까요?", "reason": "ambiguous"}}], "content": "", "wall_s": 0.0018330002203583717}
+{"id": "A3-2", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "어떤 메뉴를 취소할까요?", "reason": "ambiguous"}}], "content": "", "wall_s": 9.079976007342339e-05}
+{"id": "A3-3", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "어떤 메뉴를 취소할까요?", "reason": "ambiguous"}}], "content": "", "wall_s": 0.00015740003436803818}
+{"id": "F1-1", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 메뉴에 없는 상품이에요. 다른 메뉴로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.0018373001366853714}
+{"id": "F1-2", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 메뉴에 없는 상품이에요. 다른 메뉴로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.0018790997564792633}
+{"id": "F1-3", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 메뉴에 없는 상품이에요. 다른 메뉴로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.001233499962836504}
+{"id": "F1-4", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 메뉴에 없는 상품이에요. 다른 메뉴로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.0016445000655949116}
+{"id": "F2-1", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 메뉴에 없는 상품이에요. 다른 메뉴로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.002879700157791376}
+{"id": "F2-2", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 메뉴에 없는 상품이에요. 다른 메뉴로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.0019412999972701073}
+{"id": "F2-3", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 메뉴에 없는 상품이에요. 다른 메뉴로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.0020527001470327377}
+{"id": "F3-1", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 메뉴에 없는 상품이에요. 다른 메뉴로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.0031762998551130295}
+{"id": "F3-2", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 메뉴에 없는 상품이에요. 다른 메뉴로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.0015995996072888374}
+{"id": "F3-3", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 메뉴에 없는 상품이에요. 다른 메뉴로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.002137599978595972}
+{"id": "C1-1", "tool_calls": [{"name": "call_staff", "arguments": {"reason": "손님 문의: 제가 아까 주문한 음료 언제 나오나요?"}}], "content": "", "wall_s": 4.600267857313156e-06}
+{"id": "C1-2", "tool_calls": [{"name": "call_staff", "arguments": {"reason": "손님 문의: 아까 시킨 거 아직이에요?"}}], "content": "", "wall_s": 2.1997839212417603e-06}
+{"id": "C1-3", "tool_calls": [{"name": "call_staff", "arguments": {"reason": "손님 문의: 제 라떼 얼마나 더 걸려요?"}}], "content": "", "wall_s": 2.6999041438102722e-06}
+{"id": "C1-4", "tool_calls": [{"name": "call_staff", "arguments": {"reason": "손님 문의: 주문한 거 언제 나와여?"}}], "content": "", "wall_s": 1.200009137392044e-06}
+{"id": "C2-1", "tool_calls": [{"name": "call_staff", "arguments": {"reason": "서비스 요청: 얼음컵"}}], "content": "", "wall_s": 0.0027944003231823444}
+{"id": "C2-2", "tool_calls": [{"name": "call_staff", "arguments": {"reason": "서비스 요청: 얼음컵"}}], "content": "", "wall_s": 0.0015916000120341778}
+{"id": "C2-3", "tool_calls": [{"name": "call_staff", "arguments": {"reason": "서비스 요청: 얼음 컵"}}], "content": "", "wall_s": 0.004285399802029133}
+{"id": "C3-1", "tool_calls": [{"name": "call_staff", "arguments": {"reason": "손님 문의: 내일 오전 10시에 아메리카노 30잔 단체 주문 맞춰 주실 수 있나요?"}}], "content": "", "wall_s": 1.3799872249364853e-05}
+{"id": "C3-2", "tool_calls": [{"name": "call_staff", "arguments": {"reason": "손님 문의: 내일 아침에 아아 30잔 10시까지 돼요?"}}], "content": "", "wall_s": 1.1200085282325745e-05}
+{"id": "C3-3", "tool_calls": [{"name": "call_staff", "arguments": {"reason": "손님 문의: 낼 10시까지 아메리카노 30잔 가능해여?"}}], "content": "", "wall_s": 6.0996972024440765e-06}
+{"id": "T1-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced"}}], "content": "", "wall_s": 0.003458799794316292}
+{"id": "T1-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced"}}], "content": "", "wall_s": 0.0021286001428961754}
+{"id": "T1-3", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced"}}], "content": "", "wall_s": 0.0012166998349130154}
+{"id": "T1-4", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced"}}], "content": "", "wall_s": 0.0005268999375402927}
+{"id": "T2-1", "tool_calls": [{"name": "confirm_order", "arguments": {"dine_option": "takeout"}}], "content": "", "wall_s": 0.0016780998557806015}
+{"id": "T2-2", "tool_calls": [{"name": "confirm_order", "arguments": {"dine_option": "takeout"}}], "content": "", "wall_s": 0.002374600153416395}
+{"id": "T2-3", "tool_calls": [{"name": "confirm_order", "arguments": {"dine_option": "takeout"}}], "content": "", "wall_s": 4.020007327198982e-05}
+{"id": "T3-1", "tool_calls": [{"name": "confirm_order", "arguments": {"dine_option": "dine_in"}}], "content": "", "wall_s": 0.002243600320070982}
+{"id": "T3-2", "tool_calls": [{"name": "confirm_order", "arguments": {"dine_option": "dine_in"}}], "content": "", "wall_s": 0.0009645996615290642}
+{"id": "T3-3", "tool_calls": [{"name": "confirm_order", "arguments": {"dine_option": "dine_in"}}], "content": "", "wall_s": 0.0031440998427569866}
+{"id": "D1-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "카페라떼"}}], "content": "", "wall_s": 0.002699399832636118}
+{"id": "D1-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "카페라떼"}}], "content": "", "wall_s": 0.0006168000400066376}
+{"id": "D1-3", "tool_calls": [{"name": "add_item", "arguments": {"menu": "카페라떼"}}], "content": "", "wall_s": 0.0005461997352540493}
+{"id": "D1-4", "tool_calls": [{"name": "add_item", "arguments": {"menu": "카페라떼"}}], "content": "", "wall_s": 0.0015972000546753407}
+{"id": "D2-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "자몽에이드"}}], "content": "", "wall_s": 5.489960312843323e-05}
+{"id": "D2-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "자몽에이드"}}], "content": "", "wall_s": 3.5400036722421646e-05}
+{"id": "D2-3", "tool_calls": [{"name": "add_item", "arguments": {"menu": "자몽에이드"}}], "content": "", "wall_s": 3.260001540184021e-05}
+{"id": "D3-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노"}}], "content": "", "wall_s": 0.003660299815237522}
+{"id": "D3-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노"}}], "content": "", "wall_s": 0.0018583997152745724}
+{"id": "D3-3", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노"}}], "content": "", "wall_s": 0.0006650001741945744}
+{"id": "U1-1", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 디카페인는 준비되어 있지 않아요. 다른 걸로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.0008689998649060726}
+{"id": "U1-2", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 디카페인는 준비되어 있지 않아요. 다른 걸로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.0011163000017404556}
+{"id": "U1-3", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 디카페인는 준비되어 있지 않아요. 다른 걸로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.000467000063508749}
+{"id": "U2-1", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 휘핑크림는 준비되어 있지 않아요. 다른 걸로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.0021092002280056477}
+{"id": "U2-2", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 휘핑크림는 준비되어 있지 않아요. 다른 걸로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.0007342002354562283}
+{"id": "U2-3", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 휘핑크림는 준비되어 있지 않아요. 다른 걸로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.001173200085759163}
+{"id": "U3-1", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 락토프리 우유는 준비되어 있지 않아요. 다른 걸로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.003534900024533272}
+{"id": "U3-2", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 락토프리 우유는 준비되어 있지 않아요. 다른 걸로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.0018205000087618828}
+{"id": "U3-3", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 락토프리 우유는 준비되어 있지 않아요. 다른 걸로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.0024457997642457485}
+{"id": "U4-1", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 원두 선택는 준비되어 있지 않아요. 다른 걸로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.002129100263118744}
+{"id": "U4-2", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 원두 선택는 준비되어 있지 않아요. 다른 걸로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.0017801998183131218}
+{"id": "U4-3", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 원두 선택는 준비되어 있지 않아요. 다른 걸로 드릴까요?", "reason": "off_menu"}}], "content": "", "wall_s": 0.003375499974936247}

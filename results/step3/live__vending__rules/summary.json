@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "model": "vending",
+    "exam": "data/exam_live.jsonl",
+    "mode": "rules",
+    "think": null,
+    "options": null,
+    "ollama_version": null,
+    "n_cases": 20,
+    "ids": null,
+    "started": "2026-11-10T13:36:27",
+    "finished": "2026-11-10T13:36:27",
+    "errors": 0,
+    "empty_outputs": 0,
+    "peak_memory_this_session": null,
+    "vending_machine_blob": "a6d693cf211540a499c2b83c7261106952e018f0",
+    "vending_machine_frozen": true,
+    "vending_freeze_check": {
+      "scripts/vending_machine.py": {
+        "blob": "a6d693cf211540a499c2b83c7261106952e018f0",
+        "frozen_blob": "a6d693cf211540a499c2b83c7261106952e018f0",
+        "matches": true
+      },
+      "data/menu.json": {
+        "blob": "a898ac58530839da92bab1d27353c03ddce44dc0",
+        "frozen_blob": "a898ac58530839da92bab1d27353c03ddce44dc0",
+        "matches": true
+      },
+      "scripts/cafe_common.py": {
+        "blob": "043454654f0323850bb57d1e4df6ce21318de675",
+        "frozen_blob": "043454654f0323850bb57d1e4df6ce21318de675",
+        "matches": true
+      }
+    }
+  },
+  "summary": {
+    "n": 20,
+    "exact": 0.55,
+    "partial": 0.6929,
+    "tool_names_match": 0.65,
+    "group_consistency": 0.55,
+    "by_category": {
+      "ambiguous": {
+        "n": 1,
+        "exact": 0,
+        "partial": 0.0
+      },
+      "call_staff": {
+        "n": 3,
+        "exact": 0.6667,
+        "partial": 0.6667
+      },
+      "conditional": {
+        "n": 3,
+        "exact": 0.3333,
+        "partial": 0.5
+      },
+      "impossible": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "multi_item": {
+        "n": 1,
+        "exact": 0,
+        "partial": 0.5
+      },
+      "off_menu": {
+        "n": 6,
+        "exact": 0.6667,
+        "partial": 0.6667
+      },
+      "options": {
+        "n": 4,
+        "exact": 0.5,
+        "partial": 0.9643
+      },
+      "slang": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      }
+    }
+  }
+}
