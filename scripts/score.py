@@ -161,16 +161,38 @@ def score_knowledge_case(case: dict, response_text: str) -> dict:
     }
 
 
+def _always_d(rows: list[dict]) -> float | None:
+    """Score of a 'model' that always answers D (KMMLU's answer key is skewed)."""
+    return round(statistics.mean(int(s["answer"] == "D") for s in rows), 4) if rows else None
+
+
 def summarize_knowledge(scores: list[dict]) -> dict:
     by_src = defaultdict(list)
     for s in scores:
-        by_src[s["source"]].append(s["exact"])
+        by_src[s["source"]].append(s)
     return {
         "n": len(scores),
         "accuracy": round(statistics.mean(s["exact"] for s in scores), 4) if scores else None,
+        "always_D_baseline": _always_d(scores),
         "unparsed": sum(1 for s in scores if s["pred"] is None),
-        "by_source": {k: {"n": len(v), "accuracy": round(statistics.mean(v), 4)} for k, v in sorted(by_src.items())},
+        "by_source": {
+            k: {
+                "n": len(v),
+                "accuracy": round(statistics.mean(x["exact"] for x in v), 4),
+                "always_D_baseline": _always_d(v),
+            }
+            for k, v in sorted(by_src.items())
+        },
     }
+
+
+def knowledge_table_md(summary: dict, label: str = "model") -> str:
+    """Markdown table: model accuracy next to the always-D baseline."""
+    rows = [f"| source | n | {label} | always D |", "|---|---:|---:|---:|"]
+    for k, v in summary["by_source"].items():
+        rows.append(f"| {k} | {v['n']} | {v['accuracy']:.1%} | {v['always_D_baseline']:.1%} |")
+    rows.append(f"| **all** | {summary['n']} | {summary['accuracy']:.1%} | {summary['always_D_baseline']:.1%} |")
+    return "\n".join(rows)
 
 
 # ---------------------------------------------------------------- io
@@ -212,6 +234,9 @@ def main():
         raw = load_jsonl(a.pred)
     scores, summary = score_run(exam, raw)
     print(json.dumps(summary, ensure_ascii=False, indent=2))
+    if "always_D_baseline" in summary:
+        print()
+        print(knowledge_table_md(summary))
 
 
 if __name__ == "__main__":

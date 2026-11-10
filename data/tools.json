@@ -3,7 +3,7 @@
     "type": "function",
     "function": {
       "name": "add_item",
-      "description": "Add one menu line to the order. Call once per distinct menu line. Only pass options the customer actually asked for (or that a slang alias implies); omitted options use the menu defaults.",
+      "description": "Add one menu line to the order. Call once per distinct menu line. Only pass options the customer actually asked for (or that a slang alias implies); omitted options use the defaults.",
       "parameters": {
         "type": "object",
         "properties": {
@@ -12,11 +12,11 @@
             "description": "Canonical Korean menu name.",
             "enum": ["에스프레소", "아메리카노", "콜드브루", "카페라떼", "바닐라라떼", "카라멜마키아또", "카페모카", "얼그레이", "캐모마일", "유자차", "레몬에이드", "자몽에이드", "청포도에이드", "치즈케이크", "초콜릿케이크"]
           },
-          "temperature": {"type": "string", "enum": ["hot", "iced"], "description": "Drink temperature."},
-          "size": {"type": "string", "enum": ["regular", "large"], "description": "Cup size."},
-          "shots_delta": {"type": "integer", "description": "Extra (+) or fewer (-) espresso shots relative to the standard recipe, e.g. 1 = one extra shot, -1 = one shot fewer."},
-          "sweetness": {"type": "string", "enum": ["less", "normal", "more"], "description": "Sweetness level."},
-          "milk": {"type": "string", "enum": ["regular", "oat"], "description": "Milk type (lattes only)."},
+          "temperature": {"type": "string", "enum": ["hot", "iced"], "description": "Drink temperature. Default hot (ades: iced)."},
+          "size": {"type": "string", "enum": ["regular", "large"], "description": "Cup size. Default regular."},
+          "shots_delta": {"type": "number", "description": "Extra (+) or fewer (-) espresso shots relative to the standard recipe, in steps of 0.5 (half shot). e.g. 1 = one extra shot, 0.5 = half a shot extra, -0.5 = half a shot fewer. Default 0."},
+          "sweetness": {"type": "string", "enum": ["less", "normal", "more"], "description": "Sweetness level (lattes, teas, ades only). Default normal."},
+          "milk": {"type": "string", "enum": ["regular", "oat"], "description": "Milk type (lattes only). Default regular."},
           "quantity": {"type": "integer", "description": "Number of identical items. Default 1."}
         },
         "required": ["menu"]
@@ -39,7 +39,7 @@
               "menu": {"type": "string"},
               "temperature": {"type": "string", "enum": ["hot", "iced"]},
               "size": {"type": "string", "enum": ["regular", "large"]},
-              "shots_delta": {"type": "integer"},
+              "shots_delta": {"type": "number", "description": "New shot adjustment, in steps of 0.5."},
               "sweetness": {"type": "string", "enum": ["less", "normal", "more"]},
               "milk": {"type": "string", "enum": ["regular", "oat"]},
               "quantity": {"type": "integer"}
@@ -68,12 +68,16 @@
     "type": "function",
     "function": {
       "name": "ask_clarification",
-      "description": "Ask the customer a question instead of acting. Use when the request is ambiguous, impossible under the menu rules, or not on the menu.",
+      "description": "Say something to the customer instead of acting: ask what they mean, or politely decline. Use when the request is ambiguous, breaks a menu rule, or asks for something the cafe does not offer.",
       "parameters": {
         "type": "object",
         "properties": {
-          "question": {"type": "string", "description": "Question to say to the customer, in Korean."},
-          "reason": {"type": "string", "enum": ["ambiguous", "impossible", "off_menu"]}
+          "question": {"type": "string", "description": "What to say to the customer, in Korean."},
+          "reason": {
+            "type": "string",
+            "enum": ["ambiguous", "impossible", "off_menu"],
+            "description": "ambiguous = unclear what or which item; impossible = an existing option that this item cannot take (e.g. hot ade, syrup on coffee); off_menu = an item or option the cafe does not offer at all (e.g. a drink not on the menu, decaf, whipped cream)."
+          }
         },
         "required": ["question", "reason"]
       }
@@ -82,9 +86,28 @@
   {
     "type": "function",
     "function": {
+      "name": "call_staff",
+      "description": "Hand over to a human staff member for things the robot must not decide: preparation status of an order already placed, time promises (pickup/delivery), bulk-order timing, carriers/bags, ice cups, and other service requests that are not menu orders.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "reason": {"type": "string", "description": "Short Korean note for the staff member describing the request."}
+        },
+        "required": ["reason"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
       "name": "confirm_order",
       "description": "The customer has finished ordering; confirm and place the current order.",
-      "parameters": {"type": "object", "properties": {}}
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "dine_option": {"type": "string", "enum": ["dine_in", "takeout"], "description": "takeout if the customer said so at any point in the conversation (포장, 테이크아웃, 가져갈게요 ...), otherwise dine_in (default)."}
+        }
+      }
     }
   }
 ]

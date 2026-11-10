@@ -1,0 +1,56 @@
+{
+  "meta": {
+    "model": "vending",
+    "exam": "data/exam_cafe.jsonl",
+    "think": null,
+    "options": null,
+    "ollama_version": null,
+    "n_cases": 5,
+    "ids": [
+      "O3-1",
+      "C1-2",
+      "T2-1",
+      "D1-2",
+      "I3-1"
+    ],
+    "started": "2026-11-10T09:24:52",
+    "finished": "2026-11-10T09:24:52",
+    "errors": 0,
+    "vending_machine_blob": "a6d693cf211540a499c2b83c7261106952e018f0",
+    "vending_machine_frozen": true
+  },
+  "summary": {
+    "n": 5,
+    "exact": 1,
+    "partial": 1.0,
+    "tool_names_match": 1,
+    "group_consistency": 1,
+    "by_category": {
+      "call_staff": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "conditional": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "impossible": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "options": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "takeout": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      }
+    }
+  }
+}

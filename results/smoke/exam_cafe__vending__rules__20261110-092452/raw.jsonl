@@ -1,0 +1,5 @@
+{"id": "O3-1", "tool_calls": [{"name": "add_item", "arguments": {"menu": "카페라떼", "temperature": "iced", "shots_delta": 0.5}}], "content": "", "wall_s": 0.0034533003345131874}
+{"id": "C1-2", "tool_calls": [{"name": "call_staff", "arguments": {"reason": "손님 문의: 아까 시킨 거 아직이에요?"}}], "content": "", "wall_s": 5.900394171476364e-06}
+{"id": "T2-1", "tool_calls": [{"name": "confirm_order", "arguments": {"dine_option": "takeout"}}], "content": "", "wall_s": 0.0023147002793848515}
+{"id": "D1-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "카페라떼"}}], "content": "", "wall_s": 0.001619699876755476}
+{"id": "I3-1", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "아메리카노는 당도 조절이 안 돼요. 시럽은 셀프바에서 넣으실 수 있어요.", "reason": "impossible"}}], "content": "", "wall_s": 0.0020805997774004936}

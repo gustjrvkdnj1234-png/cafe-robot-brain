@@ -40,13 +40,16 @@ def utterances(case: dict) -> list[str]:
 
 
 def intent_key(case: dict) -> str:
+    """Explicit `intent` label if present; otherwise order state + normalized
+    expected calls, prefixed by an optional `intent_tag` (e.g. takeout, conditional)."""
     if case.get("intent"):
         return case["intent"]
     state = [normalize_add(s) for s in case.get("order_state") or []]
     calls = sorted(
         json.dumps(normalize_call(c), ensure_ascii=False, sort_keys=True) for c in case["expected"]
     )
-    return json.dumps({"state": state, "calls": calls}, ensure_ascii=False, sort_keys=True)
+    sig = json.dumps({"state": state, "calls": calls}, ensure_ascii=False, sort_keys=True)
+    return f"{case['intent_tag']}|{sig}" if case.get("intent_tag") else sig
 
 
 class ExamIndex:
