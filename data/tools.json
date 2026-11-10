@@ -12,7 +12,7 @@
             "description": "Canonical Korean menu name.",
             "enum": ["에스프레소", "아메리카노", "콜드브루", "카페라떼", "바닐라라떼", "카라멜마키아또", "카페모카", "얼그레이", "캐모마일", "유자차", "레몬에이드", "자몽에이드", "청포도에이드", "치즈케이크", "초콜릿케이크"]
           },
-          "temperature": {"type": "string", "enum": ["hot", "iced"], "description": "Drink temperature. Default hot (ades: iced)."},
+          "temperature": {"type": "string", "enum": ["hot", "iced"], "description": "Drink temperature. Default hot (cold brew and ades: iced)."},
           "size": {"type": "string", "enum": ["regular", "large"], "description": "Cup size. Default regular."},
           "shots_delta": {"type": "number", "description": "Extra (+) or fewer (-) espresso shots relative to the standard recipe, in steps of 0.5 (half shot). e.g. 1 = one extra shot, 0.5 = half a shot extra, -0.5 = half a shot fewer. Default 0."},
           "sweetness": {"type": "string", "enum": ["less", "normal", "more"], "description": "Sweetness level (lattes, teas, ades only). Default normal."},
