@@ -13,6 +13,10 @@ logs/
 models/
 # 50MB 초과 파일은 .gitignore로 크기 필터가 불가하므로 커밋 전에 수동 확인
 
+# KMMLU는 CC BY-ND 4.0 → 샘플 파일은 공개 저장소에 올리지 않음
+# (scripts/build_knowledge_exam.py 로 같은 300문항을 다시 만들 수 있음)
+data/exam_knowledge.jsonl
+
 # 비밀 정보
 .env
 .env.*

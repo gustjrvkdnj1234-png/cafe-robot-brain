@@ -1,0 +1,2 @@
+{"id": "kmmlu-016", "source": "kmmlu", "subject": "Biology", "pred": "A", "answer": "C", "exact": 0}
+{"id": "mmlu-001", "source": "mmlu", "subject": "abstract_algebra", "pred": "B", "answer": "B", "exact": 1}

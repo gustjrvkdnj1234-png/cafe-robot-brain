@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "model": "vending",
+    "exam": "data/exam_cafe.jsonl",
+    "think": null,
+    "options": null,
+    "ollama_version": null,
+    "n_cases": 5,
+    "ids": [
+      "O3-2",
+      "M1-3",
+      "X2-1",
+      "I1-1",
+      "A2-2"
+    ],
+    "started": "2026-11-09T17:29:57",
+    "finished": "2026-11-09T17:29:57",
+    "errors": 0
+  },
+  "summary": {
+    "n": 5,
+    "exact": 1,
+    "partial": 1.0,
+    "tool_names_match": 1,
+    "group_consistency": 1,
+    "by_category": {
+      "ambiguous": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "impossible": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "modify_cancel": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "multi_item": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "options": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      }
+    }
+  }
+}

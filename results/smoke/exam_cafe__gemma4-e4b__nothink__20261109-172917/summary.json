@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "model": "gemma4:e4b",
+    "exam": "data/exam_cafe.jsonl",
+    "think": false,
+    "options": {
+      "temperature": 0,
+      "seed": 42,
+      "num_ctx": 8192,
+      "num_predict": "auto"
+    },
+    "ollama_version": "0.40.15",
+    "n_cases": 5,
+    "ids": [
+      "O3-2",
+      "M1-3",
+      "X2-1",
+      "I1-1",
+      "A2-2"
+    ],
+    "started": "2026-11-09T17:29:17",
+    "finished": "2026-11-09T17:29:51",
+    "errors": 0,
+    "mean_gen_tps": 40.94,
+    "mean_wall_s": 6.943
+  },
+  "summary": {
+    "n": 5,
+    "exact": 0.6,
+    "partial": 0.6,
+    "tool_names_match": 0.6,
+    "group_consistency": 0.6,
+    "by_category": {
+      "ambiguous": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "impossible": {
+        "n": 1,
+        "exact": 0,
+        "partial": 0.0
+      },
+      "modify_cancel": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "multi_item": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "options": {
+        "n": 1,
+        "exact": 0,
+        "partial": 0.0
+      }
+    }
+  }
+}

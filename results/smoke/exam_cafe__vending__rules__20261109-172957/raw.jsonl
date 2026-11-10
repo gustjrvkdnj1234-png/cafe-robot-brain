@@ -1,0 +1,5 @@
+{"id": "O3-2", "tool_calls": [{"name": "add_item", "arguments": {"menu": "바닐라라떼", "shots_delta": 1, "sweetness": "less"}}], "content": "", "wall_s": 0.003224299754947424}
+{"id": "M1-3", "tool_calls": [{"name": "add_item", "arguments": {"menu": "아메리카노", "temperature": "iced"}}, {"name": "add_item", "arguments": {"menu": "치즈케이크"}}], "content": "", "wall_s": 0.00022789975628256798}
+{"id": "X2-1", "tool_calls": [{"name": "remove_item", "arguments": {"item_index": 2}}], "content": "", "wall_s": 0.0009006001055240631}
+{"id": "I1-1", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "죄송하지만 레몬에이드는 그 옵션으로는 안 돼요. 다르게 드릴까요?", "reason": "impossible"}}], "content": "", "wall_s": 0.0007146000862121582}
+{"id": "A2-2", "tool_calls": [{"name": "ask_clarification", "arguments": {"question": "어떤 메뉴로 드릴까요?", "reason": "ambiguous"}}], "content": "", "wall_s": 0.0010919999331235886}

@@ -1,0 +1,5 @@
+{"id": "O3-2", "category": "options", "paraphrase_group": "O3", "exact": 0, "partial": 0.0, "tool_names_match": 0}
+{"id": "M1-3", "category": "multi_item", "paraphrase_group": "M1", "exact": 1, "partial": 1.0, "tool_names_match": 1}
+{"id": "X2-1", "category": "modify_cancel", "paraphrase_group": "X2", "exact": 1, "partial": 1.0, "tool_names_match": 1}
+{"id": "I1-1", "category": "impossible", "paraphrase_group": "I1", "exact": 0, "partial": 0.0, "tool_names_match": 0}
+{"id": "A2-2", "category": "ambiguous", "paraphrase_group": "A2", "exact": 1, "partial": 1.0, "tool_names_match": 1}

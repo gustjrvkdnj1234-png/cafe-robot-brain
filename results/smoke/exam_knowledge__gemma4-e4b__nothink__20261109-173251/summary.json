@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "model": "gemma4:e4b",
+    "exam": "data/exam_knowledge.jsonl",
+    "think": false,
+    "options": {
+      "temperature": 0,
+      "seed": 42,
+      "num_ctx": 8192,
+      "num_predict": "auto"
+    },
+    "ollama_version": "0.40.15",
+    "n_cases": 2,
+    "ids": [
+      "kmmlu-016",
+      "mmlu-001"
+    ],
+    "started": "2026-11-09T17:32:51",
+    "finished": "2026-11-09T17:32:52",
+    "errors": 0,
+    "mean_gen_tps": 23.13,
+    "mean_wall_s": 0.558
+  },
+  "summary": {
+    "n": 2,
+    "accuracy": 0.5,
+    "unparsed": 0,
+    "by_source": {
+      "kmmlu": {
+        "n": 1,
+        "accuracy": 0
+      },
+      "mmlu": {
+        "n": 1,
+        "accuracy": 1
+      }
+    }
+  }
+}

@@ -1,0 +1,2 @@
+{"id": "kmmlu-016", "tool_calls": [], "content": "A", "thinking": "", "done_reason": "stop", "load_s": 0.0067259, "prompt_eval_count": 79, "prompt_eval_s": 0.256241, "eval_count": 2, "eval_s": 0.087546, "wall_s": 0.7587219998240471}
+{"id": "mmlu-001", "tool_calls": [], "content": "B", "thinking": "", "done_reason": "stop", "load_s": 0.0043827, "prompt_eval_count": 85, "prompt_eval_s": 0.226956, "eval_count": 2, "eval_s": 0.085363, "wall_s": 0.3571641002781689}

@@ -1,0 +1,90 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "add_item",
+      "description": "Add one menu line to the order. Call once per distinct menu line. Only pass options the customer actually asked for (or that a slang alias implies); omitted options use the menu defaults.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "menu": {
+            "type": "string",
+            "description": "Canonical Korean menu name.",
+            "enum": ["에스프레소", "아메리카노", "콜드브루", "카페라떼", "바닐라라떼", "카라멜마키아또", "카페모카", "얼그레이", "캐모마일", "유자차", "레몬에이드", "자몽에이드", "청포도에이드", "치즈케이크", "초콜릿케이크"]
+          },
+          "temperature": {"type": "string", "enum": ["hot", "iced"], "description": "Drink temperature."},
+          "size": {"type": "string", "enum": ["regular", "large"], "description": "Cup size."},
+          "shots_delta": {"type": "integer", "description": "Extra (+) or fewer (-) espresso shots relative to the standard recipe, e.g. 1 = one extra shot, -1 = one shot fewer."},
+          "sweetness": {"type": "string", "enum": ["less", "normal", "more"], "description": "Sweetness level."},
+          "milk": {"type": "string", "enum": ["regular", "oat"], "description": "Milk type (lattes only)."},
+          "quantity": {"type": "integer", "description": "Number of identical items. Default 1."}
+        },
+        "required": ["menu"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "modify_item",
+      "description": "Change options of an item already in the current order.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "item_index": {"type": "integer", "description": "1-based line number in the current order."},
+          "changes": {
+            "type": "object",
+            "description": "Only the fields that change.",
+            "properties": {
+              "menu": {"type": "string"},
+              "temperature": {"type": "string", "enum": ["hot", "iced"]},
+              "size": {"type": "string", "enum": ["regular", "large"]},
+              "shots_delta": {"type": "integer"},
+              "sweetness": {"type": "string", "enum": ["less", "normal", "more"]},
+              "milk": {"type": "string", "enum": ["regular", "oat"]},
+              "quantity": {"type": "integer"}
+            }
+          }
+        },
+        "required": ["item_index", "changes"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "remove_item",
+      "description": "Remove an item from the current order.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "item_index": {"type": "integer", "description": "1-based line number in the current order."}
+        },
+        "required": ["item_index"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "ask_clarification",
+      "description": "Ask the customer a question instead of acting. Use when the request is ambiguous, impossible under the menu rules, or not on the menu.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "question": {"type": "string", "description": "Question to say to the customer, in Korean."},
+          "reason": {"type": "string", "enum": ["ambiguous", "impossible", "off_menu"]}
+        },
+        "required": ["question", "reason"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "confirm_order",
+      "description": "The customer has finished ordering; confirm and place the current order.",
+      "parameters": {"type": "object", "properties": {}}
+    }
+  }
+]
