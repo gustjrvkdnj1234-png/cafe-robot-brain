@@ -1,5 +1,6 @@
 # Python
 .venv/
+.venv-prune/
 __pycache__/
 *.pyc
 
@@ -25,3 +26,4 @@ data/exam_knowledge.jsonl
 credentials*
 *secret*
 *token*
+results/step4/**/states_after_layer.pt

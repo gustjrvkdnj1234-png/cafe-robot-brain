@@ -1,0 +1,55 @@
+{
+ "embed_s": 1.04,
+ "model_dir": "models/gemma-4-26B-A4B-it",
+ "n_cases": 8,
+ "seed": 42,
+ "dtype": "float32",
+ "threads": 16,
+ "case_ids": [
+  "calib-0348",
+  "calib-0041",
+  "calib-0436",
+  "calib-0505",
+  "calib-0297",
+  "calib-0229",
+  "calib-0161",
+  "calib-0383"
+ ],
+ "categories": [
+  "ambiguous",
+  "basic",
+  "call_staff",
+  "conditional",
+  "impossible",
+  "modify_cancel",
+  "multi_item",
+  "off_menu"
+ ],
+ "tokens_if_alone": 28233,
+ "tokens_computed": 5020,
+ "segments": 11,
+ "fixed_tokens_per_case": 3466,
+ "case_tokens_mean": 63.1,
+ "layers": {
+  "0": {
+   "type": "sliding_attention",
+   "load_s": 1.29,
+   "forward_s": 5.93,
+   "tokens_per_s": 846.8,
+   "peak_rss_gb": 4.34
+  },
+  "1": {
+   "type": "sliding_attention",
+   "load_s": 1.27,
+   "forward_s": 4.28,
+   "tokens_per_s": 1172.6,
+   "peak_rss_gb": 5.08
+  }
+ },
+ "done_layers": [
+  0,
+  1
+ ],
+ "peak_rss_gb": 5.08,
+ "total_s": 18.6
+}

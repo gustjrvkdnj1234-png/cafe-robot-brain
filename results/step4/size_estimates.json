@@ -1,0 +1,52 @@
+{
+ "groups": {
+  "experts": 22837985280,
+  "router": 10901760,
+  "dense_mlp": 535265280,
+  "attention": 1110179840,
+  "norms_scalars": 609310,
+  "embedding (tied with LM head)": 738197504,
+  "vision tower + projector": 572794416,
+  "final norm": 2816
+ },
+ "total_params": 25805936206,
+ "text_params": 25233141790,
+ "params_per_expert": 5947392.0,
+ "experts_share": 0.8849896046278709,
+ "embedding_share": 0.02860572459403219,
+ "q4_effective_bits_per_weight": 5.413,
+ "estimates": [
+  {
+   "experts_kept": 128,
+   "total_params_B": 25.806,
+   "text_params_B": 25.233,
+   "bf16_GB": 51.61,
+   "q4_text_GB": 17.07,
+   "active_params_B": 3.823
+  },
+  {
+   "experts_kept": 98,
+   "total_params_B": 20.451,
+   "text_params_B": 19.878,
+   "bf16_GB": 40.9,
+   "q4_text_GB": 13.45,
+   "active_params_B": 3.823
+  },
+  {
+   "experts_kept": 64,
+   "total_params_B": 14.382,
+   "text_params_B": 13.809,
+   "bf16_GB": 28.76,
+   "q4_text_GB": 9.34,
+   "active_params_B": 3.823
+  },
+  {
+   "experts_kept": 48,
+   "total_params_B": 11.525,
+   "text_params_B": 10.953,
+   "bf16_GB": 23.05,
+   "q4_text_GB": 7.41,
+   "active_params_B": 3.823
+  }
+ ]
+}
