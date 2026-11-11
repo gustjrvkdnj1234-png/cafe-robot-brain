@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "model": "song/gemma4-26b-cafe-98e",
+    "exam": "data/exam_knowledge.jsonl",
+    "mode": "igpu",
+    "think": false,
+    "options": {
+      "temperature": 0,
+      "seed": 42,
+      "num_ctx": 8192,
+      "num_predict": "auto"
+    },
+    "ollama_version": "0.40.15",
+    "n_cases": 300,
+    "ids": null,
+    "started": "2026-11-11T17:50:56",
+    "finished": "2026-11-11T17:56:40",
+    "errors": 0,
+    "empty_outputs": 0,
+    "peak_memory_this_session": {
+      "runner_private_gb": 24.92,
+      "runner_rss_gb": 22.6,
+      "gpu_shared_gb": 17.45,
+      "sys_used_gb": 31.45,
+      "pagefile_used_gb": 2.38,
+      "sys_avail_min_gb": 0.04,
+      "pagefile_start_gb": 0.44,
+      "samples": 77
+    },
+    "api_ps_after": [
+      {
+        "name": "song/gemma4-26b-cafe-98e:latest",
+        "size": 1032312584,
+        "size_vram": 1032312584
+      }
+    ],
+    "mean_gen_tps": 13.34,
+    "mean_wall_s": 1.141
+  },
+  "summary": {
+    "n": 300,
+    "accuracy": 0.5833,
+    "always_D_baseline": 0.3,
+    "unparsed": 4,
+    "by_source": {
+      "kmmlu": {
+        "n": 200,
+        "accuracy": 0.545,
+        "always_D_baseline": 0.335
+      },
+      "mmlu": {
+        "n": 100,
+        "accuracy": 0.66,
+        "always_D_baseline": 0.23
+      }
+    }
+  }
+}

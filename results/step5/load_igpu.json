@@ -1,0 +1,23 @@
+{
+ "model": "song/gemma4-26b-cafe-98e",
+ "mode": "igpu",
+ "http_status": 200,
+ "load_s": 28.1,
+ "peak_memory": {
+  "runner_private_gb": 16.88,
+  "runner_rss_gb": 16.57,
+  "gpu_shared_gb": 17.58,
+  "sys_used_gb": 26.4,
+  "pagefile_used_gb": 0.57,
+  "sys_avail_min_gb": 5.09,
+  "pagefile_start_gb": 0.57,
+  "samples": 11
+ },
+ "api_ps": {
+  "size_gb": 0.96,
+  "size_vram_gb": 0.96,
+  "context_length": 8192
+ },
+ "ollama_ps": "NAME                               ID              SIZE      PROCESSOR    CONTEXT    RUNNER      UNTIL              \nsong/gemma4-26b-cafe-98e:latest    f8df4b1b14de    1.0 GB    100% GPU     8192       llamacpp    9 minutes from now",
+ "fits_igpu_fully": true
+}

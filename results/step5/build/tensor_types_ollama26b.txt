@@ -1,0 +1,6 @@
+blk\.29\.ffn_down_exps\.weight=q8_0
+blk\.(9|15)\.ffn_gate_up_exps\.weight=q5_k
+ffn_down_exps\.weight=q5_1
+ffn_gate_up_exps\.weight=q4_k
+attn_(q|k|v|output)\.weight=q8_0
+ffn_(gate|up|down)\.weight=q8_0
