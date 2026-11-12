@@ -1,5 +1,27 @@
 # 카페 알바 로봇 언어 두뇌
 
+## Summary (English)
+
+Choosing and slimming a local LLM to be the "language brain" of a café part-time robot, on one laptop (Core Ultra 7 255H, 32 GB RAM, Arc 140T iGPU, Ollama 0.40.15). The robot turns Korean customer speech into tool calls (add/modify/remove item, ask, call staff, confirm).
+- **Exams:** 120 café cases, 20 human-written "live" cases, 300 knowledge questions (KMMLU/MMLU), plus a rule-based vending-machine baseline.
+- **Pruning:** expert statistics (REAP) on 600 café calibration prompts for `gemma4:26b` (MoE, 128 experts per layer), then pruned models keeping 98 / 64 / 48 experts, plus an un-pruned control without imatrix.
+- **Key result:** keeping 64 experts shrinks the model from 18 GB to 11 GB, makes it fit the iGPU, and keeps café work (café 93.3% vs 94.2%, live 70% vs 75%), but general knowledge drops (73.7% → 47.3%). At 48 experts, live accuracy collapses to 50%.
+- **Cause of the knowledge drop:** pruning, not the missing imatrix; the control matches the original model.
+- **Speed:** on the same hardware, pruning barely changes speed (CPU 3.1–3.4 s per order). Prompt layout matters far more. Moving the order state after the tool definitions cut the slowest orders from 73 s to 4.5 s, because the prompt prefix stays reusable.
+- **16 GB laptops:** a text-only 48-expert model on CPU fits with 2.8 GB to spare (estimated, not measured on a real 16 GB machine).
+- **Caveat:** with 20 live cases, no difference between models is statistically significant (McNemar p ≥ 0.05).
+
+All findings, tables and limitations (Korean): `results/blog_material.md`.
+
+**Reproduce:** `ollama pull gemma4:e4b gemma4:12b gemma4:26b`, then follow steps 1–7 below:
+- exams: `scripts/run_exam.py` (`--model vending` for the baseline)
+- REAP stats: `scripts/reap_stats.py`
+- pruning: `scripts/build_pruned.py`
+- latency: `scripts/bench_latency.py`
+- comparison page: `scripts/robot_ui.py`
+
+Model weights are not included.
+
 카페 아르바이트 로봇의 "언어 두뇌"로 쓸 로컬 LLM을 노트북(Intel Core Ultra 7 255H, RAM 32GB, Arc 140T iGPU)에서 고르고 다듬는 실험 프로젝트.
 
 ## 이 저장소에 대해
