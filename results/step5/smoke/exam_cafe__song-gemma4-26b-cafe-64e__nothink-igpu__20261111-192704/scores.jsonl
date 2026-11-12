@@ -1,0 +1,5 @@
+{"id": "O3-1", "category": "options", "paraphrase_group": "O3", "exact": 1, "partial": 1.0, "tool_names_match": 1}
+{"id": "C1-2", "category": "call_staff", "paraphrase_group": "C1", "exact": 1, "partial": 1.0, "tool_names_match": 1}
+{"id": "T2-1", "category": "takeout", "paraphrase_group": "T2", "exact": 1, "partial": 1.0, "tool_names_match": 1}
+{"id": "D1-2", "category": "conditional", "paraphrase_group": "D1", "exact": 1, "partial": 1.0, "tool_names_match": 1}
+{"id": "I3-1", "category": "impossible", "paraphrase_group": "I3", "exact": 1, "partial": 1.0, "tool_names_match": 1}

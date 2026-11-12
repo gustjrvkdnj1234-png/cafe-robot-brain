@@ -1,0 +1,23 @@
+{
+ "model": "song/gemma4-26b-128e-noimat",
+ "mode": "cpu",
+ "http_status": 200,
+ "load_s": 17.1,
+ "peak_memory": {
+  "runner_private_gb": 18.98,
+  "runner_rss_gb": 18.17,
+  "gpu_shared_gb": 0.78,
+  "sys_used_gb": 23.99,
+  "pagefile_used_gb": 1.1,
+  "sys_avail_min_gb": 7.5,
+  "pagefile_start_gb": 1.1,
+  "samples": 8
+ },
+ "api_ps": {
+  "size_gb": 8.62,
+  "size_vram_gb": 0.0,
+  "context_length": 8192
+ },
+ "ollama_ps": "NAME                                  ID              SIZE      PROCESSOR    CONTEXT    RUNNER      UNTIL              \nsong/gemma4-26b-128e-noimat:latest    b036fe32e9d5    9.3 GB    100% CPU     8192       llamacpp    9 minutes from now",
+ "fits_igpu_fully": false
+}

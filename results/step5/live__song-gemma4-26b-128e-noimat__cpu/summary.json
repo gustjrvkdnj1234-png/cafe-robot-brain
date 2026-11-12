@@ -1,0 +1,90 @@
+{
+  "meta": {
+    "model": "song/gemma4-26b-128e-noimat",
+    "exam": "data/exam_live.jsonl",
+    "mode": "cpu",
+    "think": false,
+    "options": {
+      "temperature": 0,
+      "seed": 42,
+      "num_gpu": 0,
+      "num_ctx": 8192,
+      "num_predict": "auto"
+    },
+    "ollama_version": "0.40.15",
+    "n_cases": 20,
+    "ids": null,
+    "started": "2026-11-11T18:41:28",
+    "finished": "2026-11-11T18:43:02",
+    "errors": 0,
+    "empty_outputs": 0,
+    "peak_memory_this_session": {
+      "runner_private_gb": 19.78,
+      "runner_rss_gb": 19.15,
+      "gpu_shared_gb": 0.8,
+      "sys_used_gb": 25.18,
+      "pagefile_used_gb": 1.01,
+      "sys_avail_min_gb": 6.32,
+      "pagefile_start_gb": 1.01,
+      "samples": 20
+    },
+    "api_ps_after": [
+      {
+        "name": "song/gemma4-26b-128e-noimat:latest",
+        "size": 9257898473,
+        "size_vram": 0
+      }
+    ],
+    "mean_gen_tps": 13.43,
+    "mean_wall_s": 4.677
+  },
+  "summary": {
+    "n": 20,
+    "exact": 0.75,
+    "partial": 0.825,
+    "tool_names_match": 0.75,
+    "group_consistency": 0.75,
+    "by_category": {
+      "ambiguous": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "call_staff": {
+        "n": 3,
+        "exact": 0.3333,
+        "partial": 0.6667
+      },
+      "conditional": {
+        "n": 3,
+        "exact": 0.3333,
+        "partial": 0.3333
+      },
+      "impossible": {
+        "n": 1,
+        "exact": 0,
+        "partial": 0.5
+      },
+      "multi_item": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "off_menu": {
+        "n": 6,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "options": {
+        "n": 4,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "slang": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      }
+    }
+  }
+}

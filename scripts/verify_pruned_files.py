@@ -34,8 +34,10 @@ def main():
     a = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")
     src, dst = ROOT / a.src, ROOT / a.pruned
-    info = json.loads((dst / "prune_info.json").read_text(encoding="utf-8"))
-    keep = {int(k): v for k, v in info["kept_experts"].items()}
+    has_info = (dst / "prune_info.json").exists()      # no prune_info: unpruned model, only hash it (no part A compare)
+    if has_info:
+        info = json.loads((dst / "prune_info.json").read_text(encoding="utf-8"))
+        keep = {int(k): v for k, v in info["kept_experts"].items()}
 
     # ---- A
     sidx = json.loads((src / "model.safetensors.index.json").read_text(encoding="utf-8"))["weight_map"]
@@ -56,6 +58,10 @@ def main():
                 o0, o1 = meta["data_offsets"]
                 hd = hashlib.sha256()
                 copy_ranges(f, _Null(), [(base + o0, o1 - o0)], hd)
+                hashes.setdefault(hd.hexdigest(), name)
+                n += 1
+                if not has_info:
+                    continue
                 s_shard = sidx[name]
                 sbase, shdr = sh[s_shard]
                 layer, _ = sliced_kind(name)
@@ -70,10 +76,8 @@ def main():
                 if hd.hexdigest() != hs.hexdigest():
                     print(f"A DATA MISMATCH {name}")
                     bad += 1
-                hashes.setdefault(hd.hexdigest(), name)
-                n += 1
         print(f"A {shard}: checked", flush=True)
-    print(f"A: {n} tensors, {'OK' if not bad else f'{bad} problems'}", flush=True)
+    print(f"A: {n} tensors{'' if has_info else ' hashed (unpruned, no compare)'}, {'OK' if not bad else f'{bad} problems'}", flush=True)
 
     # ---- B
     if a.gguf:
