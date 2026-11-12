@@ -18,6 +18,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from report_step3 import MODE_KO, pct  # noqa: E402
 from report_step5 import ALL, CONTROL, KEEPS, S5, fmt_t, label, load, mem_text, model_mode, ollama_facts, step5_dir  # noqa: E402
 from run_step3 import CONTESTANTS, run_dir  # noqa: E402
+from score import load_jsonl, score_cafe_case, score_cafe_case_lenient  # noqa: E402
 
 SIZE_STEP3 = {"gemma4:e4b": "6.6 GB", "gemma4:12b": "8.0 GB", "gemma4:26b": "18 GB"}   # `ollama list`
 
@@ -61,6 +62,78 @@ def mcnemar_section(runs) -> list[str]:
     return L + [""]
 
 
+EXAM_FILES = {"cafe": ROOT / "data/exam_cafe.jsonl", "live": ROOT / "data/exam_live.jsonl"}
+REASON_KO = {"ambiguous": "애매함", "impossible": "불가능", "off_menu": "메뉴에 없음"}
+
+
+def _ranks(vals: dict) -> dict:
+    """competition ranking (ties share a rank)."""
+    return {k: 1 + sum(1 for x in vals.values() if x > v) for k, v in vals.items()}
+
+
+def lenient_section(runs, rows) -> list[str]:
+    """Strict (official) vs lenient score that ignores the ask_clarification reason code."""
+    exams = {e: {c["id"]: c for c in load_jsonl(f)} for e, f in EXAM_FILES.items()}
+    L = ["## 되묻기 분류 코드를 뺀 채점 (보조 점수)", "",
+         "- 공식 점수는 그대로 **엄격 채점**이다. 되묻기(`ask_clarification`)는 질문 문장은 보지 않고 이유 코드"
+         "(애매함 `ambiguous` / 불가능 `impossible` / 메뉴에 없음 `off_menu`)로 채점하므로, 되묻기를 제대로 해도 코드가 다르면 오답이 된다.",
+         "- **관대 채점**은 되묻기의 이유 코드만 무시하고 나머지(도구 이름, 다른 인자, 호출 개수)는 똑같이 본다. "
+         "‘분류만 틀림’ = 엄격 오답이지만 관대 정답인 문항.",
+         "- 엄격 점수를 다시 계산해 저장된 점수와 비교했고, 모든 실행에서 문항 단위로 같았다.", "",
+         "| 참가자 | 카페 엄격 | 카페 관대 | 실전 엄격 | 실전 관대 | 분류만 틀린 문항 (코드: 정답 → 모델) |",
+         "|---|---:|---:|---:|---:|---|"]
+    lenient = {}
+    for m, mode, es in rows:
+        cells, notes = [], []
+        for e in ("cafe", "live"):
+            r = runs.get((m, e))
+            if not r:
+                cells += ["-", "-"]
+                continue
+            st = le = 0
+            per = {}
+            for cid, case in exams[e].items():
+                pred = r["raw"][cid]["tool_calls"]
+                s = score_cafe_case(case, pred)["exact"]
+                if s != r["scores"][cid]["exact"]:
+                    raise SystemExit(f"strict rescoring differs from stored score: {m} {e} {cid}")
+                lv = score_cafe_case_lenient(case, pred)["exact"]
+                per[cid] = lv
+                st += s
+                le += lv
+                if lv and not s:
+                    ex = [c["arguments"].get("reason") for c in case["expected"] if c["name"] == "ask_clarification"]
+                    got = [c["arguments"].get("reason") for c in pred if c.get("name") == "ask_clarification"]
+                    notes.append(f"{cid} ({'/'.join(REASON_KO.get(x, str(x)) for x in ex)} → "
+                                 f"{'/'.join(REASON_KO.get(x, str(x)) for x in got)})")
+            lenient[(m, e)] = per
+            n = len(exams[e])
+            cells += [pct(st / n), pct(le / n) if le == st else f"**{pct(le / n)}**"]
+        L.append(f"| {label(m)} | {' | '.join(cells)} | {', '.join(notes) or '없음'} |")
+    # ranking on the live exam (cafe does not change)
+    names = [m for m, _, es in rows if runs.get((m, "live"))]
+    strict = {m: runs[(m, "live")]["summary"]["exact"] for m in names}
+    lax = {m: sum(lenient[(m, "live")].values()) / len(exams["live"]) for m in names}
+    rs, rl = _ranks(strict), _ranks(lax)
+    L += ["", "- 실전 시험 순위 (엄격 → 관대, 같은 점수는 같은 순위):"]
+    for m in sorted(names, key=lambda x: (rl[x], rs[x])):
+        mark = "" if rs[m] == rl[m] else " ← 바뀜"
+        L.append(f"  - {label(m)}: {rs[m]}위 ({pct(strict[m])}) → {rl[m]}위 ({pct(lax[m])}){mark}")
+    L += ["", "- 관대 채점으로 다시 한 McNemar 정확 검정 (실전 20문항):", ""]
+    L += ["| 비교 (A vs B) | 엄격: A만 / B만 맞힘, p | 관대: A만 / B만 맞힘, p |", "|---|---:|---:|"]
+    for A, B in MCNEMAR_PAIRS:
+        if (A, "live") not in lenient or (B, "live") not in lenient:
+            continue
+        sa, sb = runs[(A, "live")]["scores"], runs[(B, "live")]["scores"]
+        la, lb = lenient[(A, "live")], lenient[(B, "live")]
+        ids = sorted(set(sa) & set(sb))
+        a1, b1 = sum(1 for i in ids if sa[i]["exact"] and not sb[i]["exact"]), sum(1 for i in ids if sb[i]["exact"] and not sa[i]["exact"])
+        a2, b2 = sum(1 for i in ids if la[i] and not lb[i]), sum(1 for i in ids if lb[i] and not la[i])
+        L.append(f"| {label(A)} vs {label(B)} | {a1} / {b1}, p = {mcnemar_exact(a1, b1):.3f} | "
+                 f"{a2} / {b2}, p = {mcnemar_exact(a2, b2):.3f} |")
+    return L + [""]
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     rows = [(m, mode, es) for m, mode, es in CONTESTANTS]
@@ -100,6 +173,7 @@ def main():
             L.append(f"  - {label(m)}: {pct(bs['kmmlu']['accuracy'])} / {pct(bs['mmlu']['accuracy'])}")
     L.append("")
     L += mcnemar_section(runs)
+    L += lenient_section(runs, rows)
     notes = S5 / "comparison_notes.md"
     if notes.exists():
         L += [notes.read_text(encoding="utf-8").strip(), ""]

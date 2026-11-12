@@ -107,6 +107,30 @@ def score_cafe_case(case: dict, predicted: list) -> dict:
     }
 
 
+def _any_reason(calls: list) -> list:
+    """ask_clarification with its reason code replaced by a wildcard (same on both sides -> always equal)."""
+    out = []
+    for c in calls or []:
+        if c.get("name") == "ask_clarification":
+            args = c.get("arguments") or {}
+            if isinstance(args, str):
+                try:
+                    args = json.loads(args)
+                except json.JSONDecodeError:
+                    args = {}
+            c = {**c, "arguments": {**args, "reason": "*"}}
+        out.append(c)
+    return out
+
+
+def score_cafe_case_lenient(case: dict, predicted: list) -> dict:
+    """Supplementary score that ignores the ask_clarification reason code (the official score stays strict).
+    A case with strict exact 0 and lenient exact 1 is wrong only because of the reason code."""
+    case = {**case, "expected": _any_reason(case["expected"]),
+            "expected_alternatives": [_any_reason(a) for a in case.get("expected_alternatives") or []]}
+    return score_cafe_case(case, _any_reason(predicted))
+
+
 def summarize_cafe(scores: list[dict]) -> dict:
     by_cat = defaultdict(list)
     by_group = defaultdict(list)

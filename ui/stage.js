@@ -55,24 +55,88 @@
   function shape(ctx, fill, lw = 3) { ctx.fillStyle = fill; ctx.fill(); ctx.lineWidth = lw; ctx.strokeStyle = INK; ctx.stroke(); }
   function circle(ctx, x, y, r) { ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); }
 
-  function wrap(ctx, text, maxW, indent = 0) {
-    // word wrap with character fallback (Korean words can be long)
-    const out = [];
-    let line = "", width = maxW - indent;
-    const push = () => { out.push(line); line = ""; width = maxW; };
-    for (const word of String(text).split(/(\s+)/)) {
-      if (!word) continue;
-      const cand = line + word;
-      if (ctx.measureText(cand).width <= width) { line = cand; continue; }
-      if (/^\s+$/.test(word)) { push(); continue; }
-      if (line.trim()) push();
-      for (const ch of word) {
-        if (ctx.measureText(line + ch).width > width && line) push();
-        line += ch;
-      }
+  // ---------- Korean line breaking (like CSS word-break: keep-all + text-wrap: balance) ----------
+  // Break only at spaces, plus right before "(" so "카페라떼" / "(샷 반 개 추가)" may split there.
+  // A (...) group is never broken, and a line never starts with closing punctuation.
+  const NO_START = /^[.,?!)\]}'"”’…:;~·]/;
+
+  function units(text, relaxed = false) {
+    const pieces = [];
+    for (const w of String(text).trim().split(/\s+/).filter(Boolean)) {
+      w.split(/(?=\()/).forEach((t, i) => pieces.push({ t, sp: i === 0 }));
     }
-    if (line.trim() || !out.length) out.push(line);
-    return out.map((s) => s.trim());
+    const out = [];
+    let depth = 0;
+    for (const p of pieces) {
+      if (out.length && ((depth > 0 && !relaxed) || NO_START.test(p.t))) {
+        const last = out[out.length - 1];
+        last.t += (p.sp ? " " : "") + p.t;
+      } else out.push({ ...p });
+      depth = Math.max(0, depth + (p.t.match(/\(/g) || []).length - (p.t.match(/\)/g) || []).length);
+    }
+    return out;
+  }
+
+  function greedy(ctx, us, maxW, indent) {
+    const lines = [];
+    let cur = "", over = false;
+    for (const u of us) {
+      const width = lines.length === 0 ? maxW - indent : maxW;
+      const cand = cur ? cur + (u.sp ? " " : "") + u.t : u.t;
+      if (!cur || ctx.measureText(cand).width <= width) {
+        if (!cur && ctx.measureText(u.t).width > width) over = true;
+        cur = cand;
+      } else { lines.push(cur); cur = u.t; if (ctx.measureText(u.t).width > maxW) over = true; }
+    }
+    if (cur || !lines.length) lines.push(cur);
+    return { lines, over };
+  }
+
+  // -> {lines, over}; over = some unbreakable unit is wider than the line (caller shrinks the font)
+  function wrapInfo(ctx, text, maxW, indent = 0, relaxed = false) {
+    const us = units(text, relaxed);
+    let best = greedy(ctx, us, maxW, indent);
+    const last = best.lines[best.lines.length - 1];
+    if (best.lines.length > 1 && !best.over && ctx.measureText(last).width < maxW * 0.45) {
+      // short last line: rebalance to the narrowest width that still needs the same number of lines
+      let lo = Math.max(indent + 10, maxW * 0.4), hi = maxW;
+      for (let i = 0; i < 14; i++) {
+        const mid = (lo + hi) / 2, g = greedy(ctx, us, mid, indent);
+        if (g.lines.length === best.lines.length && !g.over) hi = mid; else lo = mid;
+      }
+      best = greedy(ctx, us, hi, indent);
+    }
+    return best;
+  }
+
+  function hardBreak(ctx, line, maxW) {  // last resort only, when even the smallest font overflows
+    const out = [];
+    let cur = "";
+    for (const ch of line) {
+      if (cur && ctx.measureText(cur + ch).width > maxW && !NO_START.test(ch)) { out.push(cur); cur = ""; }
+      cur += ch;
+    }
+    out.push(cur);
+    return out;
+  }
+
+  function wrap(ctx, text, maxW, indent = 0) {
+    const { lines } = wrapInfo(ctx, text, maxW, indent);
+    return lines.flatMap((l, i) => (ctx.measureText(l).width > maxW - (i ? 0 : indent) ? hardBreak(ctx, l, maxW - (i ? 0 : indent)) : [l]));
+  }
+
+  // pick the largest font size (from sizes) whose wrapped text has no overflowing unit:
+  // first keep (...) groups whole at the top three sizes, then allow breaks at spaces inside them
+  function fitWrap(ctx, text, maxW, sizes, indent = 0) {
+    const tries = [...sizes.slice(0, 3).map((px) => [px, false]), ...sizes.map((px) => [px, true])];
+    for (const [px, relaxed] of tries) {
+      ctx.font = font(px);
+      const w = wrapInfo(ctx, text, maxW, typeof indent === "function" ? indent(px) : indent, relaxed);
+      if (!w.over) return { px, lines: w.lines };
+    }
+    const px = sizes[sizes.length - 1];
+    ctx.font = font(px);
+    return { px, lines: wrap(ctx, text, maxW, typeof indent === "function" ? indent(px) : indent) };
   }
 
   let pattern = null;
@@ -117,7 +181,7 @@
       ctx.stroke();
     } else if (st === "thinking") {
       ctx.beginPath(); ctx.ellipse(cx + 3, cy, 4, 3 + Math.abs(Math.sin(t * 6)) * 2, 0, 0, 7); ctx.stroke();
-    } else if (st === "off") {
+    } else if (st === "off" || st === "partial") {
       ctx.beginPath(); ctx.moveTo(cx - w / 4, cy); ctx.lineTo(cx + w / 4, cy); ctx.stroke();
     } else {
       ctx.beginPath(); ctx.arc(cx, cy - w * 0.25, w * 0.4, Math.PI * 0.2, Math.PI * 0.8); ctx.stroke();
@@ -259,7 +323,7 @@
   }
 
   // ---------- bubbles ----------
-  const BUB_W = COL_W - 20, TXT_W = BUB_W - 22, LH = 22, NOTE_LH = 17;
+  const BUB_W = COL_W - 20, TXT_W = BUB_W - 22;
 
   function layoutBubble(ctx, lines) {
     const rows = [];
@@ -267,13 +331,12 @@
     for (const ln of lines) {
       ctx.font = font(13);
       const chipW = ctx.measureText(KIND[ln.kind][0]).width + 14;
-      ctx.font = font(16);
       const txt = ln.kind === "ask" || ln.kind === "talk" ? `“${ln.text}”` : ln.text;
-      const ws = wrap(ctx, txt, TXT_W, chipW + 6);
-      ctx.font = font(12.5);
-      const ns = ln.note ? wrap(ctx, ln.note, TXT_W) : [];
-      rows.push({ ln, chipW, ws, ns });
-      h += ws.length * LH + ns.length * NOTE_LH + 8;
+      const main = fitWrap(ctx, txt, TXT_W, [16, 15, 14, 13], chipW + 6);
+      const note = ln.note ? fitWrap(ctx, ln.note, TXT_W, [12.5, 12, 11.5, 11]) : { px: 12.5, lines: [] };
+      const lh = Math.round(main.px * 1.375), nlh = Math.round(note.px * 1.36);
+      rows.push({ ln, chipW, ws: main.lines, px: main.px, lh, ns: note.lines, npx: note.px, nlh });
+      h += main.lines.length * lh + note.lines.length * nlh + 8;
     }
     return { rows, h: h + 4 };
   }
@@ -294,12 +357,12 @@
       const [label, color] = KIND[r.ln.kind];
       rr(ctx, x + 11, cy + 1, r.chipW, 19, 9); ctx.fillStyle = color; ctx.fill();
       ctx.fillStyle = "#fff"; ctx.font = font(13); ctx.textBaseline = "middle"; ctx.fillText(label, x + 18, cy + 11);
-      ctx.fillStyle = r.ln.kind === "talk" || r.ln.kind === "silent" ? "#5d554d" : INK; ctx.font = font(16);
-      r.ws.forEach((w, i) => ctx.fillText(w, x + 11 + (i === 0 ? r.chipW + 6 : 0), cy + 11 + i * LH));
-      cy += r.ws.length * LH;
-      ctx.fillStyle = "#857a6e"; ctx.font = font(12.5);
-      r.ns.forEach((w, i) => ctx.fillText(w, x + 11, cy + 8 + i * NOTE_LH));
-      cy += r.ns.length * NOTE_LH + 8;
+      ctx.fillStyle = r.ln.kind === "talk" || r.ln.kind === "silent" ? "#5d554d" : INK; ctx.font = font(r.px);
+      r.ws.forEach((w, i) => ctx.fillText(w, x + 11 + (i === 0 ? r.chipW + 6 : 0), cy + 11 + i * r.lh));
+      cy += r.ws.length * r.lh;
+      ctx.fillStyle = "#857a6e"; ctx.font = font(r.npx);
+      r.ns.forEach((w, i) => ctx.fillText(w, x + 11, cy + 8 + i * r.nlh));
+      cy += r.ns.length * r.nlh + 8;
     }
     ctx.restore();
   }
@@ -320,16 +383,22 @@
     ctx.restore();
   }
 
-  function stamp(ctx, x, y, ok, p) {
+  function stamp(ctx, x, y, kind, p) {
     if (p <= 0) return;
     const s = 1 + 0.9 * (1 - easeBack(clamp(p, 0, 1)));
-    ctx.save(); ctx.translate(x, y); ctx.rotate(-0.18); ctx.scale(s, s); ctx.globalAlpha = clamp(p * 4, 0, 1);
+    ctx.save(); ctx.translate(x, kind === "reason" ? y + 6 : y); ctx.rotate(kind === "reason" ? -0.05 : -0.18); ctx.scale(s, s); ctx.globalAlpha = clamp(p * 4, 0, 1);
     ctx.strokeStyle = C.red; ctx.fillStyle = C.red; ctx.lineCap = "round";
-    // symbol on the left, word on the right (Korean marking: ○ = right, ✗ = wrong)
-    if (ok) { ctx.lineWidth = 6; circle(ctx, -30, 0, 20); ctx.stroke(); }
-    else { ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(-46, -17); ctx.lineTo(-14, 17); ctx.moveTo(-14, -17); ctx.lineTo(-46, 17); ctx.stroke(); }
-    ctx.font = font(26); ctx.textBaseline = "middle";
-    ctx.fillText(ok ? "정답!" : "오답", 2, 2);
+    // symbol on the left, word on the right (Korean marking: ○ = right, ✗ = wrong, △ = half right)
+    ctx.textBaseline = "middle";
+    if (kind === "right") { ctx.lineWidth = 6; circle(ctx, -30, 0, 20); ctx.stroke(); ctx.font = font(26); ctx.fillText("정답!", 2, 2); }
+    else if (kind === "wrong") {
+      ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(-46, -17); ctx.lineTo(-14, 17); ctx.moveTo(-14, -17); ctx.lineTo(-46, 17); ctx.stroke();
+      ctx.font = font(26); ctx.fillText("오답", 2, 2);
+    } else {
+      ctx.strokeStyle = C.orange; ctx.fillStyle = C.orange; ctx.lineWidth = 6; ctx.lineJoin = "round";
+      ctx.beginPath(); ctx.moveTo(-58, 15); ctx.lineTo(-40, -17); ctx.lineTo(-22, 15); ctx.closePath(); ctx.stroke();
+      ctx.font = font(15); ctx.fillText("질문은 맞았지만", -12, -10); ctx.fillText("분류가 달라요", -12, 11);
+    }
     ctx.restore();
   }
 
@@ -358,8 +427,8 @@
     // customer panel
     const hasSide = scene.orderState.length > 0;
     L.bubX = 196; L.bubW = hasSide ? 610 : 868;
-    ctx.font = font(26);
-    L.sayLines = wrap(ctx, `“${scene.say}”`, L.bubW - 40);
+    const say = fitWrap(ctx, `“${scene.say}”`, L.bubW - 40, [26, 24, 22]);
+    L.sayLines = say.lines; L.sayPx = say.px;
     ctx.font = font(14);
     L.hist = [];
     for (const m of scene.history) {
@@ -370,14 +439,21 @@
     ctx.font = font(15);
     L.expLines = scene.expected ? wrap(ctx, scene.expected.map((x) => x.text).join(" / "), L.bubW - 140) : [];
     L.custTop = 74;
+    L.rx = L.bubX + L.bubW + 18; L.rw = W - M - 5 - L.rx - 14;
+    L.receipt = scene.orderState.map((s2, i) => fitWrap(ctx, `${i + 1}. ${s2}`, L.rw - 24, [14.5, 13.5, 12.5]));
+    L.rh = 40 + L.receipt.reduce((a, r) => a + r.lines.length * Math.round(r.px * 1.45), 0);
     L.expY = L.custTop + 16 + L.bubH + 22;
-    L.custH = Math.max(172, L.bubH + 34 + (L.expLines.length ? 14 + L.expLines.length * 22 : 0));
+    L.custH = Math.max(172, L.bubH + 34 + (L.expLines.length ? 14 + L.expLines.length * 22 : 0), hasSide ? L.rh + 34 : 0);
     // robot columns
     L.bubbles = scene.robots.map((r) => (r.lines ? layoutBubble(ctx, r.lines) : null));
     L.bubMax = Math.max(64, ...L.bubbles.map((b) => (b ? b.h : 0)));
     L.colTop = L.custTop + L.custH + 22;
     L.colH = 52 + 160 + 16 + L.bubMax + 10 + 58 + 16 + 44;
-    L.foot = [].concat(scene.footer);
+    L.foot = [];
+    [].concat(scene.footer).forEach((line, k) => {
+      ctx.font = font(k === 0 ? 15 : 13);
+      for (const s2 of wrap(ctx, line, W - 2 * M - 12)) L.foot.push({ s: s2, k });
+    });
     L.H = L.colTop + L.colH + 30 + L.foot.length * 21;
     return L;
   }
@@ -414,18 +490,22 @@
       ctx.font = font(14);
       for (const h of L.hist) { ctx.fillStyle = h.who === "손님" ? "#8c7a66" : "#4f7cac"; ctx.fillText(h.s, bx + 20, y); y += 19; }
       if (L.hist.length) y += 8;
-      ctx.font = font(26); ctx.fillStyle = INK;
+      ctx.font = font(L.sayPx); ctx.fillStyle = INK;
       for (const s2 of L.sayLines) { ctx.fillText(s2, bx + 20, y + 6); y += 36; }
       ctx.restore();
     }
     if (scene.orderState.length) {  // receipt
-      const rx = L.bubX + L.bubW + 18, ry = L.custTop + 16, rw = W - M - 5 - rx - 14;
-      const rh = 40 + scene.orderState.length * 22;
+      const rx = L.rx, ry = L.custTop + 16, rw = L.rw, rh = L.rh;
       ctx.save(); ctx.translate(rx + rw / 2, ry); ctx.rotate(0.02); ctx.translate(-(rx + rw / 2), -ry);
       rr(ctx, rx, ry, rw, rh, 6); shape(ctx, "#fffdf7", 2.5);
       ctx.font = font(15); ctx.fillStyle = "#7b6650"; ctx.fillText("현재 주문", rx + 12, ry + 18);
-      ctx.font = font(14.5); ctx.fillStyle = INK;
-      scene.orderState.forEach((s2, i) => ctx.fillText(`${i + 1}. ${s2}`, rx + 12, ry + 42 + i * 22));
+      ctx.fillStyle = INK;
+      let yy = ry + 42;
+      for (const r of L.receipt) {
+        ctx.font = font(r.px);
+        r.lines.forEach((s2, j) => ctx.fillText(s2, rx + 12 + (j ? 14 : 0), yy + j * Math.round(r.px * 1.45)));
+        yy += r.lines.length * Math.round(r.px * 1.45);
+      }
       ctx.restore();
     }
     if (L.expLines.length) {
@@ -446,7 +526,7 @@
       const off = r.off || r.missing;
       const done = !off && t >= r.tDone;
       const thinking = !off && t >= T_THINK && !done;
-      const st = off ? "off" : done ? (r.correct === true ? "right" : r.correct === false ? "wrong" : "answered") : thinking ? "thinking" : "idle";
+      const st = off ? "off" : done ? (r.correct === true ? "right" : r.reason_only ? "partial" : r.correct === false ? "wrong" : "answered") : thinking ? "thinking" : "idle";
       ctx.save();
       if (off) ctx.globalAlpha = 0.45;
       panel(ctx, x, y, COL_W - 5, L.colH, "#fff");
@@ -473,7 +553,7 @@
         const dashed = r.lines.every((l) => l.kind === "talk" || l.kind === "silent");
         drawBubble(ctx, x + 8, by, L.bubbles[i], cx - 2, dashed, clamp((t - r.tDone) / 0.28, 0, 1));
       }
-      if (done && r.correct != null) stamp(ctx, cx + 4, y + L.colH - 44 - 16 - 36, r.correct, (t - r.tDone - 0.3) / 0.22);
+      if (done && r.correct != null) stamp(ctx, cx + 4, y + L.colH - 44 - 16 - 36, r.correct ? "right" : r.reason_only ? "reason" : "wrong", (t - r.tDone - 0.3) / 0.22);
       // badges
       const gy = y + L.colH - 40;
       let secs = 0;
@@ -484,22 +564,22 @@
       const bw = (COL_W - 31) / 2;
       ctx.font = font(12); ctx.fillStyle = "#7b6650"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
       ctx.fillText(scene.badgeLabel, cx - 2, gy - 10); ctx.textAlign = "left";
-      badge(ctx, x + 10, gy, bw + 6, "clock", off ? "—" : fmtSec(secs), !done);
+      badge(ctx, x + 10, gy, bw + 6, "clock", off ? "—" : r.key === "vending" ? "즉시" : fmtSec(secs), !done);
       badge(ctx, x + 16 + bw + 6, gy, bw - 6, "chip", r.key === "vending" ? "모델 없음" : r.memory_gb == null ? "—" : `${r.memory_gb.toFixed(1)}GB`, !done);
       ctx.restore();
     });
 
     // footer
     ctx.font = font(13); ctx.fillStyle = "#7b6650"; ctx.textBaseline = "middle";
-    L.foot.forEach((line, k) => {
-      ctx.font = font(k === 0 ? 15 : 13); ctx.fillStyle = k === 0 ? INK : "#7b6650";
-      ctx.fillText(line, M + 6, L.colTop + L.colH + 24 + k * 21);
+    L.foot.forEach((f, n) => {
+      ctx.font = font(f.k === 0 ? 15 : 13); ctx.fillStyle = f.k === 0 ? INK : "#7b6650";
+      ctx.fillText(f.s, M + 6, L.colTop + L.colH + 24 + n * 21);
     });
     ctx.restore();
   }
 
   function sceneText(scene) {
-    const parts = [scene.tag, [].concat(scene.footer).join(""), scene.badgeLabel, scene.say, "카페 알바 로봇 오디션 같은 손님, 다섯 로봇 직접 주문해 보기 손님 로봇 현재 주문 모범 답안 다섯 로봇이 모두 답하면 공개! 정답! 오답 모델 없음 쉬는 중 기록 없음 0123456789.초GB—“”…",
+    const parts = [scene.tag, [].concat(scene.footer).join(""), scene.badgeLabel, scene.say, "카페 알바 로봇 오디션 같은 손님, 다섯 로봇 직접 주문해 보기 손님 로봇 현재 주문 모범 답안 다섯 로봇이 모두 답하면 공개! 정답! 오답 질문은 맞았지만 분류가 달라요 즉시 모델 없음 쉬는 중 기록 없음 0123456789.초GB—“”…",
       ...Object.values(KIND).map((k) => k[0])];
     for (const m of scene.history) parts.push(m.content);
     parts.push(...scene.orderState);

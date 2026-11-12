@@ -29,7 +29,7 @@ from bench_baseline import gpu_memory, runner_memory  # noqa: E402
 from bench_latency import build_messages  # noqa: E402
 from cafe_common import KO_DINE, defaults, items_by_name, load_tools, normalize_add  # noqa: E402
 from run_exam import MODE_OPTIONS, OPTIONS, tool_calls_of  # noqa: E402
-from score import load_jsonl  # noqa: E402
+from score import load_jsonl, score_cafe_case_lenient  # noqa: E402
 from vending_machine import VendingMachine  # noqa: E402
 
 HOST = "http://127.0.0.1:11434"
@@ -126,15 +126,24 @@ def changes_ko(ch: dict) -> str:
     return ", ".join(out) or "(바뀐 것 없음)"
 
 
+def _obj(word: str) -> str:
+    """word + object particle 을/를 (by the final consonant of the last Hangul syllable)."""
+    ch = word.strip()[-1:]
+    if "가" <= ch <= "힣":
+        return word + ("을" if (ord(ch) - 0xAC00) % 28 else "를")
+    return word + "을(를)"
+
+
 def _line_name(order_state, idx) -> str:
+    """'1번 아이스 아메리카노를' (object form, used before 뺐어요 / 바꿨어요)."""
     try:
         i = int(idx)
     except (TypeError, ValueError):
-        return f"{idx}번"
+        return _obj(f"{idx}번 메뉴")
     if order_state and 1 <= i <= len(order_state):
-        short = re.sub(r"\(.*\)", "", item_ko(order_state[i - 1]).rsplit(" ", 1)[0])
-        return f"{i}번({short})"
-    return f"{i}번(없는 번호)"
+        short = re.sub(r"\(.*\)", "", item_ko(order_state[i - 1]).rsplit(" ", 1)[0]).strip()
+        return _obj(f"{i}번 {short}")
+    return _obj(f"없는 {i}번 메뉴")
 
 
 REASON_KO = {"ambiguous": "되묻기", "impossible": "안 되는 옵션", "off_menu": "없는 메뉴"}
@@ -148,10 +157,10 @@ def speech(calls: list, content: str = "", order_state: list | None = None) -> l
         if name == "add_item":
             lines.append({"kind": "add", "text": f"{item_ko(a)} 담았어요"})
         elif name == "modify_item":
-            lines.append({"kind": "modify", "text": f"{_line_name(order_state, a.get('item_index'))}을 "
+            lines.append({"kind": "modify", "text": f"{_line_name(order_state, a.get('item_index'))} "
                                                     f"{changes_ko(a.get('changes'))} 바꿨어요"})
         elif name == "remove_item":
-            lines.append({"kind": "remove", "text": f"{_line_name(order_state, a.get('item_index'))}을 뺐어요"})
+            lines.append({"kind": "remove", "text": f"{_line_name(order_state, a.get('item_index'))} 뺐어요"})
         elif name == "ask_clarification":
             lines.append({"kind": "ask", "text": str(a.get("question") or "…"),
                           "note": REASON_KO.get(a.get("reason"), str(a.get("reason") or ""))})
@@ -200,6 +209,15 @@ def fair_numbers(key: str) -> dict:
     return out
 
 
+def reason_only(exam: str, case: dict, rb: dict) -> bool:
+    """Wrong only because of the ask_clarification reason code (strict 0, lenient 1)."""
+    d = RES / rb["dir"].format(exam=exam)
+    sc, raw = _by_id(d / "scores.jsonl").get(case["id"]), _by_id(d / "raw.jsonl").get(case["id"])
+    if not sc or not raw or sc["exact"]:
+        return False
+    return bool(score_cafe_case_lenient(case, raw.get("tool_calls") or [])["exact"])
+
+
 def case_index() -> list[dict]:
     out = []
     for exam, path in EXAMS.items():
@@ -207,7 +225,7 @@ def case_index() -> list[dict]:
             marks = ""
             for rb in ROBOTS:
                 s = _by_id(RES / rb["dir"].format(exam=exam) / "scores.jsonl").get(c["id"])
-                marks += "?" if s is None else ("○" if s["exact"] else "✗")
+                marks += "?" if s is None else ("○" if s["exact"] else "△" if reason_only(exam, c, rb) else "✗")
             last = [m["content"] for m in c["conversation"] if m["role"] == "user"][-1]
             out.append({"id": c["id"], "exam": exam, "exam_ko": EXAM_KO[exam],
                         "category": CATEGORY_KO.get(c["category"], c["category"]), "text": last,
@@ -233,7 +251,8 @@ def replay(case_id: str) -> dict:
             r.update(missing=True)
         else:
             r.update(lines=speech(raw.get("tool_calls"), raw.get("content"), st),
-                     correct=bool(sc and sc["exact"]), partial=sc and sc.get("partial"), **fair_numbers(rb["key"]))
+                     correct=bool(sc and sc["exact"]), partial=sc and sc.get("partial"),
+                     reason_only=reason_only(exam, case, rb), **fair_numbers(rb["key"]))
         robots.append(r)
     return {
         "id": case_id, "exam": exam, "exam_ko": EXAM_KO[exam],
