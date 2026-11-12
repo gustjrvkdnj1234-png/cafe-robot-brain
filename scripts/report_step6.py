@@ -218,6 +218,79 @@ def lean_section(runs, changed):
     return L
 
 
+DEPLOY = ROOT / "results/step6/deploy"
+
+
+def deploy_section(changed):
+    if not DEPLOY.exists():
+        return []
+    from cafe_common import normalize_call
+    from score import score_cafe_case
+    by_id = {c["id"]: c for c in load_jsonl(ROOT / "data/exam_cafe.jsonl")}
+    pairs = {}
+    for m, ml in LEAN_MODELS:
+        for mode, mk in MODES:
+            fa = LEAN / f"{slug(m + '-text')}__{mode}.json"
+            fb = DEPLOY / f"{slug(m + '-text')}__{mode}.json"
+            if fa.exists() and fb.exists():
+                a, b = (json.loads(f.read_text(encoding="utf-8")) for f in (fa, fb))
+                if a.get("cases") and b.get("cases"):
+                    pairs[(m, mode)] = (ml, mk, a, b)
+    L = ["# 6c단계: 배포용 프롬프트 배치 (시연, 새 시험 아님)", "",
+         "- 시험용 프롬프트(`cafe_common.py`, 고정)는 그대로 두고, 배포용 배치를 따로 만들었다(`scripts/bench_latency.py --layout deploy`).",
+         "- 바꾼 것은 위치 하나: 시스템 프롬프트 맨 끝의 `[현재 주문 내역]` 블록을 떼어 **별도 system 메시지로 손님의 마지막 말 바로 앞**에 넣었다. 글자는 한 글자도 바꾸지 않았다"
+         "(시험용 시스템 프롬프트 = 배포용 앞부분 + 빈 줄 + 주문 내역 블록, 30문항 모두 확인). 대화 내용도 그대로다.",
+         "- Ollama는 이 메시지를 도구 설명 **뒤에** 그린다. 주문 내역만 다른 두 요청을 보내 확인했다: 앞 3,469 토큰(도구 설명까지 전부)이 같다. 시험용 배치에서는 2,362 토큰에서 갈라졌다.",
+         "- 모델·서버 설정은 6b와 같다(텍스트 전용 64개·48개, 보통 SWA 캐시, `LLAMA_ARG_CACHE_RAM=0`). 같은 30문항, 같은 순서.", ""]
+    n_ch = sum(changed.values())
+    L += ["## 주문 내역이 바뀐 경우: 전과 후", "",
+          f"| 모델 | 모드 | 첫 토큰까지: 시험용 배치 → 배포용 배치 (중앙값, {n_ch}문항) | 주문 1건 전체: 시험용 → 배포용 (중앙값, {n_ch}문항) | 최대 (30문항): 시험용 → 배포용 |",
+          "|---|---|---:|---:|---:|"]
+    for (m, mode), (ml, mk, a, b) in pairs.items():
+        ta = [c["ttft_s"] for c in a["cases"] if changed[c["id"]]]
+        tb = [c["ttft_s"] for c in b["cases"] if changed[c["id"]]]
+        wa = [c["wall_s"] for c in a["cases"] if changed[c["id"]]]
+        wb = [c["wall_s"] for c in b["cases"] if changed[c["id"]]]
+        L.append(f"| {ml} | {mk} | {statistics.median(ta):.1f} s → **{statistics.median(tb):.2f} s** | "
+                 f"{statistics.median(wa):.1f} s → **{statistics.median(wb):.2f} s** | "
+                 f"{max(c['wall_s'] for c in a['cases']):.1f} s → {max(c['wall_s'] for c in b['cases']):.1f} s |")
+    L += ["", "## 전체 지표 (배포용 배치)", "",
+          "| 모델 | 모드 | 배치 | 첫 토큰까지: 앞부분 재사용 (중앙값) | 첫 토큰까지: 주문 내역 바뀜 (중앙값) | 주문 1건 전체 (중앙값 / 최대) | 생성 속도 | 정상 상태 메모리 |",
+          "|---|---|---|---:|---:|---:|---:|---:|"]
+    for (m, mode), (ml, mk, a, b) in pairs.items():
+        for tag, r in (("시험용", a), ("배포용", b)):
+            cs = r["cases"]
+            same = [c["ttft_s"] for c in cs if not changed[c["id"]]]
+            ch = [c["ttft_s"] for c in cs if changed[c["id"]]]
+            wt = [c["wall_s"] for c in cs]
+            ts = [c["tok_s"] for c in cs if c["tok_s"]]
+            mm = mem(r)
+            L.append(f"| {ml} | {mk} | {tag} | {statistics.median(same):.2f} s | {statistics.median(ch):.2f} s | "
+                     f"{statistics.median(wt):.2f} s / {max(wt):.1f} s | {statistics.median(ts):.1f} tok/s | "
+                     f"{mm['foot_med']:.1f} GB (변화 {mm['growth']:+.2f}) |")
+    L += ["", "## 30문항 점수: 고정 시험 프롬프트 vs 배포용 배치", "",
+          "| 모델 | 모드 | 시험용 정답 | 배포용 정답 | 내용이 달라진 문항 (안내 문장 표현 차이는 뺌) |", "|---|---|---:|---:|---|"]
+    for (m, mode), (ml, mk, a, b) in pairs.items():
+        ca = {c["id"]: c for c in a["cases"]}
+        cb = {c["id"]: c for c in b["cases"]}
+        ea = sum(score_cafe_case(by_id[i], ca[i]["tool_calls"])["exact"] for i in ca)
+        eb = sum(score_cafe_case(by_id[i], cb[i]["tool_calls"])["exact"] for i in cb)
+        diff = []
+        for i in ca:
+            na = [normalize_call(c) for c in ca[i]["tool_calls"]]
+            nb = [normalize_call(c) for c in cb[i]["tool_calls"]]
+            if na != nb:
+                sa = score_cafe_case(by_id[i], ca[i]["tool_calls"])["exact"]
+                sb = score_cafe_case(by_id[i], cb[i]["tool_calls"])["exact"]
+                diff.append(f"{i} ({'✅' if sa else '❌'}→{'✅' if sb else '❌'})")
+        L.append(f"| {ml} | {mk} | {ea}/{len(ca)} | {eb}/{len(cb)} | {', '.join(diff) if diff else '없음'} |")
+    L.append("")
+    di = ROOT / "results/step6/deploy_interpretation.md"
+    if di.exists():
+        L += [di.read_text(encoding="utf-8").strip(), ""]
+    return L
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     runs = {}
@@ -298,6 +371,7 @@ def main():
     if interp.exists():
         L += [interp.read_text(encoding="utf-8").strip(), ""]
     L += lean_section(runs, changed)
+    L += deploy_section(changed)
     out = ROOT / "results/step6/latency.md"
     out.write_text("\n".join(L), encoding="utf-8")
     print("saved", out.relative_to(ROOT))

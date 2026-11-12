@@ -35,6 +35,20 @@ from score import load_jsonl  # noqa: E402
 
 HOST = "http://127.0.0.1:11434"
 NUM_CTX, NUM_PREDICT, KEEP = 8192, 512, "30m"
+ORDER_SEP = "\n\n[현재 주문 내역]\n"
+
+
+def build_messages(layout, order_state, conversation):
+    """exam  = frozen exam layout: order state at the end of the system prompt (Ollama puts tools AFTER it).
+    deploy = Step 6c deployment layout: same text, but the '[현재 주문 내역]' block moves into its own system message
+             just before the last customer turn, so it is rendered after the tool definitions."""
+    sp = build_system_prompt(order_state)
+    if layout == "exam":
+        return [{"role": "system", "content": sp}] + conversation
+    head, tail = sp.split(ORDER_SEP)
+    state_msg = {"role": "system", "content": "[현재 주문 내역]\n" + tail}
+    last_user = max(i for i, m in enumerate(conversation) if m["role"] == "user")
+    return [{"role": "system", "content": head}] + conversation[:last_user] + [state_msg] + conversation[last_user:]
 
 
 class Series:
@@ -118,6 +132,7 @@ def main():
     ap.add_argument("--mode", choices=sorted(MODE_OPTIONS), required=True)
     ap.add_argument("--n", type=int, default=30)
     ap.add_argument("--out-dir", default="results/step6/latency")
+    ap.add_argument("--layout", choices=["exam", "deploy"], default="exam")
     ap.add_argument("--server-env", default="OLLAMA_IGPU_ENABLE=1,LLAMA_ARG_CACHE_RAM=0,LLAMA_ARG_SWA_FULL=1",
                     help="comma list, recorded in the output (must match how ollama serve was started)")
     a = ap.parse_args()
@@ -129,12 +144,12 @@ def main():
     res = {"model": a.model, "mode": a.mode, "started": datetime.now().isoformat(timespec="seconds"),
            "settings": {"num_ctx": NUM_CTX, "num_predict": NUM_PREDICT, **OPTIONS, **MODE_OPTIONS[a.mode],
                         "think": False, "server_env": a.server_env.split(",")},
-           "case_ids": [c["id"] for c in cases]}
+           "layout": a.layout, "case_ids": [c["id"] for c in cases]}
     unload_all()
     time.sleep(3)
     ser = Series().start()
     try:
-        warm_msgs = [{"role": "system", "content": build_system_prompt(None)}, {"role": "user", "content": "안녕하세요"}]
+        warm_msgs = build_messages(a.layout, None, [{"role": "user", "content": "안녕하세요"}])
         res["warmup"] = {k: v for k, v in stream_chat(a.model, a.mode, warm_msgs, tools, 1).items()
                          if k not in ("tool_calls", "content")}
         res["placement"] = fits(a.model)
@@ -147,7 +162,7 @@ def main():
         ser.phase = "orders"
         res["cases"] = []
         for c in cases:
-            msgs = [{"role": "system", "content": build_system_prompt(c.get("order_state"))}] + c["conversation"]
+            msgs = build_messages(a.layout, c.get("order_state"), c["conversation"])
             r = stream_chat(a.model, a.mode, msgs, tools, NUM_PREDICT)
             r["id"] = c["id"]
             res["cases"].append(r)

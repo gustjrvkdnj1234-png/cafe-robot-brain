@@ -1,0 +1,1269 @@
+{
+ "model": "song/gemma4-26b-cafe-48e-text",
+ "mode": "cpu",
+ "started": "2026-11-12T11:41:10",
+ "settings": {
+  "num_ctx": 8192,
+  "num_predict": 512,
+  "temperature": 0,
+  "seed": 42,
+  "num_gpu": 0,
+  "think": false,
+  "server_env": [
+   "OLLAMA_IGPU_ENABLE=1",
+   "LLAMA_ARG_CACHE_RAM=0"
+  ]
+ },
+ "layout": "deploy",
+ "case_ids": [
+  "B1-1",
+  "B2-1",
+  "B3-2",
+  "O1-3",
+  "O2-3",
+  "S1-1",
+  "S2-1",
+  "S3-2",
+  "M1-3",
+  "M3-1",
+  "X1-2",
+  "X2-3",
+  "I1-1",
+  "I2-1",
+  "I3-2",
+  "A1-3",
+  "A2-3",
+  "F1-1",
+  "F2-1",
+  "F3-2",
+  "C1-3",
+  "C2-3",
+  "T1-1",
+  "T2-1",
+  "T3-2",
+  "D1-3",
+  "D2-3",
+  "U1-1",
+  "U2-2",
+  "U3-3"
+ ],
+ "warmup": {
+  "wall_s": 89.31999460000225,
+  "first_chunk_s": 89.31988350000029,
+  "load_s": 7.9949764,
+  "prompt_eval_count": 3489,
+  "prompt_eval_s": 81.268884,
+  "eval_count": 1,
+  "eval_s": 1e-06,
+  "ttft_s": 89.2638614,
+  "tok_s": 1000000.0,
+  "done_reason": "length"
+ },
+ "placement": {
+  "size": 8642269018,
+  "size_vram": 0,
+  "full_gpu": false
+ },
+ "cases": [
+  {
+   "wall_s": 2.8055458000017097,
+   "first_chunk_s": 2.720062100001087,
+   "load_s": 0.0104391,
+   "prompt_eval_count": 3499,
+   "prompt_eval_s": 0.959456,
+   "eval_count": 22,
+   "eval_s": 1.797431,
+   "ttft_s": 1.0515965090909092,
+   "tok_s": 12.239690981183701,
+   "tool_calls": [
+    {
+     "name": "add_item",
+     "arguments": {
+      "menu": "아메리카노",
+      "quantity": 1
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "B1-1"
+  },
+  {
+   "wall_s": 2.919169000000693,
+   "first_chunk_s": 2.8355289999999513,
+   "load_s": 0.0095474,
+   "prompt_eval_count": 3500,
+   "prompt_eval_s": 0.992515,
+   "eval_count": 22,
+   "eval_s": 1.871158,
+   "ttft_s": 1.0871150363636364,
+   "tok_s": 11.757425081152954,
+   "tool_calls": [
+    {
+     "name": "add_item",
+     "arguments": {
+      "menu": "치즈케이크",
+      "quantity": 1
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "B2-1"
+  },
+  {
+   "wall_s": 2.587495499999932,
+   "first_chunk_s": 2.508000699999684,
+   "load_s": 0.0085188,
+   "prompt_eval_count": 3495,
+   "prompt_eval_s": 0.796068,
+   "eval_count": 21,
+   "eval_s": 1.734059,
+   "ttft_s": 0.8871610380952382,
+   "tok_s": 12.110314585605218,
+   "tool_calls": [
+    {
+     "name": "add_item",
+     "arguments": {
+      "menu": "유자차",
+      "quantity": 1
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "B3-2"
+  },
+  {
+   "wall_s": 3.343464400000812,
+   "first_chunk_s": 3.259260999999242,
+   "load_s": 0.0084989,
+   "prompt_eval_count": 3493,
+   "prompt_eval_s": 0.758796,
+   "eval_count": 30,
+   "eval_s": 2.54773,
+   "ttft_s": 0.8522192333333334,
+   "tok_s": 11.775188108630035,
+   "tool_calls": [
+    {
+     "name": "add_item",
+     "arguments": {
+      "menu": "아메리카노",
+      "size": "large",
+      "temperature": "iced"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "O1-3"
+  },
+  {
+   "wall_s": 3.821750899998733,
+   "first_chunk_s": 3.733256999999867,
+   "load_s": 0.008758,
+   "prompt_eval_count": 3501,
+   "prompt_eval_s": 0.987461,
+   "eval_count": 32,
+   "eval_s": 2.780649,
+   "ttft_s": 1.08311428125,
+   "tok_s": 11.508104762593193,
+   "tool_calls": [
+    {
+     "name": "add_item",
+     "arguments": {
+      "menu": "바닐라라떼",
+      "shots_delta": 1,
+      "sweetness": "less"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "O2-3"
+  },
+  {
+   "wall_s": 3.3005276000003505,
+   "first_chunk_s": 3.2123121000004176,
+   "load_s": 0.009188,
+   "prompt_eval_count": 3499,
+   "prompt_eval_s": 0.918726,
+   "eval_count": 28,
+   "eval_s": 2.337959,
+   "ttft_s": 1.0114125357142858,
+   "tok_s": 11.97625792411244,
+   "tool_calls": [
+    {
+     "name": "add_item",
+     "arguments": {
+      "menu": "아메리카노",
+      "quantity": 2,
+      "temperature": "iced"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "S1-1"
+  },
+  {
+   "wall_s": 3.037264000002324,
+   "first_chunk_s": 2.9560082999996666,
+   "load_s": 0.0095368,
+   "prompt_eval_count": 3499,
+   "prompt_eval_s": 0.904402,
+   "eval_count": 25,
+   "eval_s": 2.077034999,
+   "ttft_s": 0.99702019996,
+   "tok_s": 12.036388415234404,
+   "tool_calls": [
+    {
+     "name": "add_item",
+     "arguments": {
+      "menu": "바닐라라떼",
+      "temperature": "iced"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "S2-1"
+  },
+  {
+   "wall_s": 2.9751157999999123,
+   "first_chunk_s": 2.893107100000634,
+   "load_s": 0.0084357,
+   "prompt_eval_count": 3493,
+   "prompt_eval_s": 0.742358,
+   "eval_count": 25,
+   "eval_s": 2.179706,
+   "ttft_s": 0.83798194,
+   "tok_s": 11.469436703849052,
+   "tool_calls": [
+    {
+     "name": "add_item",
+     "arguments": {
+      "menu": "카라멜마키아또",
+      "quantity": 1
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "S3-2"
+  },
+  {
+   "wall_s": 4.328191200002038,
+   "first_chunk_s": 2.747448500002065,
+   "load_s": 0.0100448,
+   "prompt_eval_count": 3495,
+   "prompt_eval_s": 0.791925,
+   "eval_count": 41,
+   "eval_s": 3.474365,
+   "ttft_s": 0.8867104097560975,
+   "tok_s": 11.80071754119098,
+   "tool_calls": [
+    {
+     "name": "add_item",
+     "arguments": {
+      "menu": "아메리카노",
+      "temperature": "iced"
+     }
+    },
+    {
+     "name": "add_item",
+     "arguments": {
+      "menu": "치즈케이크"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "M1-3"
+  },
+  {
+   "wall_s": 4.944093400001293,
+   "first_chunk_s": 3.49771999999939,
+   "load_s": 0.0109798,
+   "prompt_eval_count": 3505,
+   "prompt_eval_s": 1.104691,
+   "eval_count": 44,
+   "eval_s": 3.778824,
+   "ttft_s": 1.2015531636363639,
+   "tok_s": 11.643834166396742,
+   "tool_calls": [
+    {
+     "name": "add_item",
+     "arguments": {
+      "menu": "아메리카노",
+      "quantity": 2,
+      "temperature": "iced"
+     }
+    },
+    {
+     "name": "call_staff",
+     "arguments": {
+      "reason": "캐리어 요청"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "M3-1"
+  },
+  {
+   "wall_s": 4.7781609000012395,
+   "first_chunk_s": 4.692792099998769,
+   "load_s": 0.0117082,
+   "prompt_eval_count": 3556,
+   "prompt_eval_s": 2.817374,
+   "eval_count": 23,
+   "eval_s": 1.922685,
+   "ttft_s": 2.9126772,
+   "tok_s": 11.96243794485316,
+   "tool_calls": [
+    {
+     "name": "modify_item",
+     "arguments": {
+      "changes": {
+       "size": "large"
+      },
+      "item_index": 1
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "X1-2"
+  },
+  {
+   "wall_s": 2.095195900001272,
+   "first_chunk_s": 2.0094615000016347,
+   "load_s": 0.0119212,
+   "prompt_eval_count": 3557,
+   "prompt_eval_s": 0.841775,
+   "eval_count": 15,
+   "eval_s": 1.191557,
+   "ttft_s": 0.9331333333333334,
+   "tok_s": 12.588571088080554,
+   "tool_calls": [
+    {
+     "name": "remove_item",
+     "arguments": {
+      "item_index": 2
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "X2-3"
+  },
+  {
+   "wall_s": 4.619869900001504,
+   "first_chunk_s": 4.53566530000171,
+   "load_s": 0.0099038,
+   "prompt_eval_count": 3499,
+   "prompt_eval_s": 1.515658,
+   "eval_count": 36,
+   "eval_s": 3.04751,
+   "ttft_s": 1.6102148555555555,
+   "tok_s": 11.812922681139685,
+   "tool_calls": [
+    {
+     "name": "ask_clarification",
+     "arguments": {
+      "question": "에이드는 아이스 메뉴만 가능합니다. 아이스로 드릴까요?",
+      "reason": "impossible"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "I1-1"
+  },
+  {
+   "wall_s": 4.671084700003121,
+   "first_chunk_s": 4.586911200000031,
+   "load_s": 0.0081107,
+   "prompt_eval_count": 3507,
+   "prompt_eval_s": 1.150453,
+   "eval_count": 41,
+   "eval_s": 3.464932,
+   "ttft_s": 1.2430742365853658,
+   "tok_s": 11.832844050041963,
+   "tool_calls": [
+    {
+     "name": "ask_clarification",
+     "arguments": {
+      "question": "죄송합니다. 차 메뉴에는 에스프레소 샷을 추가할 수 없습니다.",
+      "reason": "impossible"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "I2-1"
+  },
+  {
+   "wall_s": 4.9605048000012175,
+   "first_chunk_s": 4.879869000000326,
+   "load_s": 0.0083286,
+   "prompt_eval_count": 3495,
+   "prompt_eval_s": 0.793838,
+   "eval_count": 49,
+   "eval_s": 4.121871,
+   "ttft_s": 0.8862864163265307,
+   "tok_s": 11.88780531947749,
+   "tool_calls": [
+    {
+     "name": "ask_clarification",
+     "arguments": {
+      "question": "커피 메뉴에는 시럽을 직접 넣어드릴 수 없어요. 시럽은 셀프바에서 직접 넣어 드실 수 있습니다!",
+      "reason": "impossible"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "I3-2"
+  },
+  {
+   "wall_s": 5.1908996000020124,
+   "first_chunk_s": 5.105577499998617,
+   "load_s": 0.0084707,
+   "prompt_eval_count": 3494,
+   "prompt_eval_s": 0.747882,
+   "eval_count": 52,
+   "eval_s": 4.39068,
+   "ttft_s": 0.840788853846154,
+   "tok_s": 11.84326801315514,
+   "tool_calls": [
+    {
+     "name": "ask_clarification",
+     "arguments": {
+      "question": "죄송합니다, 손님. '늘 먹던 것'이 무엇인지 제가 알지 못합니다. 어떤 메뉴로 주문해 드릴까요?",
+      "reason": "ambiguous"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "A1-3"
+  },
+  {
+   "wall_s": 4.230448400001478,
+   "first_chunk_s": 4.146634200002154,
+   "load_s": 0.0096862,
+   "prompt_eval_count": 3492,
+   "prompt_eval_s": 0.69818,
+   "eval_count": 41,
+   "eval_s": 3.486048,
+   "ttft_s": 0.7928917609756098,
+   "tok_s": 11.76116909463094,
+   "tool_calls": [
+    {
+     "name": "ask_clarification",
+     "arguments": {
+      "question": "케이크는 치즈케이크와 초콜릿케이크 중 어떤 것으로 드릴까요?",
+      "reason": "ambiguous"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "A2-3"
+  },
+  {
+   "wall_s": 5.031617199998436,
+   "first_chunk_s": 4.948325699999259,
+   "load_s": 0.0096085,
+   "prompt_eval_count": 3496,
+   "prompt_eval_s": 0.833074,
+   "eval_count": 49,
+   "eval_s": 4.144992,
+   "ttft_s": 0.9272741734693878,
+   "tok_s": 11.821494468505609,
+   "tool_calls": [
+    {
+     "name": "ask_clarification",
+     "arguments": {
+      "question": "죄송합니다, 녹차라떼는 저희 메뉴판에 없어서요. 혹시 다른 메뉴를 도와드릴까요?",
+      "reason": "off_menu"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "F1-1"
+  },
+  {
+   "wall_s": 5.26370820000011,
+   "first_chunk_s": 5.178620200000296,
+   "load_s": 0.0095505,
+   "prompt_eval_count": 3498,
+   "prompt_eval_s": 0.891012,
+   "eval_count": 51,
+   "eval_s": 4.313813,
+   "ttft_s": 0.985147068627451,
+   "tok_s": 11.82248743744803,
+   "tool_calls": [
+    {
+     "name": "ask_clarification",
+     "arguments": {
+      "question": "죄송합니다, 저희 카페에는 샌드위치 메뉴가 없습니다. 다른 음료나 디저트를 주문하시겠어요?",
+      "reason": "off_menu"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "F2-1"
+  },
+  {
+   "wall_s": 6.578464300000633,
+   "first_chunk_s": 6.494936800001597,
+   "load_s": 0.0092245,
+   "prompt_eval_count": 3494,
+   "prompt_eval_s": 0.761895,
+   "eval_count": 68,
+   "eval_s": 5.767383,
+   "ttft_s": 0.8559339558823529,
+   "tok_s": 11.790442909721794,
+   "tool_calls": [
+    {
+     "name": "ask_clarification",
+     "arguments": {
+      "question": "죄송합니다, 저희 카페에는 카푸치노가 없습니다. 대신 카페라떼나 바닐라라떼, 카라멜마키아또, 카페모카 중 원하시는 메뉴가 있으실까요?",
+      "reason": "off_menu"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "F3-2"
+  },
+  {
+   "wall_s": 2.509115400000155,
+   "first_chunk_s": 2.424464400002762,
+   "load_s": 0.0087011,
+   "prompt_eval_count": 3497,
+   "prompt_eval_s": 0.897871,
+   "eval_count": 19,
+   "eval_s": 1.56051,
+   "ttft_s": 0.9887042052631578,
+   "tok_s": 12.175506725365425,
+   "tool_calls": [
+    {
+     "name": "call_staff",
+     "arguments": {
+      "reason": "주문 준비 시간 문의"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "C1-3"
+  },
+  {
+   "wall_s": 2.438059500000236,
+   "first_chunk_s": 2.356724299999769,
+   "load_s": 0.0205245,
+   "prompt_eval_count": 3497,
+   "prompt_eval_s": 0.849854,
+   "eval_count": 19,
+   "eval_s": 1.527718,
+   "ttft_s": 0.9507847105263157,
+   "tok_s": 12.436850256395488,
+   "tool_calls": [
+    {
+     "name": "call_staff",
+     "arguments": {
+      "reason": "얼음 컵 요청"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "C2-3"
+  },
+  {
+   "wall_s": 4.530886000000464,
+   "first_chunk_s": 2.993746000000101,
+   "load_s": 0.0100424,
+   "prompt_eval_count": 3501,
+   "prompt_eval_s": 1.028838,
+   "eval_count": 41,
+   "eval_s": 3.440364,
+   "ttft_s": 1.1227917170731705,
+   "tok_s": 11.917343629918228,
+   "tool_calls": [
+    {
+     "name": "add_item",
+     "arguments": {
+      "menu": "아메리카노",
+      "temperature": "iced"
+     }
+    },
+    {
+     "name": "confirm_order",
+     "arguments": {
+      "dine_option": "takeout"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "T1-1"
+  },
+  {
+   "wall_s": 4.467445599999337,
+   "first_chunk_s": 4.381427000000258,
+   "load_s": 0.0085473,
+   "prompt_eval_count": 3560,
+   "prompt_eval_s": 2.971815,
+   "eval_count": 18,
+   "eval_s": 1.458354,
+   "ttft_s": 3.0613819666666666,
+   "tok_s": 12.34268222941755,
+   "tool_calls": [
+    {
+     "name": "confirm_order",
+     "arguments": {
+      "dine_option": "takeout"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "T2-1"
+  },
+  {
+   "wall_s": 4.379018000003271,
+   "first_chunk_s": 4.2942066000032355,
+   "load_s": 0.0087489,
+   "prompt_eval_count": 3553,
+   "prompt_eval_s": 2.802893,
+   "eval_count": 19,
+   "eval_s": 1.527124,
+   "ttft_s": 2.892016847368421,
+   "tok_s": 12.441687773880838,
+   "tool_calls": [
+    {
+     "name": "confirm_order",
+     "arguments": {
+      "dine_option": "dine_in"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "T3-2"
+  },
+  {
+   "wall_s": 2.966463200002181,
+   "first_chunk_s": 2.8828479000003426,
+   "load_s": 0.0099804,
+   "prompt_eval_count": 3497,
+   "prompt_eval_s": 1.516401,
+   "eval_count": 17,
+   "eval_s": 1.392083,
+   "ttft_s": 1.6082686352941176,
+   "tok_s": 12.211915525151877,
+   "tool_calls": [
+    {
+     "name": "add_item",
+     "arguments": {
+      "menu": "카페라떼"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "D1-3"
+  },
+  {
+   "wall_s": 2.9405174999992596,
+   "first_chunk_s": 2.850726600001508,
+   "load_s": 0.0095788,
+   "prompt_eval_count": 3499,
+   "prompt_eval_s": 0.913903,
+   "eval_count": 24,
+   "eval_s": 1.990421,
+   "ttft_s": 1.0064160083333333,
+   "tok_s": 12.05775059648185,
+   "tool_calls": [
+    {
+     "name": "add_item",
+     "arguments": {
+      "menu": "레몬에이드",
+      "temperature": "iced"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "D2-3"
+  },
+  {
+   "wall_s": 4.297695400000521,
+   "first_chunk_s": 4.213408600000548,
+   "load_s": 0.0109766,
+   "prompt_eval_count": 3499,
+   "prompt_eval_s": 0.995463,
+   "eval_count": 39,
+   "eval_s": 3.262735,
+   "ttft_s": 1.0900994717948718,
+   "tok_s": 11.9531619944617,
+   "tool_calls": [
+    {
+     "name": "ask_clarification",
+     "arguments": {
+      "question": "죄송합니다. 저희 카페에서는 디카페인 옵션을 제공하지 않습니다.",
+      "reason": "off_menu"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "U1-1"
+  },
+  {
+   "wall_s": 4.026024099999631,
+   "first_chunk_s": 3.9434293000012985,
+   "load_s": 0.0103947,
+   "prompt_eval_count": 3494,
+   "prompt_eval_s": 0.770142,
+   "eval_count": 38,
+   "eval_s": 3.197199,
+   "ttft_s": 0.8646735157894736,
+   "tok_s": 11.885403442200502,
+   "tool_calls": [
+    {
+     "name": "ask_clarification",
+     "arguments": {
+      "question": "죄송합니다. 저희 카페에서는 휘핑크림을 제공하지 않습니다.",
+      "reason": "off_menu"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "U2-2"
+  },
+  {
+   "wall_s": 5.676892800001951,
+   "first_chunk_s": 5.591754700002639,
+   "load_s": 0.0107206,
+   "prompt_eval_count": 3498,
+   "prompt_eval_s": 0.87616,
+   "eval_count": 56,
+   "eval_s": 4.74688,
+   "ttft_s": 0.9716463142857144,
+   "tok_s": 11.797222596737225,
+   "tool_calls": [
+    {
+     "name": "ask_clarification",
+     "arguments": {
+      "question": "죄송합니다. 저희 카페에서는 락토프리 우유는 제공하지 않습니다. 일반 우유나 오트밀크로 변경해 드릴까요?",
+      "reason": "off_menu"
+     }
+    }
+   ],
+   "content": "",
+   "done_reason": "stop",
+   "id": "U3-3"
+  }
+ ],
+ "placement_after": {
+  "size": 8642269018,
+  "size_vram": 0,
+  "full_gpu": false
+ },
+ "memory_series": [
+  {
+   "t": 2.6,
+   "phase": "load",
+   "runner_rss_gb": 0.0,
+   "runner_private_gb": 0.0,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 12.331,
+   "sys_avail_gb": 19.163,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 6.6,
+   "phase": "load",
+   "runner_rss_gb": 4.103,
+   "runner_private_gb": 7.552,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 17.776,
+   "sys_avail_gb": 13.717,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 11.2,
+   "phase": "load",
+   "runner_rss_gb": 8.265,
+   "runner_private_gb": 8.429,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.29,
+   "sys_avail_gb": 12.204,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 15.9,
+   "phase": "load",
+   "runner_rss_gb": 8.277,
+   "runner_private_gb": 8.429,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.291,
+   "sys_avail_gb": 12.203,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 22.2,
+   "phase": "load",
+   "runner_rss_gb": 8.278,
+   "runner_private_gb": 8.429,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.28,
+   "sys_avail_gb": 12.213,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 27.0,
+   "phase": "load",
+   "runner_rss_gb": 8.278,
+   "runner_private_gb": 8.429,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.275,
+   "sys_avail_gb": 12.219,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 31.7,
+   "phase": "load",
+   "runner_rss_gb": 8.278,
+   "runner_private_gb": 8.429,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.268,
+   "sys_avail_gb": 12.226,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 36.6,
+   "phase": "load",
+   "runner_rss_gb": 8.282,
+   "runner_private_gb": 8.429,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.274,
+   "sys_avail_gb": 12.22,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 41.5,
+   "phase": "load",
+   "runner_rss_gb": 8.282,
+   "runner_private_gb": 8.429,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.273,
+   "sys_avail_gb": 12.22,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 46.4,
+   "phase": "load",
+   "runner_rss_gb": 8.282,
+   "runner_private_gb": 8.429,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.269,
+   "sys_avail_gb": 12.225,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 51.4,
+   "phase": "load",
+   "runner_rss_gb": 8.282,
+   "runner_private_gb": 8.429,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.269,
+   "sys_avail_gb": 12.225,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 56.3,
+   "phase": "load",
+   "runner_rss_gb": 8.282,
+   "runner_private_gb": 8.429,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.265,
+   "sys_avail_gb": 12.228,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 61.1,
+   "phase": "load",
+   "runner_rss_gb": 8.282,
+   "runner_private_gb": 8.429,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.266,
+   "sys_avail_gb": 12.227,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 66.1,
+   "phase": "load",
+   "runner_rss_gb": 8.282,
+   "runner_private_gb": 8.429,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.469,
+   "sys_avail_gb": 12.024,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 71.2,
+   "phase": "load",
+   "runner_rss_gb": 8.48,
+   "runner_private_gb": 8.625,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.472,
+   "sys_avail_gb": 12.022,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 76.1,
+   "phase": "load",
+   "runner_rss_gb": 8.481,
+   "runner_private_gb": 8.625,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.482,
+   "sys_avail_gb": 12.012,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 80.9,
+   "phase": "load",
+   "runner_rss_gb": 8.481,
+   "runner_private_gb": 8.625,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.487,
+   "sys_avail_gb": 12.007,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 85.8,
+   "phase": "load",
+   "runner_rss_gb": 8.481,
+   "runner_private_gb": 8.625,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.482,
+   "sys_avail_gb": 12.012,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 90.7,
+   "phase": "orders",
+   "runner_rss_gb": 8.481,
+   "runner_private_gb": 8.625,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.873,
+   "sys_avail_gb": 11.62,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 95.6,
+   "phase": "orders",
+   "runner_rss_gb": 8.676,
+   "runner_private_gb": 8.821,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.684,
+   "sys_avail_gb": 11.81,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 100.5,
+   "phase": "orders",
+   "runner_rss_gb": 8.875,
+   "runner_private_gb": 9.02,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.877,
+   "sys_avail_gb": 11.617,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 105.4,
+   "phase": "orders",
+   "runner_rss_gb": 8.875,
+   "runner_private_gb": 9.02,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.671,
+   "sys_avail_gb": 11.823,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 110.2,
+   "phase": "orders",
+   "runner_rss_gb": 8.875,
+   "runner_private_gb": 9.02,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 20.057,
+   "sys_avail_gb": 11.436,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 115.1,
+   "phase": "orders",
+   "runner_rss_gb": 8.875,
+   "runner_private_gb": 9.02,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.873,
+   "sys_avail_gb": 11.621,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 119.9,
+   "phase": "orders",
+   "runner_rss_gb": 8.875,
+   "runner_private_gb": 9.02,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 20.06,
+   "sys_avail_gb": 11.434,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 124.8,
+   "phase": "orders",
+   "runner_rss_gb": 9.07,
+   "runner_private_gb": 9.216,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.664,
+   "sys_avail_gb": 11.83,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 129.7,
+   "phase": "orders",
+   "runner_rss_gb": 8.875,
+   "runner_private_gb": 9.02,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 20.062,
+   "sys_avail_gb": 11.432,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 134.5,
+   "phase": "orders",
+   "runner_rss_gb": 8.692,
+   "runner_private_gb": 9.017,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.87,
+   "sys_avail_gb": 11.624,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 139.4,
+   "phase": "orders",
+   "runner_rss_gb": 9.07,
+   "runner_private_gb": 9.216,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 20.053,
+   "sys_avail_gb": 11.441,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 144.3,
+   "phase": "orders",
+   "runner_rss_gb": 9.07,
+   "runner_private_gb": 9.216,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 20.053,
+   "sys_avail_gb": 11.441,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 149.2,
+   "phase": "orders",
+   "runner_rss_gb": 9.07,
+   "runner_private_gb": 9.216,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 20.046,
+   "sys_avail_gb": 11.448,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 154.0,
+   "phase": "orders",
+   "runner_rss_gb": 9.07,
+   "runner_private_gb": 9.216,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 20.054,
+   "sys_avail_gb": 11.44,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 158.9,
+   "phase": "orders",
+   "runner_rss_gb": 9.07,
+   "runner_private_gb": 9.216,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 20.055,
+   "sys_avail_gb": 11.439,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 163.8,
+   "phase": "orders",
+   "runner_rss_gb": 9.07,
+   "runner_private_gb": 9.216,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 20.055,
+   "sys_avail_gb": 11.439,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 168.7,
+   "phase": "orders",
+   "runner_rss_gb": 9.07,
+   "runner_private_gb": 9.216,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 20.044,
+   "sys_avail_gb": 11.45,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 173.5,
+   "phase": "orders",
+   "runner_rss_gb": 9.07,
+   "runner_private_gb": 9.216,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 20.041,
+   "sys_avail_gb": 11.452,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 178.3,
+   "phase": "orders",
+   "runner_rss_gb": 9.07,
+   "runner_private_gb": 9.216,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 20.043,
+   "sys_avail_gb": 11.451,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 183.0,
+   "phase": "orders",
+   "runner_rss_gb": 9.071,
+   "runner_private_gb": 9.216,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.655,
+   "sys_avail_gb": 11.839,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 187.7,
+   "phase": "orders",
+   "runner_rss_gb": 8.849,
+   "runner_private_gb": 9.017,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 20.044,
+   "sys_avail_gb": 11.45,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 192.6,
+   "phase": "orders",
+   "runner_rss_gb": 8.677,
+   "runner_private_gb": 8.822,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 19.87,
+   "sys_avail_gb": 11.624,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 197.5,
+   "phase": "orders",
+   "runner_rss_gb": 9.071,
+   "runner_private_gb": 9.216,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 20.058,
+   "sys_avail_gb": 11.436,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 202.3,
+   "phase": "orders",
+   "runner_rss_gb": 8.828,
+   "runner_private_gb": 9.018,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 20.061,
+   "sys_avail_gb": 11.433,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 207.2,
+   "phase": "orders",
+   "runner_rss_gb": 9.068,
+   "runner_private_gb": 9.213,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 20.064,
+   "sys_avail_gb": 11.43,
+   "pagefile_used_gb": 0.628
+  },
+  {
+   "t": 211.3,
+   "phase": "done",
+   "runner_rss_gb": 9.071,
+   "runner_private_gb": 9.216,
+   "gpu_shared_gb": 0.892,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 20.058,
+   "sys_avail_gb": 11.436,
+   "pagefile_used_gb": 0.628
+  }
+ ],
+ "finished": "2026-11-12T11:44:44"
+}
