@@ -118,6 +118,8 @@ def main():
     ap.add_argument("--mode", choices=sorted(MODE_OPTIONS), required=True)
     ap.add_argument("--n", type=int, default=30)
     ap.add_argument("--out-dir", default="results/step6/latency")
+    ap.add_argument("--server-env", default="OLLAMA_IGPU_ENABLE=1,LLAMA_ARG_CACHE_RAM=0,LLAMA_ARG_SWA_FULL=1",
+                    help="comma list, recorded in the output (must match how ollama serve was started)")
     a = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")
     cases = load_jsonl(ROOT / "data/exam_cafe.jsonl")[::4][: a.n]
@@ -126,7 +128,7 @@ def main():
     out.parent.mkdir(parents=True, exist_ok=True)
     res = {"model": a.model, "mode": a.mode, "started": datetime.now().isoformat(timespec="seconds"),
            "settings": {"num_ctx": NUM_CTX, "num_predict": NUM_PREDICT, **OPTIONS, **MODE_OPTIONS[a.mode],
-                        "think": False, "server_env": ["OLLAMA_IGPU_ENABLE=1", "LLAMA_ARG_CACHE_RAM=0", "LLAMA_ARG_SWA_FULL=1"]},
+                        "think": False, "server_env": a.server_env.split(",")},
            "case_ids": [c["id"] for c in cases]}
     unload_all()
     time.sleep(3)

@@ -80,6 +80,144 @@ def reuse_stats():
     return out
 
 
+LEAN = ROOT / "results/step6/lean"
+LEAN_MODELS = [("song/gemma4-26b-cafe-64e", "26b 가지치기 64개"), ("song/gemma4-26b-cafe-48e", "26b 가지치기 48개")]
+BLOB = {"song/gemma4-26b-cafe-64e": "1fa88d73", "song/gemma4-26b-cafe-48e": "9a01e444"}   # main GGUF blob (ollama show --modelfile)
+
+
+def load_breakdown(log: Path, blob: str, mode: str):
+    """Memory parts (MiB) of the LAST llama-server load of this blob in this mode, from its load log."""
+    if not log.exists():
+        return None
+    lines = log.read_text(encoding="utf-8", errors="ignore").splitlines()
+    starts = [i for i, l in enumerate(lines) if "starting llama-server" in l]
+    blocks = []
+    for k, i in enumerate(starts):
+        if blob in lines[i] and (("-ngl 0" in lines[i]) == (mode == "cpu")):
+            blocks.append(lines[i:starts[k + 1] if k + 1 < len(starts) else len(lines)])
+    if not blocks:
+        return None
+    b = blocks[-1]
+    part = "main"
+    d = {p: {"weights": 0.0, "kv": 0.0, "compute": 0.0} for p in ("main", "draft", "projector")}
+    froze, in_compute = set(), False
+    ckpt_max, ckpt_size = 0, 0.0
+    for l in b:
+        if "loading draft model" in l:
+            part, in_compute = "draft", False
+            continue
+        if l.startswith("clip_model_loader: model name") and part != "projector" and d["main"]["weights"]:
+            part, in_compute = "projector", False
+        m = re.search(r"created context checkpoint (\d+) of \d+ .*size = ([\d.]+) MiB", l)
+        if m:
+            ckpt_max, ckpt_size = max(ckpt_max, int(m[1])), float(m[2])
+            continue
+        if part in froze:
+            continue
+        m = re.search(r"model buffer size =\s+([\d.]+) MiB", l)
+        if m:
+            d[part]["weights"] += float(m[1])
+            continue
+        m = re.search(r"load_hparams: model size:\s+([\d.]+) MiB", l)
+        if m:
+            d["projector"]["weights"] += float(m[1])
+            continue
+        m = re.search(r"llama_kv_cache: size =\s+([\d.]+) MiB", l)
+        if m:
+            d[part]["kv"] += float(m[1])
+            continue
+        m = re.search(r"(sched_reserve|reserve_compute_meta):.*compute buffer size =\s+([\d.]+) MiB", l)
+        if m:
+            d[part]["compute"] += float(m[2])
+            in_compute = True
+            continue
+        if in_compute:   # first block of compute-buffer lines only (later lines are re-reservations at run time)
+            froze.add(part)
+            in_compute = False
+    d["checkpoints"] = {"n_max": ckpt_max, "each_mib": ckpt_size, "total": ckpt_max * ckpt_size}
+    return d
+
+
+def lean_section(runs, changed):
+    if not LEAN.exists():
+        return []
+    by_id = {c["id"]: c for c in load_jsonl(ROOT / "data/exam_cafe.jsonl")}
+    from score import score_cafe_case
+    L = ["# 6b단계: 카페 로봇용 텍스트 전용 가벼운 설정 (64개, 48개)", "",
+         "- 6a단계 설정에서 카페 로봇에 필요 없는 것을 뺐다:",
+         "  - 비전 프로젝터(이미지 입력용)와 초안(MTP) 모델: Modelfile에서 두 줄을 지운 새 모델 `song/gemma4-26b-cafe-{64,48}e-text`로 등록(가중치 블롭은 같은 파일, 템플릿·렌더러·파라미터 같음).",
+         "  - `LLAMA_ARG_SWA_FULL=1`을 빼고 보통의 슬라이딩 윈도 캐시를 씀. 서버는 `OLLAMA_IGPU_ENABLE=1`, `LLAMA_ARG_CACHE_RAM=0`(이 프로세스에만).",
+         "- 나머지(30문항, 순서, 데우기, thinking 끔, temperature 0, seed 42, num_ctx 8192)는 6a와 같다.", ""]
+    # scores
+    L += ["## 30문항 점수 확인", "", "| 모델 | 모드 | 6a 정답 | 6b 정답 | 도구 호출이 달라진 문항 |", "|---|---|---:|---:|---|"]
+    lean = {}
+    for m, ml in LEAN_MODELS:
+        for mode, mk in MODES:
+            f = LEAN / f"{slug(m + '-text')}__{mode}.json"
+            a = runs.get((m, mode))
+            if not f.exists() or not a or not a.get("cases"):
+                L.append(f"| {ml} | {mk} | 결과 없음 | | |")
+                continue
+            r = json.loads(f.read_text(encoding="utf-8"))
+            lean[(m, mode)] = r
+            if not r.get("cases"):
+                L.append(f"| {ml} | {mk} | | 실패: {(r.get('error') or r.get('skipped') or '')[:80]} | |")
+                continue
+            ca = {c["id"]: c for c in a["cases"]}
+            cb = {c["id"]: c for c in r["cases"]}
+            ea = sum(score_cafe_case(by_id[i], ca[i]["tool_calls"])["exact"] for i in ca)
+            eb = sum(score_cafe_case(by_id[i], cb[i]["tool_calls"])["exact"] for i in cb)
+            diff = [i for i in ca if i in cb and ca[i]["tool_calls"] != cb[i]["tool_calls"]]
+            L.append(f"| {ml} | {mk} | {ea}/{len(ca)} | {eb}/{len(cb)} | {', '.join(diff) if diff else '없음'} |")
+    L += ["", "- 도구 호출 비교는 도구 이름과 인자가 글자 그대로 같은지 본다. 초안 모델은 temperature 0에서 결과를 바꾸지 않는 것이 원칙이지만, 계산 순서가 달라 드물게 달라질 수 있다.", ""]
+    # timing / memory
+    L += ["## 응답 시간과 메모리: 6a 설정 vs 가벼운 설정", "",
+          f"| 모델 | 모드 | 설정 | 첫 토큰까지: 앞부분 재사용 (중앙값) | 첫 토큰까지: 주문 내역 바뀜 (중앙값) | 주문 1건 전체 (중앙값 / 최대) | 생성 속도 | 정상 상태 메모리 | 16 GB 노트북 (OS 4 GB + 모델) |",
+          "|---|---|---|---:|---:|---:|---:|---:|---|"]
+    for m, ml in LEAN_MODELS:
+        for mode, mk in MODES:
+            for tag, r in (("6a (전체)", runs.get((m, mode))), ("6b (가벼움)", lean.get((m, mode)))):
+                if not r or not r.get("cases"):
+                    continue
+                cs = r["cases"]
+                same = [c["ttft_s"] for c in cs if not changed[c["id"]]]
+                ch = [c["ttft_s"] for c in cs if changed[c["id"]]]
+                wt = [c["wall_s"] for c in cs]
+                ts = [c["tok_s"] for c in cs if c["tok_s"]]
+                mm = mem(r)
+                need, fit = fit16(mm)
+                L.append(f"| {ml} | {mk} | {tag} | {statistics.median(same):.2f} s | {statistics.median(ch):.1f} s | "
+                         f"{statistics.median(wt):.2f} s / {max(wt):.1f} s | {statistics.median(ts):.1f} tok/s | "
+                         f"{mm['foot_med']:.1f} GB (변화 {mm['growth']:+.2f}) | {need:.1f} GB → {fit} |")
+    L.append("")
+    # breakdown
+    L += ["## 뺀 부분이 각각 얼마나 줄였나 (llama-server 로딩 로그의 버퍼 크기)", "",
+          "| 모델 | 모드 | 본 모델 KV: SWA 전체 → 보통 (+ 체크포인트) | 초안 모델 (가중치 + KV + 계산) | 비전 프로젝터 (가중치 + 계산) | 합계 (로그) | 실제 정상 상태 메모리 차이 (측정) |",
+          "|---|---|---:|---:|---:|---:|---:|"]
+    gb = lambda mib: mib / 1024  # noqa: E731
+    for m, ml in LEAN_MODELS:
+        for mode, mk in MODES:
+            full = load_breakdown(ROOT / "logs/ollama_serve_step6.log", BLOB[m], mode)
+            lite = load_breakdown(ROOT / "logs/ollama_serve_step6b.log", BLOB[m], mode)
+            ra, rb = runs.get((m, mode)), lean.get((m, mode))
+            if not full or not lite or not ra or not rb or not rb.get("cases"):
+                L.append(f"| {ml} | {mk} | 결과 없음 | | | | |")
+                continue
+            kv_save = full["main"]["kv"] - lite["main"]["kv"] - lite["checkpoints"]["total"]
+            dr = sum(full["draft"].values())
+            pj = sum(full["projector"].values())
+            meas = mem(ra)["foot_med"] - mem(rb)["foot_med"]
+            L.append(f"| {ml} | {mk} | {gb(kv_save):.2f} GB ({gb(full['main']['kv']):.2f} → {gb(lite['main']['kv']):.2f}, "
+                     f"체크포인트 최대 {lite['checkpoints']['n_max']}개 × {lite['checkpoints']['each_mib']:.0f} MiB) | "
+                     f"{gb(dr):.2f} GB | {gb(pj):.2f} GB | {gb(kv_save + dr + pj):.2f} GB | {meas:.2f} GB |")
+    L += ["", "- 로그 값은 llama-server가 잡은 버퍼 크기(MiB → GB, 1 GB = 1024 MiB)이고, 측정값은 30문항 동안의 정상 상태 메모리(러너 private 또는 GPU 공유 중 큰 쪽의 중앙값) 차이다. 측정값에는 로그에 안 나오는 런타임 할당도 들어간다.",
+          "- SWA 전체 → 보통: 슬라이딩 윈도 층 25개의 KV가 8,192칸에서 윈도 크기만큼으로 줄어든다. 대신 앞부분을 다시 쓰려고 llama-server가 ‘컨텍스트 체크포인트’(SWA 상태 복사본)를 만들어 둔다.", ""]
+    li = ROOT / "results/step6/lean_interpretation.md"
+    if li.exists():
+        L += [li.read_text(encoding="utf-8").strip(), ""]
+    return L
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     runs = {}
@@ -159,6 +297,7 @@ def main():
     interp = ROOT / "results/step6/latency_interpretation.md"
     if interp.exists():
         L += [interp.read_text(encoding="utf-8").strip(), ""]
+    L += lean_section(runs, changed)
     out = ROOT / "results/step6/latency.md"
     out.write_text("\n".join(L), encoding="utf-8")
     print("saved", out.relative_to(ROOT))
