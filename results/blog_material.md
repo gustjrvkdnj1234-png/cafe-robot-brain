@@ -280,11 +280,12 @@
 | REAP 층별 누적 곡선 | `results/step4/charts/reap_cumulative.png` | git에 있음 |
 | REAP 층별 손실 | `results/step4/charts/reap_loss_by_layer.png` | git에 있음 |
 | 로봇 비교 화면 (실행) | `scripts/robot_ui.py` → http://127.0.0.1:8765/ | 다시 보기·직접 주문·내보내기 |
-| 추천 6문항 마지막 장면 | `ui/exports/L09/L09_142552_final.png`, `ui/exports/L04/L04_142554_final.png`, `ui/exports/D1-2/D1-2_142555_final.png`, `ui/exports/L18/L18_142556_final.png`, `ui/exports/L13/L13_142557_final.png`, `ui/exports/L14/L14_142559_final.png` | **gitignore됨**(로컬에만 있음) |
-| L09 애니메이션 | `ui/exports/L09/L09_142550.gif` | gitignore됨 |
+| 추천 6문항 마지막 장면 | `ui/exports/L09/L09_143359_final.png`, `ui/exports/L04/L04_143401_final.png`, `ui/exports/D1-2/D1-2_143402_final.png`, `ui/exports/L18/L18_143403_final.png`, `ui/exports/L13/L13_143404_final.png`, `ui/exports/L14/L14_143405_final.png` | **gitignore됨**(로컬에만 있음). 캔버스 문구: “응답 시간은 같은 노트북에서 측정한 중앙값입니다.” |
+| L09 애니메이션 | `ui/exports/L09/L09_143357.gif` | gitignore됨. 캔버스 문구에 “애니메이션은 실제보다 빠르게 재생됩니다.” 한 줄 추가 |
 | 다시 만들기 | `/?case=<문항>&export=last` 또는 `/?case=<문항>&export=gif` | 서버 실행 후 브라우저에서 |
 
-- `ui/exports/` 안의 더 오래된 시각(13:55~14:13)의 파일은 고치기 전 버전이다. 위 표의 파일을 쓰면 된다.
+- `ui/exports/` 안의 더 오래된 시각(13:55~14:25)의 파일은 고치기 전 버전이다. 위 표의 파일을 쓰면 된다.
+- 출처 설명은 캔버스에서 뺐다. 블로그 캡션에 쓸 문장(예): “시간·메모리는 6a 공정 측정값(같은 카페 30문항, 프롬프트 캐시를 고친 상태, 26B 원본은 CPU·나머지는 iGPU, 주문 1건 중앙값과 정상 상태 메모리). 답과 채점은 3·5단계 시험 기록.”
 - 표로 그릴 만한 데이터: 1-1(점수), 1-3(6a), 1-5(6c 전후). 차트로 새로 그린다면 ‘남긴 전문가 수(128/98/64/48) vs 카페·실전·지식 점수’ 꺾은선이 가장 이야기가 잘 보인다(값은 `comparison_notes.md` 2번 표).
 
 ---

@@ -6,8 +6,9 @@
   const params = new URLSearchParams(location.search);
   const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
 
-  const FOOT_REPLAY = ["응답 시간은 같은 노트북에서 측정한 중앙값이며, 애니메이션 속도는 보기 좋게 줄였습니다.",
-    "공정 측정(6a): 같은 카페 30문항, 프롬프트 캐시를 고친 상태, 26B 원본은 CPU·나머지는 iGPU. 시간은 주문 1건 중앙값, 메모리는 주문 받는 동안의 정상 상태 값. 답과 채점은 3·5단계 시험 기록."];
+  // replay captions: still image (final PNG) vs animation (page, GIF, PNG frames); source notes go in the blog caption
+  const FOOT_STILL = ["응답 시간은 같은 노트북에서 측정한 중앙값입니다."];
+  const FOOT_ANIM = [...FOOT_STILL, "애니메이션은 실제보다 빠르게 재생됩니다."];
   const FOOT_LIVE = ["직접 주문: 시간은 이번 주문의 실제 값(모델 불러오기 포함), 메모리는 응답 직후 값입니다.",
     "배포용 배치(6c): 주문 내역을 프롬프트 맨 끝에 둡니다. 내보낸 GIF는 애니메이션 속도를 보기 좋게 줄였습니다."];
   let robots = [], scene = null, L = null, t0 = 0, fixedT = null, raf = 0;
@@ -73,7 +74,7 @@
     const conv = d.conversation;
     const lastUser = conv.map((m) => m.role).lastIndexOf("user");
     const s = {
-      live: false, tag: `${d.exam_ko} ${d.id} · ${d.category}`, footer: FOOT_REPLAY, caseId: d.id,
+      live: false, tag: `${d.exam_ko} ${d.id} · ${d.category}`, footer: FOOT_ANIM, caseId: d.id,
       badgeLabel: "주문당 응답 시간(중앙값)",
       history: conv.slice(0, lastUser), say: conv[lastUser].content, orderState: d.order_state, expected: d.expected,
       robots: d.robots.map((r) => ({ ...r })),
@@ -128,10 +129,11 @@
   }
 
   // ---------- export ----------
-  function exportScene() {
+  function exportScene(still = false) {
     // live scenes are exported with the same compressed timing as replays
     const s = JSON.parse(JSON.stringify(scene));
     if (s.live) { s.live = false; s.robots.forEach((r) => { if (!r.done) r.off = true; }); }
+    else s.footer = still ? FOOT_STILL : FOOT_ANIM;
     return Stage.timeline(s);
   }
   function renderAt(s, t, scale) {
@@ -184,7 +186,7 @@
     status(`PNG 프레임 ${saved}장 저장: ${dir}/ (${fps} fps, 파일 이름 ${s.caseId}_${tag}_000.png …)`);
   }
   async function exportLast() {
-    const s = exportScene(), name = `${s.caseId}_${stamp()}_final.png`;
+    const s = exportScene(true), name = `${s.caseId}_${stamp()}_final.png`;
     const res = await save([{ name, data: renderAt(s, s.tEnd, +$("expScale").value).toDataURL("image/png") }]);
     status(`마지막 장면 저장: <a href="/exports/${s.caseId}/${name}" target="_blank">${res.dir}/${name}</a>`);
   }
