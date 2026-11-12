@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>카페 로봇 오디션</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&display=block" rel="stylesheet">
+<style>
+  :root { --ink: #2b2118; --paper: #fffaf0; --bg: #ffe9b8; --accent: #e63946; --muted: #7b6650; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Jua', 'Malgun Gothic', sans-serif; }
+  .wrap { width: 1100px; margin: 0 auto; padding: 14px 0 40px; }
+  .bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: var(--paper);
+         border: 3px solid var(--ink); border-radius: 14px; box-shadow: 5px 5px 0 var(--ink); padding: 10px 12px; margin: 0 12px 14px; }
+  .tabs { display: flex; gap: 6px; }
+  button, select, input[type=text] { font: inherit; font-size: 16px; color: var(--ink); }
+  button { background: #fff; border: 2.5px solid var(--ink); border-radius: 10px; padding: 6px 12px; cursor: pointer;
+           box-shadow: 2px 2px 0 var(--ink); }
+  button:active { transform: translate(2px, 2px); box-shadow: none; }
+  button:disabled { opacity: .45; cursor: default; }
+  button.on { background: #ffd166; }
+  button.primary { background: var(--accent); color: #fff; }
+  select, input[type=text] { border: 2.5px solid var(--ink); border-radius: 10px; padding: 6px 8px; background: #fff; }
+  #casePick { width: 560px; }
+  #liveText { flex: 1; min-width: 260px; }
+  .grow { flex: 1; }
+  .hint { color: var(--muted); font-size: 14px; }
+  .row { display: flex; gap: 10px; align-items: center; width: 100%; flex-wrap: wrap; }
+  #status { margin: 0 14px 10px; min-height: 22px; color: var(--muted); font-size: 15px; }
+  #status a { color: var(--accent); }
+  canvas { display: block; margin: 0 auto; }
+  .hidden { display: none !important; }
+  #liveOrder { font-size: 14px; color: var(--muted); }
+  label { font-size: 15px; display: inline-flex; align-items: center; gap: 4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar">
+    <div class="tabs">
+      <button id="tabReplay" class="on">다시 보기</button>
+      <button id="tabLive">직접 주문</button>
+    </div>
+    <div id="replayCtl" class="row" style="width:auto;flex:1">
+      <select id="casePick" aria-label="문항 고르기"></select>
+      <button id="play" class="primary">▶ 다시 재생</button>
+    </div>
+    <div id="liveCtl" class="row hidden">
+      <select id="liveRobot" aria-label="로봇"></select>
+      <select id="liveMode" aria-label="실행 장치">
+        <option value="">시험과 같은 장치</option><option value="igpu">iGPU</option><option value="cpu">CPU</option>
+      </select>
+      <input id="liveText" type="text" placeholder="손님 말을 입력하세요 (예: 아아 큰 걸로 두 잔이요)" maxlength="200">
+      <button id="liveSend" class="primary">보내기</button>
+      <button id="liveReset">새 주문</button>
+      <label><input id="liveKeep" type="checkbox" checked> 대화 이어가기</label>
+      <span id="liveOrder"></span>
+    </div>
+    <div class="row">
+      <span class="hint">블로그용 내보내기</span>
+      <select id="expScale" aria-label="크기">
+        <option value="0.75">825px (75%)</option><option value="1" selected>1100px</option><option value="2">2200px (PNG 고화질)</option>
+      </select>
+      <select id="expFps" aria-label="초당 프레임">
+        <option value="8">8 fps</option><option value="12" selected>12 fps</option><option value="15">15 fps</option>
+      </select>
+      <button id="expGif">GIF 만들기</button>
+      <button id="expFrames">PNG 프레임 저장</button>
+      <button id="expLast">마지막 장면 PNG</button>
+      <span class="grow"></span>
+      <span class="hint">파일은 ui/exports/에 저장돼요</span>
+    </div>
+  </div>
+  <div id="status"></div>
+  <canvas id="stage" width="1100" height="800"></canvas>
+</div>
+<script src="gif.js"></script>
+<script src="stage.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

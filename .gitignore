@@ -28,3 +28,6 @@ credentials*
 *token*
 results/step4/**/states_after_layer.pt
 tools/
+
+# Step 7 블로그용 내보내기(GIF/PNG) — 필요한 것만 골라 블로그에 올림
+ui/exports/
