@@ -8,6 +8,7 @@ A hand-written note is appended from results/step5/comparison_notes.md if presen
 from __future__ import annotations
 
 import json
+import math
 import statistics
 import sys
 from pathlib import Path
@@ -19,6 +20,45 @@ from report_step5 import ALL, CONTROL, KEEPS, S5, fmt_t, label, load, mem_text, 
 from run_step3 import CONTESTANTS, run_dir  # noqa: E402
 
 SIZE_STEP3 = {"gemma4:e4b": "6.6 GB", "gemma4:12b": "8.0 GB", "gemma4:26b": "18 GB"}   # `ollama list`
+
+
+MCNEMAR_PAIRS = [("song/gemma4-26b-cafe-64e", "gemma4:12b"), ("song/gemma4-26b-cafe-64e", "gemma4:26b"),
+                 ("song/gemma4-26b-cafe-48e", "gemma4:12b")]
+
+
+def mcnemar_exact(b: int, c: int) -> float:
+    """Two-sided exact McNemar p-value: binomial test on discordant pairs, p = 0.5."""
+    n = b + c
+    if n == 0:
+        return 1.0
+    k = min(b, c)
+    tail = sum(math.comb(n, i) for i in range(k + 1)) / 2 ** n
+    return min(1.0, 2 * tail)
+
+
+def mcnemar_section(runs) -> list[str]:
+    L = ["## 실전 시험 짝지은 비교 (McNemar 정확 검정)", "",
+         "- 같은 20문항을 두 모델이 각각 풀었으므로, 한쪽만 맞힌 문항 수로 비교한다(정답 = exact). "
+         "양쪽 검정, 이항분포(p = 0.5)로 정확히 계산했다.",
+         "- p가 0.05보다 크면 ‘이 20문항으로는 두 모델의 차이를 가릴 수 없다’는 뜻이다(같다는 뜻은 아니다).", "",
+         "| 비교 (A vs B) | A 정답률 | B 정답률 | 둘 다 맞힘 | A만 맞힘 | B만 맞힘 | 둘 다 틀림 | p 값 |",
+         "|---|---:|---:|---:|---:|---:|---:|---:|"]
+    for A, B in MCNEMAR_PAIRS:
+        ra = runs.get((A, "live"))
+        rb = runs.get((B, "live"))
+        if not ra or not rb:
+            L.append(f"| {label(A)} vs {label(B)} | 결과 없음 | | | | | | |")
+            continue
+        sa, sb = ra["scores"], rb["scores"]
+        ids = sorted(set(sa) & set(sb))
+        both = sum(1 for i in ids if sa[i]["exact"] and sb[i]["exact"])
+        a_only = sum(1 for i in ids if sa[i]["exact"] and not sb[i]["exact"])
+        b_only = sum(1 for i in ids if not sa[i]["exact"] and sb[i]["exact"])
+        neither = len(ids) - both - a_only - b_only
+        p = mcnemar_exact(a_only, b_only)
+        L.append(f"| {label(A)} vs {label(B)} | {pct(ra['summary']['exact'])} | {pct(rb['summary']['exact'])} | "
+                 f"{both} | {a_only} | {b_only} | {neither} | {p:.3f} |")
+    return L + [""]
 
 
 def main():
@@ -59,6 +99,7 @@ def main():
             bs = know["summary"]["by_source"]
             L.append(f"  - {label(m)}: {pct(bs['kmmlu']['accuracy'])} / {pct(bs['mmlu']['accuracy'])}")
     L.append("")
+    L += mcnemar_section(runs)
     notes = S5 / "comparison_notes.md"
     if notes.exists():
         L += [notes.read_text(encoding="utf-8").strip(), ""]

@@ -1,0 +1,163 @@
+{
+ "model": "gemma4:26b",
+ "mode": "igpu",
+ "started": "2026-11-12T10:19:46",
+ "settings": {
+  "num_ctx": 8192,
+  "num_predict": 512,
+  "temperature": 0,
+  "seed": 42,
+  "think": false,
+  "server_env": [
+   "OLLAMA_IGPU_ENABLE=1",
+   "LLAMA_ARG_CACHE_RAM=0",
+   "LLAMA_ARG_SWA_FULL=1"
+  ]
+ },
+ "case_ids": [
+  "B1-1",
+  "B2-1",
+  "B3-2",
+  "O1-3",
+  "O2-3",
+  "S1-1",
+  "S2-1",
+  "S3-2",
+  "M1-3",
+  "M3-1",
+  "X1-2",
+  "X2-3",
+  "I1-1",
+  "I2-1",
+  "I3-2",
+  "A1-3",
+  "A2-3",
+  "F1-1",
+  "F2-1",
+  "F3-2",
+  "C1-3",
+  "C2-3",
+  "T1-1",
+  "T2-1",
+  "T3-2",
+  "D1-3",
+  "D2-3",
+  "U1-1",
+  "U2-2",
+  "U3-3"
+ ],
+ "error": "HTTP 500: {\"error\":\"llama-server startup failed after projector CPU offload retry: llama-server reported out-of-memory during startup: llama_init_from_model: failed to initialize the context: Gemma4Assistant requires ctx_other to be set (this warning is normal during memory fitting)\\nggml_backend_buft_alloc_b",
+ "memory_series": [
+  {
+   "t": 2.5,
+   "phase": "load",
+   "runner_rss_gb": 0.0,
+   "runner_private_gb": 0.0,
+   "gpu_shared_gb": 1.009,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 12.666,
+   "sys_avail_gb": 18.828,
+   "pagefile_used_gb": 0.703
+  },
+  {
+   "t": 6.5,
+   "phase": "load",
+   "runner_rss_gb": 0.235,
+   "runner_private_gb": 0.231,
+   "gpu_shared_gb": 8.359,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 20.726,
+   "sys_avail_gb": 10.767,
+   "pagefile_used_gb": 0.703
+  },
+  {
+   "t": 10.7,
+   "phase": "load",
+   "runner_rss_gb": 16.782,
+   "runner_private_gb": 16.809,
+   "gpu_shared_gb": 17.721,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 29.387,
+   "sys_avail_gb": 2.107,
+   "pagefile_used_gb": 0.702
+  },
+  {
+   "t": 14.8,
+   "phase": "load",
+   "runner_rss_gb": 16.783,
+   "runner_private_gb": 16.81,
+   "gpu_shared_gb": 17.719,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 29.46,
+   "sys_avail_gb": 2.033,
+   "pagefile_used_gb": 0.702
+  },
+  {
+   "t": 18.9,
+   "phase": "load",
+   "runner_rss_gb": 16.784,
+   "runner_private_gb": 16.811,
+   "gpu_shared_gb": 17.445,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 29.622,
+   "sys_avail_gb": 1.871,
+   "pagefile_used_gb": 0.703
+  },
+  {
+   "t": 23.0,
+   "phase": "load",
+   "runner_rss_gb": 0.108,
+   "runner_private_gb": 0.107,
+   "gpu_shared_gb": 1.127,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 12.77,
+   "sys_avail_gb": 18.724,
+   "pagefile_used_gb": 0.703
+  },
+  {
+   "t": 27.0,
+   "phase": "load",
+   "runner_rss_gb": 0.146,
+   "runner_private_gb": 0.142,
+   "gpu_shared_gb": 17.789,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 29.634,
+   "sys_avail_gb": 1.859,
+   "pagefile_used_gb": 0.703
+  },
+  {
+   "t": 31.2,
+   "phase": "load",
+   "runner_rss_gb": 16.786,
+   "runner_private_gb": 16.813,
+   "gpu_shared_gb": 17.755,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 29.506,
+   "sys_avail_gb": 1.987,
+   "pagefile_used_gb": 0.703
+  },
+  {
+   "t": 35.4,
+   "phase": "load",
+   "runner_rss_gb": 16.784,
+   "runner_private_gb": 16.81,
+   "gpu_shared_gb": 17.741,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 29.773,
+   "sys_avail_gb": 1.721,
+   "pagefile_used_gb": 0.703
+  },
+  {
+   "t": 39.5,
+   "phase": "load",
+   "runner_rss_gb": 16.784,
+   "runner_private_gb": 16.811,
+   "gpu_shared_gb": 1.081,
+   "gpu_dedicated_gb": 0.0,
+   "sys_used_gb": 12.071,
+   "sys_avail_gb": 19.423,
+   "pagefile_used_gb": 0.703
+  }
+ ],
+ "finished": "2026-11-12T10:20:30"
+}
