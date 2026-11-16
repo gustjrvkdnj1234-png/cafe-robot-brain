@@ -31,3 +31,9 @@ tools/
 
 # Step 7 블로그용 내보내기(GIF/PNG) — 필요한 것만 골라 블로그에 올림
 ui/exports/
+
+# 블로그에 올릴 이미지 모음(ui/exports에서 고른 최종본)
+blog_assets/
+
+# 6a 파일럿 측정(최종 결과 아님, 커밋하지 않음)
+results/step6/pilot/
