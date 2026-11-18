@@ -1,0 +1,64 @@
+{
+ "plan": {
+  "done": "2026-11-18T14:29:15"
+ },
+ "build": {
+  "done": "2026-11-18T14:31:53",
+  "seconds": 149.6,
+  "peak_rss_gb": 0.16
+ },
+ "validate": {
+  "done": "2026-11-18T14:42:55",
+  "seconds": 661.8,
+  "peak_rss_gb": 7.6
+ },
+ "convert": {
+  "done": "2026-11-18T14:47:09",
+  "seconds": 253.6,
+  "peak_rss_gb": 6.02
+ },
+ "verify_bf16": {
+  "done": "2026-11-18T14:52:13",
+  "seconds": 126.2,
+  "peak_private_gb": 3.76,
+  "peak_rss_gb": 23.49
+ },
+ "quantize": {
+  "done": "2026-11-18T14:54:05",
+  "seconds": 112.5,
+  "peak_private_gb": 3.86,
+  "peak_rss_gb": 24.08,
+  "q4_bytes": 9812825280
+ },
+ "verify_q4": {
+  "done": "2026-11-18T14:54:48",
+  "seconds": 41.0,
+  "peak_private_gb": 7.39,
+  "peak_rss_gb": 14.58
+ },
+ "register": {
+  "done": "2026-11-18T14:57:07",
+  "blob_sha256": "b92b9962bec40d17fc812e70442a067dc0aec93bd1a7c397b15127a805dcd275"
+ },
+ "load": {
+  "done": "2026-11-18T14:57:51",
+  "seconds": 38.7,
+  "peak_private_gb": 0.1,
+  "peak_rss_gb": 0.13,
+  "fits_igpu_fully": true
+ },
+ "smoke": {
+  "done": "2026-11-18T14:59:16",
+  "seconds": 80.3,
+  "peak_private_gb": 0.1,
+  "peak_rss_gb": 0.13,
+  "cases_with_tool_calls": 5
+ },
+ "exams": {
+  "done": "2026-11-18T15:22:25",
+  "seconds": 1388.8,
+  "peak_private_gb": 0.13,
+  "peak_rss_gb": 0.17,
+  "mode": "igpu"
+ }
+}

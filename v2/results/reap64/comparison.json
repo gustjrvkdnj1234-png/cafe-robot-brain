@@ -1,0 +1,3565 @@
+{
+ "scores": {
+  "reap64": {
+   "cafe_strict": 0.8917,
+   "cafe_lenient": 0.8916666666666667,
+   "live_strict": 0.55,
+   "live_lenient": 0.7,
+   "knowledge": 0.46,
+   "kmmlu": 0.38,
+   "mmlu": 0.62,
+   "cafe_by_category": {
+    "ambiguous": 0.7,
+    "basic": 1,
+    "call_staff": 0.9,
+    "conditional": 0.5,
+    "impossible": 1,
+    "modify_cancel": 1,
+    "multi_item": 1,
+    "off_menu": 1,
+    "options": 0.9,
+    "slang": 1,
+    "takeout": 0.8,
+    "unavailable": 0.9167
+   },
+   "mode": "igpu"
+  },
+  "v1_64e": {
+   "cafe_strict": 0.9333,
+   "cafe_lenient": 0.9333333333333333,
+   "live_strict": 0.7,
+   "live_lenient": 0.7,
+   "knowledge": 0.4733,
+   "kmmlu": 0.435,
+   "mmlu": 0.55,
+   "cafe_by_category": {
+    "ambiguous": 0.7,
+    "basic": 1,
+    "call_staff": 1,
+    "conditional": 0.9,
+    "impossible": 1,
+    "modify_cancel": 1,
+    "multi_item": 1,
+    "off_menu": 1,
+    "options": 0.9,
+    "slang": 1,
+    "takeout": 0.7,
+    "unavailable": 1
+   },
+   "mode": "igpu"
+  },
+  "orig26b": {
+   "cafe_strict": 0.9417,
+   "cafe_lenient": 0.9416666666666667,
+   "live_strict": 0.75,
+   "live_lenient": 0.75,
+   "knowledge": 0.7267,
+   "kmmlu": 0.675,
+   "mmlu": 0.83,
+   "cafe_by_category": {
+    "ambiguous": 0.7,
+    "basic": 1,
+    "call_staff": 1,
+    "conditional": 1,
+    "impossible": 1,
+    "modify_cancel": 1,
+    "multi_item": 1,
+    "off_menu": 1,
+    "options": 1,
+    "slang": 1,
+    "takeout": 0.6,
+    "unavailable": 1
+   },
+   "mode": "cpu"
+  }
+ },
+ "mcnemar": {
+  "reap64|v1_64e|cafe|strict": {
+   "n": 120,
+   "both": 106,
+   "a_only": 1,
+   "b_only": 6,
+   "neither": 7,
+   "p": 0.125
+  },
+  "reap64|v1_64e|cafe|lenient": {
+   "n": 120,
+   "both": 106,
+   "a_only": 1,
+   "b_only": 6,
+   "neither": 7,
+   "p": 0.125
+  },
+  "reap64|v1_64e|live|strict": {
+   "n": 20,
+   "both": 9,
+   "a_only": 2,
+   "b_only": 5,
+   "neither": 4,
+   "p": 0.453125
+  },
+  "reap64|v1_64e|live|lenient": {
+   "n": 20,
+   "both": 12,
+   "a_only": 2,
+   "b_only": 2,
+   "neither": 4,
+   "p": 1.0
+  },
+  "reap64|v1_64e|knowledge|strict": {
+   "n": 300,
+   "both": 97,
+   "a_only": 41,
+   "b_only": 45,
+   "neither": 117,
+   "p": 0.7465343822890573
+  },
+  "reap64|orig26b|cafe|strict": {
+   "n": 120,
+   "both": 105,
+   "a_only": 2,
+   "b_only": 8,
+   "neither": 5,
+   "p": 0.109375
+  },
+  "reap64|orig26b|cafe|lenient": {
+   "n": 120,
+   "both": 105,
+   "a_only": 2,
+   "b_only": 8,
+   "neither": 5,
+   "p": 0.109375
+  },
+  "reap64|orig26b|live|strict": {
+   "n": 20,
+   "both": 10,
+   "a_only": 1,
+   "b_only": 5,
+   "neither": 4,
+   "p": 0.21875
+  },
+  "reap64|orig26b|live|lenient": {
+   "n": 20,
+   "both": 13,
+   "a_only": 1,
+   "b_only": 2,
+   "neither": 4,
+   "p": 1.0
+  },
+  "reap64|orig26b|knowledge|strict": {
+   "n": 300,
+   "both": 115,
+   "a_only": 23,
+   "b_only": 103,
+   "neither": 59,
+   "p": 2.785639130957218e-13
+  },
+  "v1_64e|orig26b|cafe|strict": {
+   "n": 120,
+   "both": 111,
+   "a_only": 1,
+   "b_only": 2,
+   "neither": 6,
+   "p": 1.0
+  },
+  "v1_64e|orig26b|cafe|lenient": {
+   "n": 120,
+   "both": 111,
+   "a_only": 1,
+   "b_only": 2,
+   "neither": 6,
+   "p": 1.0
+  },
+  "v1_64e|orig26b|live|strict": {
+   "n": 20,
+   "both": 14,
+   "a_only": 0,
+   "b_only": 1,
+   "neither": 5,
+   "p": 1.0
+  },
+  "v1_64e|orig26b|live|lenient": {
+   "n": 20,
+   "both": 14,
+   "a_only": 0,
+   "b_only": 1,
+   "neither": 5,
+   "p": 1.0
+  },
+  "v1_64e|orig26b|knowledge|strict": {
+   "n": 300,
+   "both": 120,
+   "a_only": 22,
+   "b_only": 98,
+   "neither": 60,
+   "p": 1.2161033345676806e-12
+  }
+ },
+ "diff_items": {
+  "cafe": [
+   {
+    "id": "B3-1",
+    "category": "basic",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "유자차"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "유자차",
+       "quantity": 1
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "유자차"
+      }
+     }
+    ]
+   },
+   {
+    "id": "O2-2",
+    "category": "options",
+    "reap64_exact": 0,
+    "v1_64e_exact": 0,
+    "reap64_lenient": 0,
+    "v1_64e_lenient": 0,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "바닐라라떼",
+       "shots_delta": -1,
+       "sweetness": "less",
+       "temperature": "hot"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "바닐라라떼",
+       "shots_delta": -0.5,
+       "sweetness": "less"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "바닐라라떼",
+       "sweetness": "less",
+       "shots_delta": 1
+      }
+     }
+    ]
+   },
+   {
+    "id": "S2-1",
+    "category": "slang",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "바닐라라떼",
+       "size": "regular",
+       "temperature": "iced"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "바닐라라떼",
+       "temperature": "iced"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "바닐라라떼",
+       "temperature": "iced"
+      }
+     }
+    ]
+   },
+   {
+    "id": "S2-2",
+    "category": "slang",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "바닐라라떼",
+       "size": "regular",
+       "temperature": "iced"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "바닐라라떼",
+       "temperature": "iced"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "바닐라라떼",
+       "temperature": "iced"
+      }
+     }
+    ]
+   },
+   {
+    "id": "S2-3",
+    "category": "slang",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "바닐라라떼",
+       "size": "regular",
+       "temperature": "iced"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "바닐라라떼",
+       "temperature": "iced"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "바닐라라떼",
+       "temperature": "iced"
+      }
+     }
+    ]
+   },
+   {
+    "id": "M1-1",
+    "category": "multi_item",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "size": "regular",
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "치즈케이크"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "치즈케이크"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "치즈케이크"
+      }
+     }
+    ]
+   },
+   {
+    "id": "M1-2",
+    "category": "multi_item",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "size": "regular",
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "치즈케이크",
+       "quantity": 1
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "치즈케이크"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "치즈케이크"
+      }
+     }
+    ]
+   },
+   {
+    "id": "M1-3",
+    "category": "multi_item",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "size": "regular",
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "치즈케이크"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "치즈케이크"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "치즈케이크"
+      }
+     }
+    ]
+   },
+   {
+    "id": "M2-1",
+    "category": "multi_item",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "카페라떼",
+       "quantity": 2
+      }
+     },
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "레몬에이드",
+       "temperature": "iced"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "카페라떼",
+       "quantity": 2
+      }
+     },
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "레몬에이드"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "카페라떼",
+       "quantity": 2
+      }
+     },
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "레몬에이드"
+      }
+     }
+    ]
+   },
+   {
+    "id": "M2-2",
+    "category": "multi_item",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "카페라떼",
+       "quantity": 2
+      }
+     },
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "레몬에이드",
+       "quantity": 1,
+       "temperature": "iced"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "카페라떼",
+       "quantity": 2
+      }
+     },
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "레몬에이드",
+       "quantity": 1
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "카페라떼",
+       "quantity": 2
+      }
+     },
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "레몬에이드"
+      }
+     }
+    ]
+   },
+   {
+    "id": "M2-3",
+    "category": "multi_item",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "카페라떼",
+       "quantity": 2
+      }
+     },
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "레몬에이드",
+       "temperature": "iced"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "카페라떼",
+       "quantity": 2
+      }
+     },
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "레몬에이드"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "카페라떼",
+       "quantity": 2
+      }
+     },
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "레몬에이드"
+      }
+     }
+    ]
+   },
+   {
+    "id": "X2-1",
+    "category": "modify_cancel",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "remove_item",
+      "arguments": {
+       "changes": {},
+       "item_index": 2
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "remove_item",
+      "arguments": {
+       "item_index": 2
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "remove_item",
+      "arguments": {
+       "item_index": 2
+      }
+     }
+    ]
+   },
+   {
+    "id": "X2-2",
+    "category": "modify_cancel",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "remove_item",
+      "arguments": {
+       "changes": {},
+       "item_index": 2
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "remove_item",
+      "arguments": {
+       "item_index": 2
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "remove_item",
+      "arguments": {
+       "item_index": 2
+      }
+     }
+    ]
+   },
+   {
+    "id": "I1-1",
+    "category": "impossible",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 레몬에이드는 시원하게(아이스)만 제공해 드리고 있습니다. 아이스로 준비해 드릴까요?",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "에이드는 아이스 메뉴만 가능합니다. 아이스로 변경해 드릴까요?",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "레몬에이드는 아이스로만 가능한데, 아이스로 드릴까요?",
+       "reason": "impossible"
+      }
+     }
+    ]
+   },
+   {
+    "id": "I1-2",
+    "category": "impossible",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 레몬에이드는 시원하게(아이스)만 제공됩니다.",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "레몬에이드는 아이스 메뉴만 가능합니다. 아이스로 준비해 드릴까요?",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "레몬에이드는 아이스로만 가능한데, 아이스로 드릴까요?",
+       "reason": "impossible"
+      }
+     }
+    ]
+   },
+   {
+    "id": "I1-3",
+    "category": "impossible",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 에이드는 시원하게 아이스로만 제공 가능합니다. 아이스로 준비해 드릴까요?",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "에이드는 아이스 메뉴만 가능합니다. 아이스로 준비해 드릴까요?",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "레몬에이드는 아이스로만 가능한데, 아이스로 드릴까요?",
+       "reason": "impossible"
+      }
+     }
+    ]
+   },
+   {
+    "id": "I1-4",
+    "category": "impossible",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 에이드는 시원하게 아이스로만 제공해 드리고 있습니다.",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "레몬에이드는 아이스 메뉴만 가능합니다. 아이스로 준비해 드릴까요?",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "레몬에이드는 아이스로만 가능한데, 아이스로 드릴까요?",
+       "reason": "impossible"
+      }
+     }
+    ]
+   },
+   {
+    "id": "I2-1",
+    "category": "impossible",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 차 종류에는 에스프레소 샷을 추가할 수 없습니다. 시럽이나 단맛을 원하시면 셀프바를 이용해 주세요.",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 차 종류인 얼그레이에는 에스프레소 샷을 추가할 수 없습니다.",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "차에는 샷을 넣을 수 없어요. 그냥 얼그레이로 드릴까요?",
+       "reason": "impossible"
+      }
+     }
+    ]
+   },
+   {
+    "id": "I2-2",
+    "category": "impossible",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 차 종류에는 에스프레소 샷을 추가할 수 없습니다. 시럽이나 단맛을 원하시면 셀프바를 이용해 주세요.",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 차 종류인 얼그레이에는 에스프레소 샷을 추가할 수 없습니다.",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "차에는 샷을 넣을 수 없어요. 그냥 얼그레이로 드릴까요?",
+       "reason": "impossible"
+      }
+     }
+    ]
+   },
+   {
+    "id": "I2-3",
+    "category": "impossible",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 차 종류에는 에스프레소 샷을 추가할 수 없습니다.",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 차 메뉴인 얼그레이에는 에스프레소 샷을 추가할 수 없습니다.",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "차에는 샷을 넣을 수 없어요. 그냥 얼그레이로 드릴까요?",
+       "reason": "impossible"
+      }
+     }
+    ]
+   },
+   {
+    "id": "I3-1",
+    "category": "impossible",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 아메리카노에 시럽을 넣고 싶으시면 셀프바에 준비된 시럽을 이용해 직접 넣어주실 수 있습니다.",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "아메리카노에는 시럽을 직접 넣어드릴 수 없어요. 시럽은 셀프바에서 직접 넣어 드실 수 있습니다!",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "아메리카노는 당도 조절이 안 돼요. 시럽은 셀프바에서 넣으실 수 있어요.",
+       "reason": "impossible"
+      }
+     }
+    ]
+   },
+   {
+    "id": "I3-2",
+    "category": "impossible",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 아메리카노에는 시럽을 따로 넣어드리지 않고 있어요. 시럽은 셀프바에 준비되어 있으니 직접 넣어 드실 수 있습니다.",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "커피 메뉴에는 시럽을 직접 넣어드릴 수 없어요. 시럽은 셀프바에서 직접 넣어 드실 수 있습니다!",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "아메리카노는 당도 조절이 안 돼요. 시럽은 셀프바에서 넣으실 수 있어요.",
+       "reason": "impossible"
+      }
+     }
+    ]
+   },
+   {
+    "id": "I3-3",
+    "category": "impossible",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 아메리카노에는 시럽이나 단맛 조절 옵션이 없습니다. 시럽은 셀프바에서 직접 넣어 드실 수 있습니다.",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "아메리카노는 당도 조절이 되지 않습니다. 시럽은 셀프바에서 직접 넣어 드실 수 있습니다.",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "아메리카노는 당도 조절이 안 돼요. 시럽은 셀프바에서 넣으실 수 있어요.",
+       "reason": "impossible"
+      }
+     }
+    ]
+   },
+   {
+    "id": "A1-1",
+    "category": "ambiguous",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 어떤 메뉴를 주문하시겠어요?",
+       "reason": "ambiguous"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "어떤 메뉴를 드릴까요?",
+       "reason": "ambiguous"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "어떤 메뉴를 말씀하시는 걸까요?",
+       "reason": "ambiguous"
+      }
+     }
+    ]
+   },
+   {
+    "id": "A1-3",
+    "category": "ambiguous",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 손님. '늘 먹던 것'이 무엇인지 제가 아직 알지 못합니다. 어떤 메뉴를 주문해 드릴까요?",
+       "reason": "ambiguous"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 손님. '늘 먹던 것'이 무엇인지 제가 알지 못해서요. 어떤 메뉴로 주문해 드릴까요?",
+       "reason": "ambiguous"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "어떤 메뉴를 말씀하시는 걸까요?",
+       "reason": "ambiguous"
+      }
+     }
+    ]
+   },
+   {
+    "id": "A1-4",
+    "category": "ambiguous",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 어떤 메뉴를 말씀하시는 걸까요? 이전에 주문하신 내역이 없어 확인이 어렵습니다.",
+       "reason": "ambiguous"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 어떤 메뉴를 말씀하시는 걸까요? 다시 한번 말씀해 주시면 감사하겠습니다.",
+       "reason": "ambiguous"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "어떤 메뉴를 말씀하시는 걸까요?",
+       "reason": "ambiguous"
+      }
+     }
+    ]
+   },
+   {
+    "id": "A2-2",
+    "category": "ambiguous",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "어떤 케이크로 드릴까요? 치즈케이크와 초콜릿케이크가 있습니다.",
+       "reason": "ambiguous"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "치즈케이크와 초콜릿케이크 중 어떤 것으로 드릴까요?",
+       "reason": "ambiguous"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "치즈케이크와 초콜릿케이크 중 어떤 걸로 드릴까요?",
+       "reason": "ambiguous"
+      }
+     }
+    ]
+   },
+   {
+    "id": "A2-3",
+    "category": "ambiguous",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "어떤 케이크로 드릴까요? 치즈케이크와 초콜릿케이크가 있습니다.",
+       "reason": "ambiguous"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "치즈케이크와 초콜릿케이크 중 어떤 것으로 드릴까요?",
+       "reason": "ambiguous"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "치즈케이크와 초콜릿케이크 중 어떤 걸로 드릴까요?",
+       "reason": "ambiguous"
+      }
+     }
+    ]
+   },
+   {
+    "id": "A3-2",
+    "category": "ambiguous",
+    "reap64_exact": 0,
+    "v1_64e_exact": 0,
+    "reap64_lenient": 0,
+    "v1_64e_lenient": 0,
+    "orig26b_exact": 0,
+    "reap64_calls": [
+     {
+      "name": "remove_item",
+      "arguments": {
+       "changes": {},
+       "item_index": 1
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "remove_item",
+      "arguments": {
+       "item_index": 1
+      }
+     },
+     {
+      "name": "remove_item",
+      "arguments": {
+       "item_index": 2
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "따뜻한 아메리카노와 아이스 아메리카노 중 어떤 걸 취소할까요?",
+       "reason": "ambiguous"
+      }
+     }
+    ]
+   },
+   {
+    "id": "A3-3",
+    "category": "ambiguous",
+    "reap64_exact": 0,
+    "v1_64e_exact": 0,
+    "reap64_lenient": 0,
+    "v1_64e_lenient": 0,
+    "orig26b_exact": 0,
+    "reap64_calls": [
+     {
+      "name": "remove_item",
+      "arguments": {
+       "item_index": 1
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "remove_item",
+      "arguments": {
+       "item_index": 1
+      }
+     },
+     {
+      "name": "remove_item",
+      "arguments": {
+       "item_index": 2
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "따뜻한 아메리카노와 아이스 아메리카노 중 어떤 걸 취소할까요?",
+       "reason": "ambiguous"
+      }
+     }
+    ]
+   },
+   {
+    "id": "F1-1",
+    "category": "off_menu",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 메뉴판에는 녹차라떼가 없습니다. 혹시 다른 메뉴를 찾으시나요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 녹차라떼는 저희 메뉴판에 없습니다. 대신 다른 음료를 도와드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "녹차라떼는 메뉴에 없어요. 다른 라떼로 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "F1-2",
+    "category": "off_menu",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 메뉴판에는 녹차라떼가 없습니다. 혹시 다른 메뉴를 찾으시나요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 녹차라떼는 저희 메뉴판에 없습니다. 대신 다른 음료를 도와드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "녹차라떼는 메뉴에 없어요. 다른 라떼로 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "F1-3",
+    "category": "off_menu",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 메뉴판에는 '그린티 라떼'라는 메뉴가 없습니다. 혹시 다른 메뉴를 찾으시나요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 그린티 라떼는 저희 메뉴에 없습니다. 혹시 다른 메뉴를 도와드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "녹차라떼는 메뉴에 없어요. 다른 라떼로 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "F1-4",
+    "category": "off_menu",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 메뉴판에는 녹차 라테가 없습니다. 혹시 카페라떼나 다른 메뉴를 찾으시나요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 녹차 라테는 저희 메뉴에 없습니다. 대신 카페라떼나 다른 메뉴를 도와드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "녹차라떼는 메뉴에 없어요. 다른 라떼로 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "F2-1",
+    "category": "off_menu",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 카페에는 샌드위치가 준비되어 있지 않습니다. 메뉴판에 있는 디저트인 치즈케이크나 초콜릿케이크는 어떠신가요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 카페에는 샌드위치 메뉴가 준비되어 있지 않습니다. 다른 음료나 디저트를 주문하시겠어요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "샌드위치는 없고 케이크만 있어요. 케이크로 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "F2-2",
+    "category": "off_menu",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 메뉴판에는 샌드위치가 없습니다. 다른 메뉴를 도와드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 카페에는 샌드위치 메뉴가 없습니다. 다른 음료나 디저트를 주문하시겠어요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "샌드위치는 없고 케이크만 있어요. 케이크로 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "F2-3",
+    "category": "off_menu",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 메뉴판에는 샌드위치라는 메뉴가 없습니다. 다른 메뉴를 도와드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 카페에는 샌드위치가 준비되어 있지 않습니다. 대신 치즈케이크나 초콜릿케이크 같은 디저트는 어떠신가요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "샌드위치는 없고 케이크만 있어요. 케이크로 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "F3-1",
+    "category": "off_menu",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 메뉴판에는 카푸치노가 없습니다. 라떼 종류인 카페라떼, 바닐라라떼, 카라멜마키아또, 카페모카 중에서 선택하시겠어요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 카페에는 카푸치노 메뉴가 없습니다. 대신 카페라떼나 바닐라라떼는 어떠신가요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "카푸치노는 메뉴에 없어요. 카페라떼는 어떠세요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "F3-2",
+    "category": "off_menu",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 메뉴판에는 카푸치노가 없습니다. 라떼 종류인 카페라떼, 바닐라라떼, 카라멜마키아또, 카페모카 중에서 선택하시겠어요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 카페에는 카푸치노 메뉴가 없습니다. 대신 카페라떼나 바닐라라떼는 어떠신가요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "카푸치노는 메뉴에 없어요. 카페라떼는 어떠세요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "F3-3",
+    "category": "off_menu",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 메뉴판에는 카푸치노가 없습니다. 카페라떼나 다른 메뉴를 도와드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 카푸치노는 저희 메뉴판에 없습니다. 대신 카페라떼나 바닐라라떼는 어떠신가요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "카푸치노는 메뉴에 없어요. 카페라떼는 어떠세요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "C1-2",
+    "category": "call_staff",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "주문 준비 상태 확인 요청"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "주문 준비 상태 문의"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "주문한 음료 준비 상태 문의"
+      }
+     }
+    ]
+   },
+   {
+    "id": "C1-3",
+    "category": "call_staff",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "주문 준비 시간 문의"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "주문한 라떼의 준비 시간 문의"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "주문한 음료 준비 상태 문의"
+      }
+     }
+    ]
+   },
+   {
+    "id": "C1-4",
+    "category": "call_staff",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "주문 준비 상태 문의"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "주문한 메뉴의 준비 상태 문의"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "주문한 음료 준비 상태 문의"
+      }
+     }
+    ]
+   },
+   {
+    "id": "C2-3",
+    "category": "call_staff",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "얼음 컵 요청"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "얼음컵 요청"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "얼음컵 요청"
+      }
+     }
+    ]
+   },
+   {
+    "id": "C3-1",
+    "category": "call_staff",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "내일 오전 10시 아메리카노 30잔 단체 주문 가능 여부 및 시간 확인 요청"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "오전 10시 아메리카노 30잔 단체 주문 가능 여부 및 시간 확인 요청"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "단체 주문 시간 문의"
+      }
+     }
+    ]
+   },
+   {
+    "id": "C3-2",
+    "category": "call_staff",
+    "reap64_exact": 0,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 0,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "quantity": 30,
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "내일 아침 아메리카노 30잔 10시까지 가능한지 문의"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "내일 아침 대량 주문(아메리카노 30잔) 10시까지 가능 여부 문의"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "단체 주문 시간 문의"
+      }
+     }
+    ]
+   },
+   {
+    "id": "C3-3",
+    "category": "call_staff",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "단체 주문(아메리카노 30잔) 가능 여부 및 10시까지 준비 가능 여부 문의"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "대량 주문(아메리카노 30잔) 가능 여부 및 10시까지 준비 가능 여부 문의"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "단체 주문 시간 문의"
+      }
+     }
+    ]
+   },
+   {
+    "id": "T1-1",
+    "category": "takeout",
+    "reap64_exact": 0,
+    "v1_64e_exact": 0,
+    "reap64_lenient": 0,
+    "v1_64e_lenient": 0,
+    "orig26b_exact": 0,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "size": "regular",
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "confirm_order",
+      "arguments": {
+       "dine_option": "takeout"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "confirm_order",
+      "arguments": {
+       "dine_option": "takeout"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "temperature": "iced"
+      }
+     }
+    ]
+   },
+   {
+    "id": "T1-2",
+    "category": "takeout",
+    "reap64_exact": 1,
+    "v1_64e_exact": 0,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 0,
+    "orig26b_exact": 0,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "size": "regular",
+       "temperature": "iced"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "confirm_order",
+      "arguments": {
+       "dine_option": "takeout"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "temperature": "iced"
+      }
+     }
+    ]
+   },
+   {
+    "id": "T1-3",
+    "category": "takeout",
+    "reap64_exact": 0,
+    "v1_64e_exact": 0,
+    "reap64_lenient": 0,
+    "v1_64e_lenient": 0,
+    "orig26b_exact": 0,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "size": "regular",
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "confirm_order",
+      "arguments": {
+       "dine_option": "takeout"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "confirm_order",
+      "arguments": {
+       "dine_option": "takeout"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "temperature": "iced"
+      }
+     }
+    ]
+   },
+   {
+    "id": "T1-4",
+    "category": "takeout",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 0,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "size": "regular",
+       "temperature": "iced"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "temperature": "iced"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "temperature": "iced"
+      }
+     }
+    ]
+   },
+   {
+    "id": "D1-2",
+    "category": "conditional",
+    "reap64_exact": 0,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 0,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 메뉴에는 녹차라떼가 없습니다. 대신 카페라떼로 준비해 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "카페라떼"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "카페라떼"
+      }
+     }
+    ]
+   },
+   {
+    "id": "D1-3",
+    "category": "conditional",
+    "reap64_exact": 0,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 0,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 메뉴에는 녹차라떼가 없습니다. 대신 카페라떼로 준비해 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "카페라떼"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "카페라떼"
+      }
+     }
+    ]
+   },
+   {
+    "id": "D1-4",
+    "category": "conditional",
+    "reap64_exact": 0,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 0,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 메뉴에는 녹차라떼가 준비되어 있지 않습니다. 대신 카페라떼로 준비해 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "카페라떼"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "카페라떼"
+      }
+     }
+    ]
+   },
+   {
+    "id": "D2-1",
+    "category": "conditional",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "자몽에이드",
+       "size": "regular",
+       "temperature": "iced"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "자몽에이드",
+       "temperature": "iced"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "자몽에이드"
+      }
+     }
+    ]
+   },
+   {
+    "id": "D2-2",
+    "category": "conditional",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "자몽에이드",
+       "size": "regular",
+       "temperature": "iced"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "자몽에이드",
+       "temperature": "iced"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "자몽에이드"
+      }
+     }
+    ]
+   },
+   {
+    "id": "D2-3",
+    "category": "conditional",
+    "reap64_exact": 0,
+    "v1_64e_exact": 0,
+    "reap64_lenient": 0,
+    "v1_64e_lenient": 0,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "레몬에이드"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "레몬에이드",
+       "temperature": "iced"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "자몽에이드"
+      }
+     }
+    ]
+   },
+   {
+    "id": "D3-3",
+    "category": "conditional",
+    "reap64_exact": 0,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 0,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페는 디카페인 옵션을 제공하지 않습니다. 대신 일반 아메리카노로 준비해 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노"
+      }
+     }
+    ]
+   },
+   {
+    "id": "U1-1",
+    "category": "unavailable",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 디카페인 옵션은 제공하지 않습니다. 일반 아메리카노로 도와드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 디카페인 옵션을 제공하지 않습니다. 일반 아메리카노로 주문 도와드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송하지만 디카페인은 준비되어 있지 않아요. 일반 아메리카노로 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "U1-2",
+    "category": "unavailable",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 디카페인 옵션은 제공하지 않습니다. 일반 아메리카노로 도와드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 디카페인 옵션을 제공하지 않습니다. 일반 아메리카노로 주문 도와드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송하지만 디카페인은 준비되어 있지 않아요. 일반 아메리카노로 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "U1-3",
+    "category": "unavailable",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 디카페인 옵션은 제공하지 않습니다.",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 디카페인 옵션은 제공하지 않고 있습니다.",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송하지만 디카페인은 준비되어 있지 않아요. 일반 아메리카노로 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "U2-1",
+    "category": "unavailable",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 휘핑크림은 제공하지 않습니다.",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 휘핑크림을 제공하지 않습니다.",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송하지만 휘핑크림은 없어요. 그냥 카페모카로 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "U2-2",
+    "category": "unavailable",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 휘핑크림은 제공하지 않습니다.",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 휘핑크림을 제공하지 않습니다.",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송하지만 휘핑크림은 없어요. 그냥 카페모카로 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "U2-3",
+    "category": "unavailable",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 휘핑크림은 제공하지 않습니다.",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 카페에서는 휘핑크림을 제공하지 않습니다.",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송하지만 휘핑크림은 없어요. 그냥 카페모카로 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "U3-1",
+    "category": "unavailable",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 락토프리 우유는 제공하지 않습니다. 일반 우유나 오트밀크 중에서 선택해 주시겠어요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 락토프리 우유는 제공하지 않고 있습니다. 일반 우유나 오트밀크로 변경해 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송하지만 락토프리 우유는 없어요. 오트밀크는 가능한데 괜찮으세요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "U3-2",
+    "category": "unavailable",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 카페에서는 락토프리 우유는 제공하지 않습니다. 일반 우유나 오트밀크 중에서 선택해 주시겠어요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 카페에서는 락토프리 우유를 제공하지 않습니다. 일반 우유나 오트밀크로 변경해 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송하지만 락토프리 우유는 없어요. 오트밀크는 가능한데 괜찮으세요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "U3-3",
+    "category": "unavailable",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 카페에서는 락토프리 우유는 제공하지 않습니다. 일반 우유나 오트밀크 중에서 선택해 주시겠어요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 카페에서는 락토프리 우유를 제공하지 않습니다. 일반 우유나 오트밀크로 변경해 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송하지만 락토프리 우유는 없어요. 오트밀크는 가능한데 괜찮으세요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "U4-1",
+    "category": "unavailable",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 원두 선택이 불가능합니다. 기본 원두로 준비해 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 원두를 선택하실 수 없습니다.",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송하지만 원두는 고르실 수 없어요. 기본 원두로 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "U4-2",
+    "category": "unavailable",
+    "reap64_exact": 0,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 0,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 원두 선택이나 디카페인 옵션은 제공하지 않습니다.",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 원두를 선택하실 수 없습니다.",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송하지만 원두는 고르실 수 없어요. 기본 원두로 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "U4-3",
+    "category": "unavailable",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 원두 선택은 제공하지 않습니다. 일반적인 원두로 준비해 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 원두 선택 옵션을 제공하지 않습니다.",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "expected": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송하지만 원두는 고르실 수 없어요. 기본 원두로 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   }
+  ],
+  "live": [
+   {
+    "id": "L01",
+    "category": "conditional",
+    "reap64_exact": 0,
+    "v1_64e_exact": 0,
+    "reap64_lenient": 0,
+    "v1_64e_lenient": 0,
+    "orig26b_exact": 0,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페는 원두 선택이나 고소한 맛을 따로 선택하실 수 없습니다. 기본 아메리카노로 준비해 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 원두를 선택하실 수 없습니다. 대신 기본 아메리카노로 준비해 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "L02",
+    "category": "off_menu",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 디카페인 옵션은 제공하지 않습니다. 일반 아메리카노로 도와드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 디카페인 옵션을 제공하지 않습니다. 일반 아메리카노로 주문 도와드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "L03",
+    "category": "conditional",
+    "reap64_exact": 0,
+    "v1_64e_exact": 0,
+    "reap64_lenient": 0,
+    "v1_64e_lenient": 0,
+    "orig26b_exact": 0,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 원두 선택은 제공되지 않습니다.",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 카페는 원두 선택이나 산미 조절 옵션을 제공하지 않습니다. 대신 기본 메뉴인 카페라떼나 아메리카노로 주문 도와드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "L04",
+    "category": "ambiguous",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 따뜻한 아메리카노와 아이스 아메리카노 중 어떤 것으로 드릴까요?",
+       "reason": "ambiguous"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "따뜻한 아메리카노와 아이스 아메리카노 중 어떤 것으로 드릴까요?",
+       "reason": "ambiguous"
+      }
+     }
+    ]
+   },
+   {
+    "id": "L05",
+    "category": "off_menu",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 메뉴판에는 초코라떼가 없습니다. 초콜릿케이크를 말씀하시는 걸까요, 아니면 다른 음료를 찾으시나요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 카페에는 초코라떼 메뉴가 없습니다. 대신 카페모카를 아이스로 준비해 드릴까요, 아니면 다른 메뉴를 도와드릴까요? 그리고 휘핑크림은 저희 카페에서 제공하지 않는 옵션입니다.",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "L06",
+    "category": "off_menu",
+    "reap64_exact": 0,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 초콜릿케이크는 당도 조절이 되지 않습니다. 다른 메뉴를 도와드릴까요?",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 카페에는 초코라떼 메뉴가 없습니다. 혹시 카페모카를 말씀하시는 걸까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "L07",
+    "category": "impossible",
+    "reap64_exact": 1,
+    "v1_64e_exact": 0,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 0,
+    "orig26b_exact": 0,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "아이스 아메리카노 한 잔 준비해 드릴게요. 다만, 커피 종류에는 시럽을 넣어드리지 않고 있어요. 시럽은 셀프바에 준비되어 있으니 직접 넣어 드실 수 있습니다.",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "아이스 아메리카노 한 잔 준비해 드릴게요. 커피에 시럽을 넣으시려면 셀프바에서 직접 넣어 드실 수 있습니다!",
+       "reason": "impossible"
+      }
+     }
+    ]
+   },
+   {
+    "id": "L08",
+    "category": "off_menu",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 락토프리 우유는 제공하지 않습니다. 일반 우유나 오트밀크로 변경해 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에서는 락토프리 우유는 제공하지 않습니다. 대신 일반 우유나 오트밀크로 변경 가능합니다.",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "L11",
+    "category": "call_staff",
+    "reap64_exact": 0,
+    "v1_64e_exact": 0,
+    "reap64_lenient": 0,
+    "v1_64e_lenient": 0,
+    "orig26b_exact": 0,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "quantity": 20,
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "아메리카노 20잔 10분 내 수령 가능 여부 확인 요청 (불가능 시 고객 이탈 예정)"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "quantity": 20,
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "아메리카노 20잔 10분 내 준비 가능 여부 문의"
+      }
+     }
+    ]
+   },
+   {
+    "id": "L12",
+    "category": "multi_item",
+    "reap64_exact": 0,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "레몬에이드",
+       "size": "regular",
+       "temperature": "iced"
+      }
+     },
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 라떼 종류 중 어떤 메뉴로 드릴까요? 카페라떼, 바닐라라떼, 카라멜마키아또, 카페모카 중에서 선택해 주세요. 그리고 저희 카페는 원두 선택이 불가능합니다.",
+       "reason": "ambiguous"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "레몬에이드",
+       "quantity": 1
+      }
+     },
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 카페에서는 원두를 선택하실 수 없습니다. 라떼 2잔은 기본 원두로 준비해 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "L13",
+    "category": "off_menu",
+    "reap64_exact": 0,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 0,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "아메리카노",
+       "shots_delta": 0.5,
+       "size": "regular",
+       "temperature": "iced"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다, 저희 카페에는 아이스티 메뉴가 없습니다. 혹시 다른 음료를 주문하시겠어요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "L14",
+    "category": "options",
+    "reap64_exact": 1,
+    "v1_64e_exact": 0,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 0,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "바닐라라떼",
+       "sweetness": "less"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "커피 메뉴에는 시럽을 직접 넣어드릴 수 없어요. 시럽은 셀프바에서 직접 넣어 드실 수 있습니다!",
+       "reason": "impossible"
+      }
+     }
+    ]
+   },
+   {
+    "id": "L15",
+    "category": "call_staff",
+    "reap64_exact": 0,
+    "v1_64e_exact": 0,
+    "reap64_lenient": 0,
+    "v1_64e_lenient": 0,
+    "orig26b_exact": 0,
+    "reap64_calls": [
+     {
+      "name": "remove_item",
+      "arguments": {
+       "changes": {},
+       "item_index": 1
+      }
+     },
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "주문이 들어갔는지 확인 요청"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "remove_item",
+      "arguments": {
+       "item_index": 1
+      }
+     },
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "주문 취소 및 주문 확인 요청"
+      }
+     }
+    ]
+   },
+   {
+    "id": "L16",
+    "category": "slang",
+    "reap64_exact": 1,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "바닐라라떼",
+       "size": "regular",
+       "temperature": "iced"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "바닐라라떼",
+       "temperature": "iced"
+      }
+     }
+    ]
+   },
+   {
+    "id": "L19",
+    "category": "off_menu",
+    "reap64_exact": 0,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 1,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 유자차에 에이드 탄산 추가는 불가능합니다. 유자차는 차 종류라 에이드처럼 탄산이 들어가지 않아요. 대신 시원한 유자차나 상큼한 자몽에이드 같은 에이드 메뉴는 어떠신가요?",
+       "reason": "impossible"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 저희 카페에는 유자 에이드는 메뉴에 없어서, 유자차로 준비해 드릴까요?",
+       "reason": "off_menu"
+      }
+     }
+    ]
+   },
+   {
+    "id": "L20",
+    "category": "conditional",
+    "reap64_exact": 0,
+    "v1_64e_exact": 1,
+    "reap64_lenient": 0,
+    "v1_64e_lenient": 1,
+    "orig26b_exact": 1,
+    "reap64_calls": [
+     {
+      "name": "ask_clarification",
+      "arguments": {
+       "question": "죄송합니다. 에스프레소는 아이스로 제공되지 않습니다. 얼음 컵을 따로 드릴까요, 아니면 그냥 에스프레소를 주문하시겠어요?",
+       "reason": "impossible"
+      }
+     },
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "얼음컵 요청"
+      }
+     }
+    ],
+    "v1_64e_calls": [
+     {
+      "name": "add_item",
+      "arguments": {
+       "menu": "에스프레소"
+      }
+     },
+     {
+      "name": "call_staff",
+      "arguments": {
+       "reason": "얼음컵 요청"
+      }
+     }
+    ]
+   }
+  ],
+  "knowledge": {
+   "differ_pred": 139,
+   "reap64_only_correct": [
+    "kmmlu-003",
+    "kmmlu-022",
+    "kmmlu-047",
+    "kmmlu-066",
+    "kmmlu-070",
+    "kmmlu-080",
+    "kmmlu-084",
+    "kmmlu-097",
+    "kmmlu-105",
+    "kmmlu-107",
+    "kmmlu-115",
+    "kmmlu-120",
+    "kmmlu-123",
+    "kmmlu-143",
+    "kmmlu-152",
+    "kmmlu-156",
+    "kmmlu-173",
+    "kmmlu-180",
+    "kmmlu-188",
+    "kmmlu-192",
+    "kmmlu-193",
+    "kmmlu-200",
+    "mmlu-001",
+    "mmlu-004",
+    "mmlu-015",
+    "mmlu-016",
+    "mmlu-017",
+    "mmlu-021",
+    "mmlu-032",
+    "mmlu-037",
+    "mmlu-041",
+    "mmlu-044",
+    "mmlu-046",
+    "mmlu-047",
+    "mmlu-054",
+    "mmlu-056",
+    "mmlu-063",
+    "mmlu-067",
+    "mmlu-073",
+    "mmlu-088",
+    "mmlu-093"
+   ],
+   "v1_64e_only_correct": [
+    "kmmlu-005",
+    "kmmlu-011",
+    "kmmlu-016",
+    "kmmlu-021",
+    "kmmlu-032",
+    "kmmlu-035",
+    "kmmlu-040",
+    "kmmlu-069",
+    "kmmlu-071",
+    "kmmlu-073",
+    "kmmlu-075",
+    "kmmlu-079",
+    "kmmlu-088",
+    "kmmlu-093",
+    "kmmlu-101",
+    "kmmlu-103",
+    "kmmlu-106",
+    "kmmlu-112",
+    "kmmlu-126",
+    "kmmlu-129",
+    "kmmlu-131",
+    "kmmlu-132",
+    "kmmlu-136",
+    "kmmlu-148",
+    "kmmlu-153",
+    "kmmlu-155",
+    "kmmlu-160",
+    "kmmlu-161",
+    "kmmlu-165",
+    "kmmlu-175",
+    "kmmlu-176",
+    "kmmlu-181",
+    "kmmlu-195",
+    "mmlu-003",
+    "mmlu-006",
+    "mmlu-008",
+    "mmlu-013",
+    "mmlu-026",
+    "mmlu-027",
+    "mmlu-055",
+    "mmlu-070",
+    "mmlu-072",
+    "mmlu-084",
+    "mmlu-099",
+    "mmlu-100"
+   ]
+  }
+ },
+ "meta": {
+  "reap64": {
+   "cafe": {
+    "started": "2026-11-18T14:59:27",
+    "finished": "2026-11-18T15:13:27",
+    "options": {
+     "temperature": 0,
+     "seed": 42,
+     "num_ctx": 8192,
+     "num_predict": "auto"
+    },
+    "think": false
+   },
+   "live": {
+    "started": "2026-11-18T15:13:28",
+    "finished": "2026-11-18T15:15:53",
+    "options": {
+     "temperature": 0,
+     "seed": 42,
+     "num_ctx": 8192,
+     "num_predict": "auto"
+    },
+    "think": false
+   },
+   "knowledge": {
+    "started": "2026-11-18T15:15:53",
+    "finished": "2026-11-18T15:22:20",
+    "options": {
+     "temperature": 0,
+     "seed": 42,
+     "num_ctx": 8192,
+     "num_predict": "auto"
+    },
+    "think": false
+   }
+  },
+  "v1_64e": {
+   "cafe": {
+    "started": "2026-11-11T19:28:27",
+    "finished": "2026-11-11T19:42:33",
+    "options": {
+     "temperature": 0,
+     "seed": 42,
+     "num_ctx": 8192,
+     "num_predict": "auto"
+    },
+    "think": false
+   },
+   "live": {
+    "started": "2026-11-11T19:42:33",
+    "finished": "2026-11-11T19:44:58",
+    "options": {
+     "temperature": 0,
+     "seed": 42,
+     "num_ctx": 8192,
+     "num_predict": "auto"
+    },
+    "think": false
+   },
+   "knowledge": {
+    "started": "2026-11-11T19:44:59",
+    "finished": "2026-11-11T19:50:28",
+    "options": {
+     "temperature": 0,
+     "seed": 42,
+     "num_ctx": 8192,
+     "num_predict": "auto"
+    },
+    "think": false
+   }
+  },
+  "orig26b": {
+   "cafe": {
+    "started": "2026-11-10T14:18:41",
+    "finished": "2026-11-10T14:34:40",
+    "options": {
+     "temperature": 0,
+     "seed": 42,
+     "num_gpu": 0,
+     "num_ctx": 8192,
+     "num_predict": "auto"
+    },
+    "think": false
+   },
+   "live": {
+    "started": "2026-11-10T14:34:41",
+    "finished": "2026-11-10T14:36:10",
+    "options": {
+     "temperature": 0,
+     "seed": 42,
+     "num_gpu": 0,
+     "num_ctx": 8192,
+     "num_predict": "auto"
+    },
+    "think": false
+   },
+   "knowledge": {
+    "started": "2026-11-10T14:36:10",
+    "finished": "2026-11-10T14:51:33",
+    "options": {
+     "temperature": 0,
+     "seed": 42,
+     "num_gpu": 0,
+     "num_ctx": 8192,
+     "num_predict": "auto"
+    },
+    "think": false
+   }
+  }
+ }
+}
