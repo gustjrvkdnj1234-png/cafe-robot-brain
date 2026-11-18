@@ -37,3 +37,6 @@ blog_assets/
 
 # 6a 파일럿 측정(최종 결과 아님, 커밋하지 않음)
 results/step6/pilot/
+
+# v2 통계 수집의 이어서 돌리기용 은닉 상태(1.4 GB, 재생성 가능)
+v2/results/**/states_after_layer.pt
