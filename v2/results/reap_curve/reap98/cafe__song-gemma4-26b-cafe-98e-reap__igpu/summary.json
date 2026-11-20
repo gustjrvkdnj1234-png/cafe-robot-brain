@@ -1,0 +1,109 @@
+{
+  "meta": {
+    "model": "song/gemma4-26b-cafe-98e-reap",
+    "exam": "data/exam_cafe.jsonl",
+    "mode": "igpu",
+    "think": false,
+    "options": {
+      "temperature": 0,
+      "seed": 42,
+      "num_ctx": 8192,
+      "num_predict": "auto"
+    },
+    "ollama_version": "0.40.15",
+    "n_cases": 120,
+    "ids": null,
+    "started": "2026-11-20T14:37:53",
+    "finished": "2026-11-20T14:56:01",
+    "errors": 0,
+    "empty_outputs": 0,
+    "peak_memory_this_session": {
+      "runner_private_gb": 17.8,
+      "runner_rss_gb": 17.48,
+      "gpu_shared_gb": 17.42,
+      "sys_used_gb": 26.38,
+      "pagefile_used_gb": 1.26,
+      "sys_avail_min_gb": 5.11,
+      "pagefile_start_gb": 1.26,
+      "samples": 200
+    },
+    "api_ps_after": [
+      {
+        "name": "song/gemma4-26b-cafe-98e-reap:latest",
+        "size": 1032312584,
+        "size_vram": 1032312584
+      }
+    ],
+    "mean_gen_tps": 12.77,
+    "mean_wall_s": 9.061
+  },
+  "summary": {
+    "n": 120,
+    "exact": 0.9417,
+    "partial": 0.9655,
+    "tool_names_match": 0.9583,
+    "group_consistency": 0.8919,
+    "by_category": {
+      "ambiguous": {
+        "n": 10,
+        "exact": 0.7,
+        "partial": 0.7
+      },
+      "basic": {
+        "n": 10,
+        "exact": 0.9,
+        "partial": 0.9929
+      },
+      "call_staff": {
+        "n": 10,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "conditional": {
+        "n": 10,
+        "exact": 0.9,
+        "partial": 0.9929
+      },
+      "impossible": {
+        "n": 10,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "modify_cancel": {
+        "n": 9,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "multi_item": {
+        "n": 9,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "off_menu": {
+        "n": 10,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "options": {
+        "n": 10,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "slang": {
+        "n": 10,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "takeout": {
+        "n": 10,
+        "exact": 0.8,
+        "partial": 0.9
+      },
+      "unavailable": {
+        "n": 12,
+        "exact": 1,
+        "partial": 1.0
+      }
+    }
+  }
+}

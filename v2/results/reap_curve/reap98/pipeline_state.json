@@ -1,0 +1,67 @@
+{
+ "plan": {
+  "done": "2026-11-20T13:41:02"
+ },
+ "build": {
+  "done": "2026-11-20T13:46:55",
+  "seconds": 344.4,
+  "peak_private_gb": 0.15,
+  "peak_rss_gb": 0.16
+ },
+ "validate": {
+  "done": "2026-11-20T13:58:44",
+  "seconds": 708.8,
+  "peak_private_gb": 9.17,
+  "peak_rss_gb": 7.94
+ },
+ "convert": {
+  "done": "2026-11-20T14:07:10",
+  "seconds": 506.4,
+  "peak_private_gb": 6.88,
+  "peak_rss_gb": 6.06
+ },
+ "verify_bf16": {
+  "done": "2026-11-20T14:10:07",
+  "seconds": 176.9,
+  "peak_private_gb": 3.92,
+  "peak_rss_gb": 24.69
+ },
+ "quantize": {
+  "done": "2026-11-20T14:15:54",
+  "seconds": 346.9,
+  "peak_private_gb": 3.89,
+  "peak_rss_gb": 25.41,
+  "q4_bytes": 13670547328
+ },
+ "verify_q4": {
+  "done": "2026-11-20T14:19:36",
+  "seconds": 219.6,
+  "peak_private_gb": 9.53,
+  "peak_rss_gb": 19.18
+ },
+ "register": {
+  "done": "2026-11-20T14:23:16",
+  "blob_sha256": "0da0897562517978f12f947a3e7a40528b66e1b3e3bc556ec3a8e2fc5432608f"
+ },
+ "load": {
+  "done": "2026-11-20T14:27:13",
+  "seconds": 231.9,
+  "peak_private_gb": 0.1,
+  "peak_rss_gb": 0.13,
+  "fits_igpu_fully": true
+ },
+ "smoke": {
+  "done": "2026-11-20T14:35:50",
+  "seconds": 511.6,
+  "peak_private_gb": 0.1,
+  "peak_rss_gb": 0.13,
+  "cases_with_tool_calls": 5
+ },
+ "exams": {
+  "done": "2026-11-20T15:04:52",
+  "seconds": 1741.9,
+  "peak_private_gb": 0.13,
+  "peak_rss_gb": 0.17,
+  "mode": "igpu"
+ }
+}

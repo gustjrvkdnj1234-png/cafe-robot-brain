@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "model": "song/gemma4-26b-cafe-98e-reap",
+    "exam": "data/exam_live.jsonl",
+    "mode": "igpu",
+    "think": false,
+    "options": {
+      "temperature": 0,
+      "seed": 42,
+      "num_ctx": 8192,
+      "num_predict": "auto"
+    },
+    "ollama_version": "0.40.15",
+    "n_cases": 20,
+    "ids": null,
+    "started": "2026-11-20T14:56:01",
+    "finished": "2026-11-20T14:58:24",
+    "errors": 0,
+    "empty_outputs": 0,
+    "peak_memory_this_session": {
+      "runner_private_gb": 17.61,
+      "runner_rss_gb": 5.29,
+      "gpu_shared_gb": 17.25,
+      "sys_used_gb": 25.9,
+      "pagefile_used_gb": 1.11,
+      "sys_avail_min_gb": 5.6,
+      "pagefile_start_gb": 1.11,
+      "samples": 32
+    },
+    "api_ps_after": [
+      {
+        "name": "song/gemma4-26b-cafe-98e-reap:latest",
+        "size": 1032312584,
+        "size_vram": 1032312584
+      }
+    ],
+    "mean_gen_tps": 17.82,
+    "mean_wall_s": 7.15
+  },
+  "summary": {
+    "n": 20,
+    "exact": 0.7,
+    "partial": 0.8,
+    "tool_names_match": 0.75,
+    "group_consistency": 0.7,
+    "by_category": {
+      "ambiguous": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "call_staff": {
+        "n": 3,
+        "exact": 0.3333,
+        "partial": 0.6667
+      },
+      "conditional": {
+        "n": 3,
+        "exact": 0.3333,
+        "partial": 0.3333
+      },
+      "impossible": {
+        "n": 1,
+        "exact": 0,
+        "partial": 0.5
+      },
+      "multi_item": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "off_menu": {
+        "n": 6,
+        "exact": 0.8333,
+        "partial": 0.9167
+      },
+      "options": {
+        "n": 4,
+        "exact": 1,
+        "partial": 1.0
+      },
+      "slang": {
+        "n": 1,
+        "exact": 1,
+        "partial": 1.0
+      }
+    }
+  }
+}

@@ -2,6 +2,7 @@
 
     .venv-prune\\Scripts\\python.exe v2\\scripts\\reap64_pipeline.py            # all steps, finished ones skipped
     .venv-prune\\Scripts\\python.exe v2\\scripts\\reap64_pipeline.py --only plan
+    .venv-prune\\Scripts\\python.exe v2\\scripts\\reap64_pipeline.py --keep 98   # also 48 -> v2/results/reap_curve/reap<k>
 
 Keep-set: v1 Step 4 plain REAP ranking (results/step4/reap_prune_plan.json, removed lists for keep 64), i.e. combined
 REAP score on the plain v1 statistics, ties by router probability mass. Re-derived here from the v1 stats with
@@ -241,16 +242,16 @@ def make_plan():
         layers[str(i)] = {"kept": kept, "removed": removed}
     if mism:
         raise Stop(f"plain REAP keep-set differs from results/step4/reap_prune_plan.json in layers {mism}")
-    v1_64 = json.loads((ROOT / "results/step5/prune_plan_64.json").read_text(encoding="utf-8"))["layers"]
+    v1_64 = json.loads((ROOT / f"results/step5/prune_plan_{K}.json").read_text(encoding="utf-8"))["layers"]
     diff = {i: len(set(layers[i]["kept"]) - set(v1_64[i]["kept"])) for i in layers}
     plan = {"keep": K, "num_experts_original": 128, "top_k": 8, "source_stats": "results/step4/reap_600",
             "ranking": "pure REAP: mean g*||f(x)|| over routed tokens on the plain combined v1 stats, "
                        "ties by router prob mass, then index (= results/step4/reap_prune_plan.json keep 64)",
             "checked_against": "results/step4/reap_prune_plan.json (all 30 layers equal)",
-            "experts_differing_from_v1_64e_per_layer": diff, "layers": layers}
+            f"experts_differing_from_v1_{K}e_per_layer": diff, "layers": layers}
     OUT.mkdir(parents=True, exist_ok=True)
     PLAN.write_text(json.dumps(plan, indent=1), encoding="utf-8")
-    log(f"plan written; experts kept by REAP-64 but not v1 64e: total {sum(diff.values())} "
+    log(f"plan written; experts kept by REAP-{K} but not v1 {K}e: total {sum(diff.values())} "
         f"(mean {sum(diff.values()) / 30:.1f}/layer)")
 
 
@@ -271,12 +272,12 @@ def register():
     body_new, show = modelfile_body(NAME)
     body_v1, _ = modelfile_body(V1_NAME)
     if sorted(body_new) != sorted(body_v1):          # `ollama show` may list PARAMETER lines in a different order
-        raise Stop("registered Modelfile differs from v1 64e beyond the main FROM line")
+        raise Stop(f"registered Modelfile differs from {V1_NAME} beyond the main FROM line")
     blob = re.search(r"^FROM .*sha256-([0-9a-f]{64})", show, re.M)
     local = sha256(Q4)
     if not blob or blob.group(1) != local:
         raise Stop(f"registered blob {blob.group(1) if blob else None} != local Q4 {local}")
-    log(f"registered {NAME}; blob sha256 == local Q4 ({local[:12]}); Modelfile equals v1 64e except FROM")
+    log(f"registered {NAME}; blob sha256 == local Q4 ({local[:12]}); Modelfile equals {V1_NAME} except FROM")
     safe_delete(Q4)
     return {"blob_sha256": local}
 
@@ -286,17 +287,40 @@ def exams(mode):
     code = ("import sys; sys.path.insert(0, r'%s'); import run_step5; from pathlib import Path; "
             "run_step5.OUT = Path(r'%s'); run_step5.run_step3.LOG = Path(r'%s'); "
             "sys.argv = ['run_step5', '--model', '%s', '--mode', '%s']; run_step5.main()"
-            % (ROOT / "scripts", OUT, ROOT / "logs/reap64_exams.log", NAME, mode))
+            % (ROOT / "scripts", OUT, ROOT / f"logs/reap{K}_exams.log", NAME, mode))
     return run("exams", [EXAM_PY, "-c", code], timeout=6 * 3600)[1]
+
+
+def configure(k):
+    """Paths for another keep size. k = 64 keeps the original REAP-64 layout (v2/results/reap64)."""
+    global K, MDIR_REL, MDIR, OUT, PLAN, STATE, LOG, STEP_LOGS, NAME, V1_NAME, BF16, Q4
+    if k == 64:
+        return
+    K = k
+    MDIR_REL = f"models/gemma-4-26B-A4B-it-cafe-{k}e-reap"
+    MDIR = ROOT / MDIR_REL
+    OUT = ROOT / f"v2/results/reap_curve/reap{k}"
+    PLAN = OUT / f"prune_plan_reap{k}.json"
+    STATE = OUT / "pipeline_state.json"
+    LOG = ROOT / f"logs/reap{k}_pipeline.log"
+    STEP_LOGS = ROOT / f"logs/reap{k}"
+    NAME = f"song/gemma4-26b-cafe-{k}e-reap"
+    V1_NAME = f"song/gemma4-26b-cafe-{k}e"
+    BF16 = GGUF_DIR / f"gemma4-26b-cafe-{k}e-reap-bf16.gguf"
+    Q4 = GGUF_DIR / f"gemma4-26b-cafe-{k}e-reap-Q4_K_M.gguf"
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--only")
+    ap.add_argument("--keep", type=int, default=64, choices=[98, 64, 48])
+    ap.add_argument("--continue-after-smoke-fail", action="store_true",
+                    help="record a failed 5-case smoke gate but still run the full exams (build already verified)")
     a = ap.parse_args()
+    configure(a.keep)
     sys.stdout.reconfigure(encoding="utf-8")
     OUT.mkdir(parents=True, exist_ok=True)
-    log(f"=== reap64 start (free {free_gb():.1f} GB) ===")
+    log(f"=== reap{K} start (free {free_gb():.1f} GB) ===")
     bf16_gb = 51.6 * (0.115 + 0.885 * K / 128)
     steps = []
 
@@ -325,7 +349,7 @@ def main():
     def _():
         check_disk("validate")
         return run("validate", [PRUNE_PY, "scripts/validate_pruned.py", "--pruned", MDIR_REL, "--n", "8",
-                                "--out", (OUT / "validate_reap64.json").relative_to(ROOT).as_posix()])[1]
+                                "--out", (OUT / f"validate_reap{K}.json").relative_to(ROOT).as_posix()])[1]
 
     @step("convert")
     def _():
@@ -355,7 +379,7 @@ def main():
 
     @step("register")
     def _():
-        check_disk("register", 11)
+        check_disk("register", Q4.stat().st_size / GB if Q4.exists() else 14)
         return register()
 
     @step("load")
@@ -379,9 +403,11 @@ def main():
         rows = [json.loads(l) for l in (d / "raw.jsonl").read_text(encoding="utf-8").splitlines()]
         n = sum(1 for r in rows if r.get("tool_calls"))
         log(f"smoke: {n}/5 cases with tool calls")
-        if n < 3:
+        if n < 3 and not a.continue_after_smoke_fail:
             raise Stop(f"smoke: only {n}/5 cases produced tool calls")
-        return {**info, "cases_with_tool_calls": n}
+        if n < 3:
+            log(f"smoke gate failed ({n}/5) but --continue-after-smoke-fail given: running the full exams anyway")
+        return {**info, "cases_with_tool_calls": n, "gate_passed": n >= 3}
 
     @step("exams")
     def _():
@@ -401,7 +427,7 @@ def main():
     except Stop as e:
         log(f"STOPPED: {e}")
         sys.exit(1)
-    log(f"=== reap64 end (free {free_gb():.1f} GB) ===")
+    log(f"=== reap{K} end (free {free_gb():.1f} GB) ===")
 
 
 if __name__ == "__main__":

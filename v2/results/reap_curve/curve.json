@@ -1,0 +1,367 @@
+{
+ "rows": {
+  "orig_128": {
+   "model": "orig",
+   "keep": 128,
+   "mode": "cpu",
+   "cafe": 0.9417,
+   "cafe_lenient": 0.9416666666666667,
+   "live": 0.75,
+   "live_lenient": 0.75,
+   "knowledge": 0.7267,
+   "top1": 1.0,
+   "kl": 0.0,
+   "runaway": {
+    "cafe": 0,
+    "live": 0,
+    "knowledge": 0
+   },
+   "cafe_by_category": {
+    "ambiguous": 0.7,
+    "basic": 1.0,
+    "call_staff": 1.0,
+    "conditional": 1.0,
+    "impossible": 1.0,
+    "modify_cancel": 1.0,
+    "multi_item": 1.0,
+    "off_menu": 1.0,
+    "options": 1.0,
+    "slang": 1.0,
+    "takeout": 0.6,
+    "unavailable": 1.0
+   },
+   "dirs": {
+    "cafe": "results/step3/cafe__gemma4-26b__cpu",
+    "live": "results/step3/live__gemma4-26b__cpu",
+    "knowledge": "results/step3/knowledge__gemma4-26b__cpu"
+   }
+  },
+  "v1_98": {
+   "model": "v1",
+   "keep": 98,
+   "mode": "igpu",
+   "cafe": 0.95,
+   "cafe_lenient": 0.95,
+   "live": 0.7,
+   "live_lenient": 0.7,
+   "knowledge": 0.5833,
+   "top1": 0.9274,
+   "kl": 0.18723,
+   "runaway": {
+    "cafe": 0,
+    "live": 0,
+    "knowledge": 0
+   },
+   "cafe_by_category": {
+    "ambiguous": 0.7,
+    "basic": 1.0,
+    "call_staff": 1.0,
+    "conditional": 1.0,
+    "impossible": 1.0,
+    "modify_cancel": 1.0,
+    "multi_item": 1.0,
+    "off_menu": 1.0,
+    "options": 1.0,
+    "slang": 1.0,
+    "takeout": 0.7,
+    "unavailable": 1.0
+   },
+   "dirs": {
+    "cafe": "results/step5/cafe__song-gemma4-26b-cafe-98e__igpu",
+    "live": "results/step5/live__song-gemma4-26b-cafe-98e__igpu",
+    "knowledge": "results/step5/knowledge__song-gemma4-26b-cafe-98e__igpu"
+   }
+  },
+  "reap_98": {
+   "model": "reap",
+   "keep": 98,
+   "mode": "igpu",
+   "cafe": 0.9417,
+   "cafe_lenient": 0.9416666666666667,
+   "live": 0.7,
+   "live_lenient": 0.75,
+   "knowledge": 0.6333,
+   "top1": 0.778,
+   "kl": 1.36173,
+   "runaway": {
+    "cafe": 0,
+    "live": 0,
+    "knowledge": 0
+   },
+   "cafe_by_category": {
+    "ambiguous": 0.7,
+    "basic": 0.9,
+    "call_staff": 1.0,
+    "conditional": 0.9,
+    "impossible": 1.0,
+    "modify_cancel": 1.0,
+    "multi_item": 1.0,
+    "off_menu": 1.0,
+    "options": 1.0,
+    "slang": 1.0,
+    "takeout": 0.8,
+    "unavailable": 1.0
+   },
+   "dirs": {
+    "cafe": "v2/results/reap_curve/reap98/cafe__song-gemma4-26b-cafe-98e-reap__igpu",
+    "live": "v2/results/reap_curve/reap98/live__song-gemma4-26b-cafe-98e-reap__igpu",
+    "knowledge": "v2/results/reap_curve/reap98/knowledge__song-gemma4-26b-cafe-98e-reap__igpu"
+   }
+  },
+  "v1_64": {
+   "model": "v1",
+   "keep": 64,
+   "mode": "igpu",
+   "cafe": 0.9333,
+   "cafe_lenient": 0.9333333333333333,
+   "live": 0.7,
+   "live_lenient": 0.7,
+   "knowledge": 0.4733,
+   "top1": 0.8029,
+   "kl": 0.91231,
+   "runaway": {
+    "cafe": 0,
+    "live": 0,
+    "knowledge": 0
+   },
+   "cafe_by_category": {
+    "ambiguous": 0.7,
+    "basic": 1.0,
+    "call_staff": 1.0,
+    "conditional": 0.9,
+    "impossible": 1.0,
+    "modify_cancel": 1.0,
+    "multi_item": 1.0,
+    "off_menu": 1.0,
+    "options": 0.9,
+    "slang": 1.0,
+    "takeout": 0.7,
+    "unavailable": 1.0
+   },
+   "dirs": {
+    "cafe": "results/step5/cafe__song-gemma4-26b-cafe-64e__igpu",
+    "live": "results/step5/live__song-gemma4-26b-cafe-64e__igpu",
+    "knowledge": "results/step5/knowledge__song-gemma4-26b-cafe-64e__igpu"
+   }
+  },
+  "reap_64": {
+   "model": "reap",
+   "keep": 64,
+   "mode": "igpu",
+   "cafe": 0.8917,
+   "cafe_lenient": 0.8916666666666667,
+   "live": 0.55,
+   "live_lenient": 0.7,
+   "knowledge": 0.46,
+   "top1": 0.7324,
+   "kl": 1.76858,
+   "runaway": {
+    "cafe": 0,
+    "live": 0,
+    "knowledge": 0
+   },
+   "cafe_by_category": {
+    "ambiguous": 0.7,
+    "basic": 1.0,
+    "call_staff": 0.9,
+    "conditional": 0.5,
+    "impossible": 1.0,
+    "modify_cancel": 1.0,
+    "multi_item": 1.0,
+    "off_menu": 1.0,
+    "options": 0.9,
+    "slang": 1.0,
+    "takeout": 0.8,
+    "unavailable": 0.9166666666666666
+   },
+   "dirs": {
+    "cafe": "v2/results/reap64/cafe__song-gemma4-26b-cafe-64e-reap__igpu",
+    "live": "v2/results/reap64/live__song-gemma4-26b-cafe-64e-reap__igpu",
+    "knowledge": "v2/results/reap64/knowledge__song-gemma4-26b-cafe-64e-reap__igpu"
+   }
+  },
+  "v1_48": {
+   "model": "v1",
+   "keep": 48,
+   "mode": "igpu",
+   "cafe": 0.9333,
+   "cafe_lenient": 0.9333333333333333,
+   "live": 0.5,
+   "live_lenient": 0.55,
+   "knowledge": 0.3833,
+   "top1": 0.7676,
+   "kl": 1.19545,
+   "runaway": {
+    "cafe": 0,
+    "live": 0,
+    "knowledge": 0
+   },
+   "cafe_by_category": {
+    "ambiguous": 0.7,
+    "basic": 1.0,
+    "call_staff": 1.0,
+    "conditional": 0.9,
+    "impossible": 1.0,
+    "modify_cancel": 1.0,
+    "multi_item": 1.0,
+    "off_menu": 1.0,
+    "options": 1.0,
+    "slang": 1.0,
+    "takeout": 0.6,
+    "unavailable": 1.0
+   },
+   "dirs": {
+    "cafe": "results/step5/cafe__song-gemma4-26b-cafe-48e__igpu",
+    "live": "results/step5/live__song-gemma4-26b-cafe-48e__igpu",
+    "knowledge": "results/step5/knowledge__song-gemma4-26b-cafe-48e__igpu"
+   }
+  },
+  "reap_48": {
+   "model": "reap",
+   "keep": 48,
+   "mode": "igpu",
+   "cafe": 0.375,
+   "cafe_lenient": 0.375,
+   "live": 0.15,
+   "live_lenient": 0.15,
+   "knowledge": 0.2833,
+   "top1": 0.695,
+   "kl": 2.25207,
+   "runaway": {
+    "cafe": 68,
+    "live": 11,
+    "knowledge": 1
+   },
+   "cafe_by_category": {
+    "ambiguous": 0.0,
+    "basic": 0.5,
+    "call_staff": 0.6,
+    "conditional": 0.1,
+    "impossible": 0.4,
+    "modify_cancel": 0.7777777777777778,
+    "multi_item": 0.3333333333333333,
+    "off_menu": 0.1,
+    "options": 0.6,
+    "slang": 0.8,
+    "takeout": 0.4,
+    "unavailable": 0.0
+   },
+   "dirs": {
+    "cafe": "v2/results/reap_curve/reap48/cafe__song-gemma4-26b-cafe-48e-reap__igpu",
+    "live": "v2/results/reap_curve/reap48/live__song-gemma4-26b-cafe-48e-reap__igpu",
+    "knowledge": "v2/results/reap_curve/reap48/knowledge__song-gemma4-26b-cafe-48e-reap__igpu"
+   }
+  }
+ },
+ "mcnemar_reap_vs_v1": {
+  "98|cafe|strict": {
+   "n": 120,
+   "reap_only": 1,
+   "v1_only": 2,
+   "p": 1.0
+  },
+  "98|cafe|lenient": {
+   "n": 120,
+   "reap_only": 1,
+   "v1_only": 2,
+   "p": 1.0
+  },
+  "98|live|strict": {
+   "n": 20,
+   "reap_only": 1,
+   "v1_only": 1,
+   "p": 1.0
+  },
+  "98|live|lenient": {
+   "n": 20,
+   "reap_only": 1,
+   "v1_only": 0,
+   "p": 1.0
+  },
+  "98|knowledge|strict": {
+   "n": 300,
+   "reap_only": 45,
+   "v1_only": 30,
+   "p": 0.10534226887460488
+  },
+  "98|cafe_conditional|strict": {
+   "n": 10,
+   "reap_only": 0,
+   "v1_only": 1,
+   "p": 1.0
+  },
+  "64|cafe|strict": {
+   "n": 120,
+   "reap_only": 1,
+   "v1_only": 6,
+   "p": 0.125
+  },
+  "64|cafe|lenient": {
+   "n": 120,
+   "reap_only": 1,
+   "v1_only": 6,
+   "p": 0.125
+  },
+  "64|live|strict": {
+   "n": 20,
+   "reap_only": 2,
+   "v1_only": 5,
+   "p": 0.453125
+  },
+  "64|live|lenient": {
+   "n": 20,
+   "reap_only": 2,
+   "v1_only": 2,
+   "p": 1.0
+  },
+  "64|knowledge|strict": {
+   "n": 300,
+   "reap_only": 41,
+   "v1_only": 45,
+   "p": 0.7465343822890573
+  },
+  "64|cafe_conditional|strict": {
+   "n": 10,
+   "reap_only": 0,
+   "v1_only": 4,
+   "p": 0.125
+  },
+  "48|cafe|strict": {
+   "n": 120,
+   "reap_only": 1,
+   "v1_only": 68,
+   "p": 2.371692252312041e-19
+  },
+  "48|cafe|lenient": {
+   "n": 120,
+   "reap_only": 1,
+   "v1_only": 68,
+   "p": 2.371692252312041e-19
+  },
+  "48|live|strict": {
+   "n": 20,
+   "reap_only": 1,
+   "v1_only": 8,
+   "p": 0.0390625
+  },
+  "48|live|lenient": {
+   "n": 20,
+   "reap_only": 1,
+   "v1_only": 9,
+   "p": 0.021484375
+  },
+  "48|knowledge|strict": {
+   "n": 300,
+   "reap_only": 43,
+   "v1_only": 73,
+   "p": 0.006831631268294263
+  },
+  "48|cafe_conditional|strict": {
+   "n": 10,
+   "reap_only": 0,
+   "v1_only": 8,
+   "p": 0.0078125
+  }
+ },
+ "alpha": 0.05
+}
