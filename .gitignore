@@ -47,3 +47,7 @@ v2/voice/recordings/
 v2/voice/models/
 v2/voice/**/*.wav
 
+# v2 voice app: turn logs and local voice choice (not committed)
+v2/voice/app/logs/
+v2/voice/app/config.local.json
+

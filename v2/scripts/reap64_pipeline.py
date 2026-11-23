@@ -184,11 +184,12 @@ def ollama_up():
 
 
 def ensure_ollama():
-    """Same server settings as v1 Step 5: only OLLAMA_IGPU_ENABLE=1, for the serve process only."""
+    """Same server settings as v1 Step 5 (OLLAMA_IGPU_ENABLE=1), for the serve process only,
+    plus OLLAMA_NOPRUNE=1 so a server start never deletes blobs (no effect on inference)."""
     if ollama_up():
         return
-    log("starting ollama serve with OLLAMA_IGPU_ENABLE=1 (serve process only)")
-    env = dict(os.environ, OLLAMA_IGPU_ENABLE="1")
+    log("starting ollama serve with OLLAMA_IGPU_ENABLE=1 OLLAMA_NOPRUNE=1 (serve process only)")
+    env = dict(os.environ, OLLAMA_IGPU_ENABLE="1", OLLAMA_NOPRUNE="1")
     logf = open(ROOT / "logs/ollama_serve_reap64.log", "a", encoding="utf-8")  # noqa: SIM115
     subprocess.Popen(["ollama", "serve"], cwd=ROOT, env=env, stdout=logf, stderr=subprocess.STDOUT,
                      creationflags=getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0))

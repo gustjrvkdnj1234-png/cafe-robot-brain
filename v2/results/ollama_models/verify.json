@@ -1,0 +1,233 @@
+{
+  "server_noprune": true,
+  "models": [
+    {
+      "model": "song/gemma4-26b-cafe-98e",
+      "expected_prefix": "061cc70f",
+      "expected_source": "results/step5/overnight_notes.md",
+      "main_blob": "061cc70f4814d88008cdbef7596c1f9da7f2248e558a2bdaf4bb0312c448ffc8",
+      "from_blobs": [
+        "061cc70f4814d88008cdbef7596c1f9da7f2248e558a2bdaf4bb0312c448ffc8",
+        "7e78b02d928be76d0db72d23ba011aeae7fcdd9488358fd83741a8fd10b8556d"
+      ],
+      "draft_blobs": [
+        "491f38afe0eb215a819c085110255fcebd6c68b4cc8e0f29168324ef3f913e32"
+      ],
+      "blob_bytes": 13670547296,
+      "mode": "igpu",
+      "prompt_reply": "안녕하세요, 만나서 반갑습니다!",
+      "prompt_wall_s": 18.1,
+      "prompt_error": null,
+      "checks": {
+        "main_blob_expected": true,
+        "main_blob_file_exists": true,
+        "projector_and_draft": true,
+        "blob_content_matches_name": true,
+        "prompt_ok": true
+      },
+      "status": "registered OK"
+    },
+    {
+      "model": "song/gemma4-26b-cafe-64e",
+      "expected_prefix": "1fa88d73",
+      "expected_source": "scripts/report_step6.py BLOB",
+      "main_blob": "1fa88d73cd3ff5bb95b30d1a10315aeae89c208cea774b13c423f99bb1d1ec5f",
+      "from_blobs": [
+        "1fa88d73cd3ff5bb95b30d1a10315aeae89c208cea774b13c423f99bb1d1ec5f",
+        "7e78b02d928be76d0db72d23ba011aeae7fcdd9488358fd83741a8fd10b8556d"
+      ],
+      "draft_blobs": [
+        "491f38afe0eb215a819c085110255fcebd6c68b4cc8e0f29168324ef3f913e32"
+      ],
+      "blob_bytes": 9812825248,
+      "mode": "igpu",
+      "prompt_reply": "안녕하세요, 만나서 반갑습니다!",
+      "prompt_wall_s": 10.3,
+      "prompt_error": null,
+      "checks": {
+        "main_blob_expected": true,
+        "main_blob_file_exists": true,
+        "projector_and_draft": true,
+        "blob_content_matches_name": true,
+        "prompt_ok": true
+      },
+      "status": "registered OK"
+    },
+    {
+      "model": "song/gemma4-26b-cafe-48e",
+      "expected_prefix": "9a01e444",
+      "expected_source": "scripts/report_step6.py BLOB",
+      "main_blob": "9a01e444a06685e7d34c65801b8bf08323388fa7b7f5985f4034d917f078c420",
+      "from_blobs": [
+        "9a01e444a06685e7d34c65801b8bf08323388fa7b7f5985f4034d917f078c420",
+        "7e78b02d928be76d0db72d23ba011aeae7fcdd9488358fd83741a8fd10b8556d"
+      ],
+      "draft_blobs": [
+        "491f38afe0eb215a819c085110255fcebd6c68b4cc8e0f29168324ef3f913e32"
+      ],
+      "blob_bytes": 7997426976,
+      "mode": "igpu",
+      "prompt_reply": "반갑습니다, 만나서 정말 기뻐요!",
+      "prompt_wall_s": 10.1,
+      "prompt_error": null,
+      "checks": {
+        "main_blob_expected": true,
+        "main_blob_file_exists": true,
+        "projector_and_draft": true,
+        "blob_content_matches_name": true,
+        "prompt_ok": true
+      },
+      "status": "registered OK"
+    },
+    {
+      "model": "song/gemma4-26b-cafe-64e-text",
+      "expected_prefix": "1fa88d73",
+      "expected_source": "models/gguf/lean/Modelfile.64e-text FROM",
+      "main_blob": "1fa88d73cd3ff5bb95b30d1a10315aeae89c208cea774b13c423f99bb1d1ec5f",
+      "from_blobs": [
+        "1fa88d73cd3ff5bb95b30d1a10315aeae89c208cea774b13c423f99bb1d1ec5f"
+      ],
+      "draft_blobs": [],
+      "blob_bytes": 9812825248,
+      "mode": "igpu",
+      "prompt_reply": "안녕하세요, 만나서 반갑습니다!",
+      "prompt_wall_s": 10.2,
+      "prompt_error": null,
+      "checks": {
+        "main_blob_expected": true,
+        "main_blob_file_exists": true,
+        "text_only_no_projector": true,
+        "blob_content_matches_name": true,
+        "prompt_ok": true
+      },
+      "status": "registered OK"
+    },
+    {
+      "model": "song/gemma4-26b-cafe-48e-text",
+      "expected_prefix": "9a01e444",
+      "expected_source": "models/gguf/lean/Modelfile.48e-text FROM",
+      "main_blob": "9a01e444a06685e7d34c65801b8bf08323388fa7b7f5985f4034d917f078c420",
+      "from_blobs": [
+        "9a01e444a06685e7d34c65801b8bf08323388fa7b7f5985f4034d917f078c420"
+      ],
+      "draft_blobs": [],
+      "blob_bytes": 7997426976,
+      "mode": "igpu",
+      "prompt_reply": "반갑습니다, 만나서 정말 기뻐요!",
+      "prompt_wall_s": 9.3,
+      "prompt_error": null,
+      "checks": {
+        "main_blob_expected": true,
+        "main_blob_file_exists": true,
+        "text_only_no_projector": true,
+        "blob_content_matches_name": true,
+        "prompt_ok": true
+      },
+      "status": "registered OK"
+    },
+    {
+      "model": "song/gemma4-26b-128e-noimat",
+      "expected_prefix": null,
+      "expected_source": "no hash recorded; logs/overnight_step5.log: registered 18:24:35 'blob sha256 == local Q4', local Q4 (17.1 GB) deleted 18:24:37",
+      "main_blob": "caf0cbfc0553abe332953cd746c6a8de21e3b0b7b014f2a0de93e4b2730e4d02",
+      "from_blobs": [
+        "caf0cbfc0553abe332953cd746c6a8de21e3b0b7b014f2a0de93e4b2730e4d02",
+        "7e78b02d928be76d0db72d23ba011aeae7fcdd9488358fd83741a8fd10b8556d"
+      ],
+      "draft_blobs": [
+        "491f38afe0eb215a819c085110255fcebd6c68b4cc8e0f29168324ef3f913e32"
+      ],
+      "blob_bytes": 17074418336,
+      "mode": "cpu",
+      "prompt_reply": "안녕하세요, 만나서 반갑습니다!",
+      "prompt_wall_s": 18.6,
+      "prompt_error": null,
+      "checks": {
+        "main_blob_expected": true,
+        "main_blob_file_exists": true,
+        "projector_and_draft": true,
+        "blob_content_matches_name": true,
+        "prompt_ok": true
+      },
+      "status": "registered OK"
+    },
+    {
+      "model": "song/gemma4-26b-cafe-98e-reap",
+      "expected_prefix": "0da08975",
+      "expected_source": "v2/results/reap_curve/reap98/pipeline_state.json",
+      "main_blob": "0da0897562517978f12f947a3e7a40528b66e1b3e3bc556ec3a8e2fc5432608f",
+      "from_blobs": [
+        "0da0897562517978f12f947a3e7a40528b66e1b3e3bc556ec3a8e2fc5432608f",
+        "7e78b02d928be76d0db72d23ba011aeae7fcdd9488358fd83741a8fd10b8556d"
+      ],
+      "draft_blobs": [
+        "491f38afe0eb215a819c085110255fcebd6c68b4cc8e0f29168324ef3f913e32"
+      ],
+      "blob_bytes": 13670547328,
+      "mode": "igpu",
+      "prompt_reply": "안녕하세요, 만나서 반갑습니다!",
+      "prompt_wall_s": 19.1,
+      "prompt_error": null,
+      "checks": {
+        "main_blob_expected": true,
+        "main_blob_file_exists": true,
+        "projector_and_draft": true,
+        "blob_content_matches_name": true,
+        "prompt_ok": true
+      },
+      "status": "registered OK"
+    },
+    {
+      "model": "song/gemma4-26b-cafe-64e-reap",
+      "expected_prefix": "b92b9962",
+      "expected_source": "v2/results/reap64/pipeline_state.json",
+      "main_blob": "b92b9962bec40d17fc812e70442a067dc0aec93bd1a7c397b15127a805dcd275",
+      "from_blobs": [
+        "b92b9962bec40d17fc812e70442a067dc0aec93bd1a7c397b15127a805dcd275",
+        "7e78b02d928be76d0db72d23ba011aeae7fcdd9488358fd83741a8fd10b8556d"
+      ],
+      "draft_blobs": [
+        "491f38afe0eb215a819c085110255fcebd6c68b4cc8e0f29168324ef3f913e32"
+      ],
+      "blob_bytes": 9812825280,
+      "mode": "igpu",
+      "prompt_reply": "안녕하세요! 만나서 정말 반갑습니다. \n\n오늘 하루도 기분 좋게 보내시길 바라며, 도움이 필요",
+      "prompt_wall_s": 10.6,
+      "prompt_error": null,
+      "checks": {
+        "main_blob_expected": true,
+        "main_blob_file_exists": true,
+        "projector_and_draft": true,
+        "blob_content_matches_name": true,
+        "prompt_ok": true
+      },
+      "status": "registered OK"
+    },
+    {
+      "model": "song/gemma4-26b-cafe-48e-reap",
+      "expected_prefix": "a8832fd3",
+      "expected_source": "v2/results/reap_curve/reap48/pipeline_state.json",
+      "main_blob": "a8832fd38f803553d4fde94ea9c65251e3c9eb983c3dab0e6a3b02134a0031c3",
+      "from_blobs": [
+        "a8832fd38f803553d4fde94ea9c65251e3c9eb983c3dab0e6a3b02134a0031c3",
+        "7e78b02d928be76d0db72d23ba011aeae7fcdd9488358fd83741a8fd10b8556d"
+      ],
+      "draft_blobs": [
+        "491f38afe0eb215a819c085110255fcebd6c68b4cc8e0f29168324ef3f913e32"
+      ],
+      "blob_bytes": 7997427008,
+      "mode": "igpu",
+      "prompt_reply": "안녕하세요, 만나서 반갑습니다!",
+      "prompt_wall_s": 9.4,
+      "prompt_error": null,
+      "checks": {
+        "main_blob_expected": true,
+        "main_blob_file_exists": true,
+        "projector_and_draft": true,
+        "blob_content_matches_name": true,
+        "prompt_ok": true
+      },
+      "status": "registered OK"
+    }
+  ]
+}

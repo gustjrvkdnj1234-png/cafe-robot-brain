@@ -143,8 +143,9 @@ def ollama_up():
 def ensure_ollama():
     if ollama_up():
         return
-    log("ollama server not responding; starting it with OLLAMA_IGPU_ENABLE=1 (this process only)")
-    env = dict(os.environ, OLLAMA_IGPU_ENABLE="1")
+    log("ollama server not responding; starting it with OLLAMA_IGPU_ENABLE=1 OLLAMA_NOPRUNE=1 (this process only)")
+    # OLLAMA_NOPRUNE=1: never let a server start delete blobs (does not affect inference)
+    env = dict(os.environ, OLLAMA_IGPU_ENABLE="1", OLLAMA_NOPRUNE="1")
     logf = open(ROOT / "logs/ollama_serve_overnight.log", "a", encoding="utf-8")  # noqa: SIM115
     subprocess.Popen(["ollama", "serve"], cwd=ROOT, env=env, stdout=logf, stderr=subprocess.STDOUT,
                      creationflags=getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0))

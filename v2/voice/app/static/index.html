@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>카페 로봇 음성 주문</title>
+<style>
+  /* v1 robot UI look: thick ink outlines, offset shadows, pastel fills. Local fonts only (offline). */
+  :root { --ink: #2b2118; --paper: #fffaf0; --bg: #ffe9b8; --accent: #e63946; --muted: #7b6650;
+          --mint: #c9f2d9; --sky: #cfe6ff; --lilac: #e6dcff; --butter: #ffe08a; --peach: #ffd6c2; --rose: #ffc9d3; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+         word-break: keep-all; overflow-wrap: break-word; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 14px 16px 40px; }
+  .card { background: var(--paper); border: 3px solid var(--ink); border-radius: 16px;
+          box-shadow: 5px 5px 0 var(--ink); padding: 12px 14px; }
+  .bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px; }
+  h1 { font-size: 22px; margin: 0 6px 0 0; }
+  .chip { border: 2.5px solid var(--ink); border-radius: 999px; padding: 2px 10px; font-size: 13px; background: #fff; }
+  .chip.ok { background: var(--mint); } .chip.wait { background: var(--butter); } .chip.bad { background: var(--rose); }
+  .grow { flex: 1; }
+  button, select, input[type=text] { font: inherit; font-size: 15px; color: var(--ink); }
+  button { background: #fff; border: 2.5px solid var(--ink); border-radius: 10px; padding: 6px 12px; cursor: pointer;
+           box-shadow: 2px 2px 0 var(--ink); }
+  button:active { transform: translate(2px, 2px); box-shadow: none; }
+  button:disabled { opacity: .45; cursor: default; }
+  button.primary { background: var(--accent); color: #fff; }
+  select, input[type=text] { border: 2.5px solid var(--ink); border-radius: 10px; padding: 6px 8px; background: #fff; }
+  .grid { display: grid; grid-template-columns: 340px 1fr; gap: 18px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  .col { display: flex; flex-direction: column; gap: 16px; }
+  .label { font-size: 13px; color: var(--muted); margin-bottom: 6px; display: flex; justify-content: space-between; }
+  #talk { width: 100%; height: 190px; border-radius: 24px; font-size: 22px; background: var(--sky);
+          box-shadow: 5px 5px 0 var(--ink); border-width: 3px; display: flex; flex-direction: column;
+          align-items: center; justify-content: center; gap: 8px; user-select: none; touch-action: none; }
+  #talk .big { font-size: 44px; line-height: 1; }
+  #talk.rec { background: var(--rose); transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--ink); }
+  #talk.busy { background: var(--butter); }
+  .meter { width: 80%; height: 12px; border: 2px solid var(--ink); border-radius: 6px; background: #fff; overflow: hidden; }
+  .meter > div { height: 100%; width: 0; background: var(--accent); transition: width 60ms linear; }
+  .hint { color: var(--muted); font-size: 13px; }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  #textIn { flex: 1; min-width: 180px; }
+  .bubble { border: 3px solid var(--ink); border-radius: 16px; padding: 10px 14px; font-size: 20px; min-height: 52px;
+            background: #fff; position: relative; }
+  .bubble.robot { background: var(--lilac); }
+  .bubble.empty { color: var(--muted); font-size: 15px; }
+  #order { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  #order li { border: 2.5px solid var(--ink); border-radius: 10px; padding: 6px 10px; background: var(--mint); font-size: 17px; }
+  #order li .n { display: inline-block; min-width: 26px; font-weight: bold; }
+  #order li.none { background: #fff; color: var(--muted); font-size: 14px; }
+  .badge { border: 2.5px solid var(--ink); border-radius: 8px; padding: 1px 8px; font-size: 13px; background: var(--butter); }
+  #staff { background: var(--peach); border: 3px solid var(--ink); border-radius: 14px; padding: 10px 14px;
+           font-size: 18px; box-shadow: 4px 4px 0 var(--ink); }
+  .times { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .t { border: 2.5px solid var(--ink); border-radius: 10px; background: #fff; padding: 6px 8px; text-align: center; }
+  .t b { display: block; font-size: 20px; }
+  .t span { font-size: 12px; color: var(--muted); }
+  .t.total { background: var(--butter); }
+  details { border: 2.5px solid var(--ink); border-radius: 10px; background: #fff; padding: 6px 10px; }
+  summary { cursor: pointer; font-size: 14px; }
+  pre { margin: 6px 0 0; font-size: 12.5px; white-space: pre-wrap; font-family: Consolas, monospace; }
+  #history { max-height: 220px; overflow: auto; font-size: 14px; display: flex; flex-direction: column; gap: 4px; }
+  #history .u { color: var(--ink); } #history .a { color: #5b3fa8; padding-left: 12px; }
+  #msg { min-height: 20px; color: var(--accent); font-size: 14px; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card bar">
+    <h1>☕ 카페 로봇 음성 주문</h1>
+    <span id="stStt" class="chip wait">STT 준비 중</span>
+    <span id="stLlm" class="chip wait">64e 준비 중</span>
+    <span id="stTts" class="chip wait">TTS 준비 중</span>
+    <span class="grow"></span>
+    <button id="reset">🧑 새 손님</button>
+  </div>
+
+  <div class="grid">
+    <div class="col">
+      <div class="card">
+        <button id="talk" aria-label="누르고 말하기">
+          <span class="big">🎙️</span><span id="talkLabel">누르고 있는 동안 말하기</span>
+          <div class="meter"><div id="lvl"></div></div>
+          <span class="hint">마우스 버튼 또는 Space 키를 누르고 있는 동안 녹음</span>
+        </button>
+      </div>
+      <div class="card">
+        <div class="label">글자로 주문 (마이크 대신)</div>
+        <div class="row">
+          <input id="textIn" type="text" maxlength="200" placeholder="예: 아아 큰 걸로 두 잔이요">
+          <button id="send" class="primary">보내기</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="label">목소리</div>
+        <div class="row">
+          <select id="engine" aria-label="TTS 엔진">
+            <option value="supertonic">Supertonic 3</option>
+            <option value="heami">Windows Heami</option>
+          </select>
+          <select id="sid" aria-label="화자"></select>
+          <select id="steps" aria-label="단계">
+            <option value="4">4단계 (빠름)</option>
+            <option value="8">8단계</option>
+          </select>
+          <button id="preview">🔊 미리 듣기</button>
+        </div>
+        <div class="hint" style="margin-top:6px">선택은 config.local.json에 저장돼요. 화자 성별은 음높이로 추정한 값이에요.</div>
+      </div>
+      <div class="card">
+        <div class="label">대화 기록</div>
+        <div id="history"><span class="hint">아직 대화가 없어요</span></div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div id="staff" class="hidden">🛎️ 직원을 불렀어요 — <span id="staffReason"></span></div>
+      <div class="card">
+        <div class="label"><span>손님 말 (인식 결과)</span><span id="inputKind"></span></div>
+        <div id="heard" class="bubble empty">버튼을 누르고 주문해 보세요</div>
+      </div>
+      <div class="card">
+        <div class="label"><span>로봇 답</span><button id="replay" class="hidden" style="font-size:13px;padding:2px 8px">▶ 다시 듣기</button></div>
+        <div id="reply" class="bubble robot empty">…</div>
+        <details style="margin-top:10px"><summary>모델 도구 호출 (JSON)</summary><pre id="calls">-</pre></details>
+      </div>
+      <div class="card">
+        <div class="label"><span>주문 내역</span><span id="confirmed" class="badge hidden"></span></div>
+        <ul id="order"><li class="none">비어 있어요</li></ul>
+      </div>
+      <div class="card">
+        <div class="label"><span>이번 턴 시간</span><span id="tokinfo"></span></div>
+        <div class="times">
+          <div class="t"><b id="tStt">-</b><span>STT</span></div>
+          <div class="t"><b id="tLlm">-</b><span>64e</span></div>
+          <div class="t"><b id="tTts">-</b><span>TTS</span></div>
+          <div class="t total"><b id="tTotal">-</b><span>서버 합계</span></div>
+          <div class="t"><b id="tClient">-</b><span>왕복(브라우저)</span></div>
+        </div>
+      </div>
+      <div id="msg"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let session = null, busy = false, stream = null, rec = null, chunks = [], recStart = 0, lastAudio = null, player = null;
+let audioCtx = null, analyser = null, lvlTimer = null;
+
+async function api(path, body, raw) {
+  const opt = { method: body === undefined ? "GET" : "POST" };
+  if (raw) { opt.body = body; opt.headers = { "Content-Type": raw }; }
+  else if (body !== undefined) { opt.body = JSON.stringify(body); opt.headers = { "Content-Type": "application/json" }; }
+  const r = await fetch(path, opt);
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(d.detail || d.error || ("HTTP " + r.status));
+  return d;
+}
+const fmt = (v) => (v === null || v === undefined) ? "-" : v.toFixed(2) + "s";
+function say(m) { $("msg").textContent = m || ""; }
+
+async function newSession() {
+  session = (await api("/api/new_session", {})).session;
+  $("heard").textContent = "버튼을 누르고 주문해 보세요"; $("heard").className = "bubble empty";
+  $("reply").textContent = "…"; $("reply").className = "bubble robot empty";
+  $("calls").textContent = "-"; $("staff").classList.add("hidden"); $("confirmed").classList.add("hidden");
+  $("history").innerHTML = '<span class="hint">아직 대화가 없어요</span>';
+  renderOrder([]); ["tStt","tLlm","tTts","tTotal","tClient"].forEach(i => $(i).textContent = "-");
+  $("tokinfo").textContent = ""; $("inputKind").textContent = ""; $("replay").classList.add("hidden");
+}
+
+function renderOrder(lines) {
+  const ul = $("order"); ul.innerHTML = "";
+  if (!lines.length) { ul.innerHTML = '<li class="none">비어 있어요</li>'; return; }
+  lines.forEach((t, i) => { const li = document.createElement("li");
+    li.innerHTML = `<span class="n">${i + 1}.</span>`; li.append(document.createTextNode(t)); ul.append(li); });
+}
+
+function play(src) {
+  if (player) { player.pause(); }
+  if (!src) return;
+  player = new Audio(src); player.play().catch(e => say("자동 재생이 막혔어요: " + e.message));
+}
+
+function show(d, t0) {
+  $("heard").textContent = d.transcript || "(아무 말도 인식되지 않았어요)";
+  $("heard").className = "bubble" + (d.transcript ? "" : " empty");
+  $("inputKind").textContent = d.input === "audio" ? `🎙️ 음성 ${d.timings.audio_in_s ? d.timings.audio_in_s.toFixed(1) + "초" : ""}` : "⌨️ 글자";
+  $("reply").textContent = d.reply; $("reply").className = "bubble robot";
+  $("calls").textContent = JSON.stringify({ tool_calls: d.tool_calls, content: d.content || undefined }, null, 2);
+  renderOrder(d.order);
+  if (d.confirmed) { $("confirmed").textContent = d.dine_option === "takeout" ? "✅ 주문 확정 · 포장" : "✅ 주문 확정 · 매장";
+    $("confirmed").classList.remove("hidden"); }
+  if (d.staff_called) { $("staffReason").textContent = d.staff_reason; $("staff").classList.remove("hidden"); }
+  const t = d.timings;
+  $("tStt").textContent = fmt(t.stt_s); $("tLlm").textContent = fmt(t.llm_s); $("tTts").textContent = fmt(t.tts_s);
+  $("tTotal").textContent = fmt(t.total_s); $("tClient").textContent = fmt((performance.now() - t0) / 1000);
+  $("tokinfo").textContent = t.prompt_tokens ? `프롬프트 ${t.prompt_tokens}토큰 · 생성 ${t.gen_tokens}토큰` : "";
+  const h = $("history"); if (h.querySelector(".hint")) h.innerHTML = "";
+  if (d.transcript) { const u = document.createElement("div"); u.className = "u"; u.textContent = "🧑 " + d.transcript; h.append(u); }
+  const a = document.createElement("div"); a.className = "a"; a.textContent = "🤖 " + d.reply; h.append(a);
+  h.scrollTop = h.scrollHeight;
+  say(d.error || "");
+  lastAudio = d.audio; $("replay").classList.toggle("hidden", !d.audio);
+  play(d.audio);
+}
+
+function setBusy(b) {
+  busy = b; $("talk").classList.toggle("busy", b); $("send").disabled = b;
+  $("talkLabel").textContent = b ? "생각하는 중…" : "누르고 있는 동안 말하기";
+}
+
+async function sendText() {
+  const text = $("textIn").value.trim(); if (!text || busy) return;
+  setBusy(true); const t0 = performance.now();
+  try { show(await api("/api/turn/text", { session, text }), t0); $("textIn").value = ""; }
+  catch (e) { say("오류: " + e.message); } finally { setBusy(false); }
+}
+
+// ---------- push-to-talk ----------
+async function ensureMic() {
+  if (stream) return true;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true } });
+    audioCtx = new AudioContext(); analyser = audioCtx.createAnalyser(); analyser.fftSize = 1024;
+    audioCtx.createMediaStreamSource(stream).connect(analyser);
+    return true;
+  } catch (e) { say("마이크를 쓸 수 없어요: " + e.message); return false; }
+}
+
+function meterOn() {
+  const buf = new Float32Array(analyser.fftSize);
+  lvlTimer = setInterval(() => { analyser.getFloatTimeDomainData(buf);
+    let p = 0; for (const v of buf) p = Math.max(p, Math.abs(v));
+    $("lvl").style.width = Math.min(100, Math.round(p * 140)) + "%"; }, 60);
+}
+function meterOff() { clearInterval(lvlTimer); $("lvl").style.width = "0"; }
+
+async function startRec() {
+  if (busy || rec) return;
+  if (player) player.pause();
+  const first = !stream;
+  if (!(await ensureMic())) return;
+  if (first) { say("마이크가 준비됐어요. 다시 누르고 말해 주세요."); return; }   // the permission prompt ate the press
+  if (audioCtx.state === "suspended") await audioCtx.resume();
+  const type = MediaRecorder.isTypeSupported("audio/webm;codecs=opus") ? "audio/webm;codecs=opus" : "";
+  rec = new MediaRecorder(stream, type ? { mimeType: type } : undefined); chunks = [];
+  rec.ondataavailable = (e) => e.data.size && chunks.push(e.data);
+  rec.start(); recStart = performance.now();
+  $("talk").classList.add("rec"); $("talkLabel").textContent = "듣고 있어요… (떼면 전송)"; say(""); meterOn();
+}
+
+async function stopRec() {
+  if (!rec) return;
+  const r = rec; rec = null; meterOff(); $("talk").classList.remove("rec");
+  const dur = performance.now() - recStart;
+  await new Promise(res => { r.onstop = res; r.stop(); });
+  if (dur < 350) { $("talkLabel").textContent = "누르고 있는 동안 말하기"; say("너무 짧아요. 버튼을 누른 채로 말해 주세요."); return; }
+  const blob = new Blob(chunks, { type: r.mimeType || "audio/webm" });
+  setBusy(true); const t0 = performance.now();
+  try { show(await api("/api/turn/audio?session=" + session, blob, blob.type || "audio/webm"), t0); }
+  catch (e) { say("오류: " + e.message); } finally { setBusy(false); }
+}
+
+const talk = $("talk");
+talk.addEventListener("pointerdown", (e) => { e.preventDefault(); talk.setPointerCapture(e.pointerId); startRec(); });
+["pointerup", "pointercancel"].forEach(ev => talk.addEventListener(ev, () => stopRec()));
+const typing = () => document.activeElement && ["INPUT", "SELECT", "TEXTAREA"].includes(document.activeElement.tagName);
+window.addEventListener("keydown", (e) => { if (e.code === "Space" && !typing()) { e.preventDefault(); if (!e.repeat) startRec(); } });
+window.addEventListener("keyup", (e) => { if (e.code === "Space" && !typing()) { e.preventDefault(); stopRec(); } });
+window.addEventListener("blur", () => stopRec());
+
+// ---------- voice settings ----------
+function fillSid(n) {
+  const s = $("sid"); s.innerHTML = "";
+  for (let i = 0; i < n; i++) { const o = document.createElement("option"); o.value = i;
+    o.textContent = `화자 ${i} (${i < 5 ? "여성" : "남성"} 추정)`; s.append(o); }
+}
+function syncVoiceUi() { const sup = $("engine").value === "supertonic"; $("sid").disabled = !sup; $("steps").disabled = !sup; }
+async function saveVoice() {
+  syncVoiceUi();
+  try { await api("/api/config", { engine: $("engine").value, sid: +$("sid").value, steps: +$("steps").value }); }
+  catch (e) { say("설정 저장 실패: " + e.message); }
+}
+["engine", "sid", "steps"].forEach(id => $(id).addEventListener("change", saveVoice));
+$("preview").addEventListener("click", async () => {
+  $("preview").disabled = true;
+  try { const d = await api("/api/tts/preview", { engine: $("engine").value, sid: +$("sid").value, steps: +$("steps").value });
+        play(d.audio); say(`미리 듣기 합성 ${d.tts_s.toFixed(2)}s`); }
+  catch (e) { say("미리 듣기 실패: " + e.message); } finally { $("preview").disabled = false; }
+});
+
+$("send").addEventListener("click", sendText);
+$("textIn").addEventListener("keydown", (e) => { if (e.key === "Enter") sendText(); });
+$("reset").addEventListener("click", newSession);
+$("replay").addEventListener("click", () => play(lastAudio));
+
+async function poll() {
+  try {
+    const h = await api("/api/health");
+    const chip = (id, ok, txt) => { $(id).className = "chip " + (ok ? "ok" : "wait"); $(id).textContent = txt; };
+    chip("stStt", h.stt, h.stt ? "STT 준비됨" : "STT 준비 중");
+    chip("stLlm", h.llm, h.llm ? "64e 준비됨" + (h.llm_warmup && h.llm_warmup.full_igpu ? " · iGPU" : "") : (h.ollama_up ? "64e 불러오는 중" : "Ollama 꺼짐"));
+    if (!h.ollama_up) $("stLlm").className = "chip bad";
+    chip("stTts", h.tts, h.tts ? "TTS 준비됨" : "TTS 준비 중");
+    if (!h.ready) setTimeout(poll, 1500);
+  } catch (e) { setTimeout(poll, 2000); }
+}
+
+(async function init() {
+  fillSid(10);
+  try { const c = await api("/api/config"); $("engine").value = c.engine; $("sid").value = c.sid; $("steps").value = c.steps; } catch (e) {}
+  syncVoiceUi(); await newSession(); poll();
+})();
+</script>
+</body>
+</html>
