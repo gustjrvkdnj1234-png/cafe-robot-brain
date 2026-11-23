@@ -1,0 +1,55 @@
+{
+  "num_speakers": 10,
+  "voices": [
+    {
+      "sid": 0,
+      "median_f0_hz": 216.8,
+      "gender_est": "F"
+    },
+    {
+      "sid": 1,
+      "median_f0_hz": 253.4,
+      "gender_est": "F"
+    },
+    {
+      "sid": 2,
+      "median_f0_hz": 183.0,
+      "gender_est": "F"
+    },
+    {
+      "sid": 3,
+      "median_f0_hz": 192.2,
+      "gender_est": "F"
+    },
+    {
+      "sid": 4,
+      "median_f0_hz": 166.4,
+      "gender_est": "F"
+    },
+    {
+      "sid": 5,
+      "median_f0_hz": 144.4,
+      "gender_est": "M"
+    },
+    {
+      "sid": 6,
+      "median_f0_hz": 104.6,
+      "gender_est": "M"
+    },
+    {
+      "sid": 7,
+      "median_f0_hz": 105.8,
+      "gender_est": "M"
+    },
+    {
+      "sid": 8,
+      "median_f0_hz": 132.0,
+      "gender_est": "M"
+    },
+    {
+      "sid": 9,
+      "median_f0_hz": 88.5,
+      "gender_est": "M"
+    }
+  ]
+}

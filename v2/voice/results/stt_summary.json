@@ -1,0 +1,72 @@
+{
+  "fw-small": {
+    "cer_builtin": 17.5,
+    "cer_bluetooth": 20.833333333333332,
+    "cer_all": 19.166666666666668,
+    "cer_all_lenient": 19.166666666666668,
+    "latency_mean_s": 1.1357,
+    "latency_builtin_s": 1.1364,
+    "latency_bluetooth_s": 1.135,
+    "latency_max_s": 1.189,
+    "rtf": 0.22134086922627166,
+    "peak_ram_gb": 0.730927104,
+    "download_gb": 0.486217555,
+    "load_s": 2.77
+  },
+  "fw-medium": {
+    "cer_builtin": 6.666666666666667,
+    "cer_bluetooth": 7.5,
+    "cer_all": 7.083333333333333,
+    "cer_all_lenient": 7.083333333333333,
+    "latency_mean_s": 3.13745,
+    "latency_builtin_s": 2.9894,
+    "latency_bluetooth_s": 3.2855,
+    "latency_max_s": 3.537,
+    "rtf": 0.611469499122978,
+    "peak_ram_gb": 1.828974592,
+    "download_gb": 1.530576929,
+    "load_s": 2.94
+  },
+  "fw-large-v3-turbo": {
+    "cer_builtin": 14.166666666666666,
+    "cer_bluetooth": 13.333333333333334,
+    "cer_all": 13.75,
+    "cer_all_lenient": 11.25,
+    "latency_mean_s": 4.9729,
+    "latency_builtin_s": 4.8926,
+    "latency_bluetooth_s": 5.0532,
+    "latency_max_s": 5.473,
+    "rtf": 0.9691872929253557,
+    "peak_ram_gb": 1.973551104,
+    "download_gb": 1.621670879,
+    "load_s": 3.21
+  },
+  "whispercpp-turbo-q5_0": {
+    "cer_builtin": 16.666666666666668,
+    "cer_bluetooth": 13.333333333333334,
+    "cer_all": 15.0,
+    "cer_all_lenient": 12.083333333333334,
+    "latency_mean_s": 9.7041,
+    "latency_builtin_s": 10.0188,
+    "latency_bluetooth_s": 9.3894,
+    "latency_max_s": 10.792,
+    "rtf": 1.8912687585266028,
+    "peak_ram_gb": 0.827420672,
+    "download_gb": 0.582984632,
+    "load_s": 1.13
+  },
+  "sensevoice-int8": {
+    "cer_builtin": 15.0,
+    "cer_bluetooth": 12.5,
+    "cer_all": 13.75,
+    "cer_all_lenient": 13.75,
+    "latency_mean_s": 0.0741,
+    "latency_builtin_s": 0.0747,
+    "latency_bluetooth_s": 0.0735,
+    "latency_max_s": 0.088,
+    "rtf": 0.014441629312024945,
+    "peak_ram_gb": 0.374493184,
+    "download_gb": 0.239552254,
+    "load_s": 0.92
+  }
+}

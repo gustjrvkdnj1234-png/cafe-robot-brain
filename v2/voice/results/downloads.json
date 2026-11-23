@@ -1,0 +1,81 @@
+{
+  "fw-small": {
+    "kind": "hf",
+    "source": "Systran/faster-whisper-small",
+    "files": null,
+    "download_bytes": 486217555,
+    "disk_bytes": 486217555,
+    "seconds": 13.7
+  },
+  "fw-medium": {
+    "kind": "hf",
+    "source": "Systran/faster-whisper-medium",
+    "files": null,
+    "download_bytes": 1530576929,
+    "disk_bytes": 1530576929,
+    "seconds": 25.8
+  },
+  "fw-large-v3-turbo": {
+    "kind": "hf",
+    "source": "mobiuslabsgmbh/faster-whisper-large-v3-turbo",
+    "files": null,
+    "download_bytes": 1621670879,
+    "disk_bytes": 1621670879,
+    "seconds": 24.0
+  },
+  "whispercpp-bin": {
+    "kind": "zip",
+    "source": "https://github.com/ggml-org/whisper.cpp/releases/download/b5454/whisper-bin-x64.zip",
+    "files": null,
+    "download_bytes": 8928640,
+    "disk_bytes": 23147520,
+    "seconds": 0.6
+  },
+  "whispercpp-large-v3-turbo-q5_0": {
+    "kind": "hf",
+    "source": "ggerganov/whisper.cpp",
+    "files": [
+      "ggml-large-v3-turbo-q5_0.bin"
+    ],
+    "download_bytes": 574055992,
+    "disk_bytes": 574055992,
+    "seconds": 9.8
+  },
+  "supertonic3-int8": {
+    "kind": "tar",
+    "source": "https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/sherpa-onnx-supertonic-3-tts-int8-2026-05-11.tar.bz2",
+    "files": null,
+    "download_bytes": 128774318,
+    "disk_bytes": 145316356,
+    "seconds": 11.2
+  },
+  "supertonic2-int8": {
+    "kind": "tar",
+    "source": "https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/sherpa-onnx-supertonic-tts-int8-2026-03-06.tar.bz2",
+    "files": null,
+    "download_bytes": 84692981,
+    "disk_bytes": 96426478,
+    "seconds": 9.7
+  },
+  "mimic3-ko-kss": {
+    "kind": "tar",
+    "source": "https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/vits-mimic3-ko_KO-kss_low.tar.bz2",
+    "files": null,
+    "download_bytes": 66838474,
+    "disk_bytes": 80791421,
+    "seconds": 9.3
+  },
+  "sensevoice-int8": {
+    "kind": "hf",
+    "source": "csukuangfj/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-2024-07-17",
+    "files": [
+      "model.int8.onnx",
+      "tokens.txt",
+      "LICENSE",
+      "README.md"
+    ],
+    "download_bytes": 239552254,
+    "disk_bytes": 239552254,
+    "seconds": 9.0
+  }
+}

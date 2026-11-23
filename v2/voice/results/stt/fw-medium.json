@@ -1,0 +1,214 @@
+{
+  "name": "fw-medium",
+  "engine": "faster-whisper",
+  "model": "fw-medium",
+  "label": "faster-whisper medium (int8)",
+  "threads": 8,
+  "load_s": 2.94,
+  "warmup_s": 2.99,
+  "peak_wset_bytes": 1828974592,
+  "peak_wset_worker_bytes": 1828974592,
+  "peak_wset_server_bytes": 0,
+  "items": [
+    {
+      "device": "builtin",
+      "id": "01",
+      "ref": "아이스 아메리카노 큰 걸로 두 잔이요",
+      "duration_s": 5.45,
+      "hyp": "아이스 아메리카노 큰 걸로 두 잔요.",
+      "errors": 1,
+      "ref_chars": 15,
+      "latency_s": 2.944
+    },
+    {
+      "device": "builtin",
+      "id": "02",
+      "ref": "아아 하나랑 따뜻한 라떼 하나요",
+      "duration_s": 5.41,
+      "hyp": "아 하나랑 따뜻한 라떼 하나요",
+      "errors": 1,
+      "ref_chars": 13,
+      "latency_s": 2.993
+    },
+    {
+      "device": "builtin",
+      "id": "03",
+      "ref": "바닐라라떼 덜 달게 해주세요",
+      "duration_s": 3.84,
+      "hyp": "바닐라 라떼에 덜 달게 해주세요.",
+      "errors": 1,
+      "ref_chars": 12,
+      "latency_s": 2.999
+    },
+    {
+      "device": "builtin",
+      "id": "04",
+      "ref": "카페라떼 반샷만 넣어주세요",
+      "duration_s": 4.66,
+      "hyp": "카페라떼에 반샷만 넣어주세요",
+      "errors": 1,
+      "ref_chars": 12,
+      "latency_s": 2.943
+    },
+    {
+      "device": "builtin",
+      "id": "05",
+      "ref": "녹차라떼 되나요 안 되면 그냥 라떼요",
+      "duration_s": 6.23,
+      "hyp": "녹차라떼 되나요? 안되면 그냥 라떼요.",
+      "errors": 0,
+      "ref_chars": 15,
+      "latency_s": 3.057
+    },
+    {
+      "device": "builtin",
+      "id": "06",
+      "ref": "디카페인 있어요",
+      "duration_s": 5.31,
+      "hyp": "티카페인이 있어요?",
+      "errors": 2,
+      "ref_chars": 7,
+      "latency_s": 2.761
+    },
+    {
+      "device": "builtin",
+      "id": "07",
+      "ref": "캐리어 좀 담아주세요",
+      "duration_s": 4.55,
+      "hyp": "페리얼 좀 담아주세요.",
+      "errors": 2,
+      "ref_chars": 9,
+      "latency_s": 2.845
+    },
+    {
+      "device": "builtin",
+      "id": "08",
+      "ref": "아바라 테이크아웃이요",
+      "duration_s": 4.86,
+      "hyp": "아바라 테이크아웃이요.",
+      "errors": 0,
+      "ref_chars": 10,
+      "latency_s": 2.948
+    },
+    {
+      "device": "builtin",
+      "id": "09",
+      "ref": "방금 시킨 거 취소할게요",
+      "duration_s": 5.31,
+      "hyp": "방금 시킨 거 취소할게요.",
+      "errors": 0,
+      "ref_chars": 10,
+      "latency_s": 3.11
+    },
+    {
+      "device": "builtin",
+      "id": "10",
+      "ref": "레몬에이드 한 잔이랑 치즈케이크 하나요",
+      "duration_s": 6.26,
+      "hyp": "레몬에이드 한잔이랑 치즈케이크 하나요.",
+      "errors": 0,
+      "ref_chars": 17,
+      "latency_s": 3.294
+    },
+    {
+      "device": "bluetooth",
+      "id": "01",
+      "ref": "아이스 아메리카노 큰 걸로 두 잔이요",
+      "duration_s": 5.82,
+      "hyp": "아이스 아메리카노 큰 걸로 두잔이요.",
+      "errors": 0,
+      "ref_chars": 15,
+      "latency_s": 3.253
+    },
+    {
+      "device": "bluetooth",
+      "id": "02",
+      "ref": "아아 하나랑 따뜻한 라떼 하나요",
+      "duration_s": 5.58,
+      "hyp": "아 하나랑 따뜻한 것 같아 하나야",
+      "errors": 5,
+      "ref_chars": 13,
+      "latency_s": 3.17
+    },
+    {
+      "device": "bluetooth",
+      "id": "03",
+      "ref": "바닐라라떼 덜 달게 해주세요",
+      "duration_s": 5.34,
+      "hyp": "바닐라 라떼 덜 달게 해주세요.",
+      "errors": 0,
+      "ref_chars": 12,
+      "latency_s": 3.256
+    },
+    {
+      "device": "bluetooth",
+      "id": "04",
+      "ref": "카페라떼 반샷만 넣어주세요",
+      "duration_s": 4.56,
+      "hyp": "카페라떼에 반샷만 넣어주세요",
+      "errors": 1,
+      "ref_chars": 12,
+      "latency_s": 3.208
+    },
+    {
+      "device": "bluetooth",
+      "id": "05",
+      "ref": "녹차라떼 되나요 안 되면 그냥 라떼요",
+      "duration_s": 5.98,
+      "hyp": "녹차라떼 되나요? 안 되면 그냥 라떼요.",
+      "errors": 0,
+      "ref_chars": 15,
+      "latency_s": 3.259
+    },
+    {
+      "device": "bluetooth",
+      "id": "06",
+      "ref": "디카페인 있어요",
+      "duration_s": 4.27,
+      "hyp": "디카페인이 있어요?",
+      "errors": 1,
+      "ref_chars": 7,
+      "latency_s": 3.196
+    },
+    {
+      "device": "bluetooth",
+      "id": "07",
+      "ref": "캐리어 좀 담아주세요",
+      "duration_s": 4.56,
+      "hyp": "캐리어 좀 담아주세요",
+      "errors": 0,
+      "ref_chars": 9,
+      "latency_s": 3.177
+    },
+    {
+      "device": "bluetooth",
+      "id": "08",
+      "ref": "아바라 테이크아웃이요",
+      "duration_s": 3.89,
+      "hyp": "아바라 테이크아웃 이어",
+      "errors": 1,
+      "ref_chars": 10,
+      "latency_s": 3.411
+    },
+    {
+      "device": "bluetooth",
+      "id": "09",
+      "ref": "방금 시킨 거 취소할게요",
+      "duration_s": 5.38,
+      "hyp": "방금 시킨 거 취소할게요.",
+      "errors": 0,
+      "ref_chars": 10,
+      "latency_s": 3.388
+    },
+    {
+      "device": "bluetooth",
+      "id": "10",
+      "ref": "레몬에이드 한 잔이랑 치즈케이크 하나요",
+      "duration_s": 5.36,
+      "hyp": "레몬에이드 한잔이랑 치즈케이크 하나",
+      "errors": 1,
+      "ref_chars": 17,
+      "latency_s": 3.537
+    }
+  ]
+}

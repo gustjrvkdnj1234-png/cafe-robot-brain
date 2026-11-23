@@ -1,0 +1,74 @@
+{
+  "windows-sapi-heami": {
+    "latency_mean_s": 0.011,
+    "latency_max_s": 0.018,
+    "rtf": 0.0025264124942581535,
+    "peak_ram_gb": 0.121344,
+    "asr_cer": 2.272727272727273,
+    "asr_cer_lenient": 0.0,
+    "download_gb": 0.0,
+    "load_s": 0.09,
+    "sample_rate": 22050,
+    "sid": null
+  },
+  "windows-onecore-heami": {
+    "latency_mean_s": 0.0086,
+    "latency_max_s": 0.017,
+    "rtf": 0.0019742883379247015,
+    "peak_ram_gb": 0.118575104,
+    "asr_cer": 3.409090909090909,
+    "asr_cer_lenient": 0.0,
+    "download_gb": 0.0,
+    "load_s": 0.09,
+    "sample_rate": 16000,
+    "sid": null
+  },
+  "supertonic3-f": {
+    "latency_mean_s": 1.386,
+    "latency_max_s": 1.587,
+    "rtf": 0.35684860968074145,
+    "peak_ram_gb": 0.3170304,
+    "asr_cer": 2.272727272727273,
+    "asr_cer_lenient": 0.0,
+    "download_gb": 0.128774318,
+    "load_s": 0.69,
+    "sample_rate": 44100,
+    "sid": 0
+  },
+  "supertonic3-m": {
+    "latency_mean_s": 1.3586,
+    "latency_max_s": 1.575,
+    "rtf": 0.34979402677651905,
+    "peak_ram_gb": 0.317218816,
+    "asr_cer": 3.409090909090909,
+    "asr_cer_lenient": 2.272727272727273,
+    "download_gb": 0.128774318,
+    "load_s": 0.75,
+    "sample_rate": 44100,
+    "sid": 5
+  },
+  "supertonic3-f-steps4": {
+    "latency_mean_s": 1.0426,
+    "latency_max_s": 1.108,
+    "rtf": 0.2684346035015448,
+    "peak_ram_gb": 0.318017536,
+    "asr_cer": 2.272727272727273,
+    "asr_cer_lenient": 0.0,
+    "download_gb": 0.128774318,
+    "load_s": 0.69,
+    "sample_rate": 44100,
+    "sid": 0
+  },
+  "supertonic2-f": {
+    "latency_mean_s": 0.6812,
+    "latency_max_s": 0.793,
+    "rtf": 0.182529474812433,
+    "peak_ram_gb": 0.247558144,
+    "asr_cer": 4.545454545454546,
+    "asr_cer_lenient": 2.272727272727273,
+    "download_gb": 0.084692981,
+    "load_s": 0.81,
+    "sample_rate": 44100,
+    "sid": 0
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "load_s": 0.69,
+  "warmup_s": 0.95,
+  "peak_wset_bytes": 318017536,
+  "items": [
+    {
+      "id": "01",
+      "latency_s": 1.008,
+      "duration_s": 3.84,
+      "sample_rate": 44100,
+      "asr": "아이스 아메리카노 큰 사이즈 2잔 담았습니다.",
+      "asr_errors": 1,
+      "ref_chars": 19
+    },
+    {
+      "id": "02",
+      "latency_s": 0.99,
+      "duration_s": 4.64,
+      "sample_rate": 44100,
+      "asr": "녹차라떼는 메뉴에 없습니다. 카페라떼로 드릴까요?",
+      "asr_errors": 0,
+      "ref_chars": 21
+    },
+    {
+      "id": "03",
+      "latency_s": 1.001,
+      "duration_s": 3.05,
+      "sample_rate": 44100,
+      "asr": "시럽은 셀프바에서 이용 부탁드립니다.",
+      "asr_errors": 0,
+      "ref_chars": 16
+    },
+    {
+      "id": "04",
+      "latency_s": 1.106,
+      "duration_s": 4.19,
+      "sample_rate": 44100,
+      "asr": "직원을 불러드릴게요. 잠시만 기다려주세요.",
+      "asr_errors": 0,
+      "ref_chars": 18
+    },
+    {
+      "id": "05",
+      "latency_s": 1.108,
+      "duration_s": 3.7,
+      "sample_rate": 44100,
+      "asr": "주문 확인했습니다. 총 3잔입니다.",
+      "asr_errors": 1,
+      "ref_chars": 14
+    }
+  ],
+  "sid": 0,
+  "num_steps": 4
+}

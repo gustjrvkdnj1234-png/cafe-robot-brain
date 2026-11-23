@@ -40,3 +40,10 @@ results/step6/pilot/
 
 # v2 통계 수집의 이어서 돌리기용 은닉 상태(1.4 GB, 재생성 가능)
 v2/results/**/states_after_layer.pt
+
+# v2 voice: recordings, synthesized audio, downloaded models (not committed)
+.venv-voice/
+v2/voice/recordings/
+v2/voice/models/
+v2/voice/**/*.wav
+

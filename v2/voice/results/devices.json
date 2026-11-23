@@ -1,0 +1,246 @@
+{
+  "default_input": 1,
+  "default_output": 4,
+  "devices": [
+    {
+      "index": 0,
+      "hostapi": "MME",
+      "name": "Microsoft 사운드 매퍼 - Input",
+      "max_input_channels": 2,
+      "max_output_channels": 0,
+      "default_samplerate": 44100.0
+    },
+    {
+      "index": 1,
+      "hostapi": "MME",
+      "name": "마이크 배열(디지털 마이크용 인텔® 스마트 사운드 기술)",
+      "max_input_channels": 2,
+      "max_output_channels": 0,
+      "default_samplerate": 44100.0
+    },
+    {
+      "index": 2,
+      "hostapi": "MME",
+      "name": "머리에 거는 수화기(2- Buds4 Pro)",
+      "max_input_channels": 1,
+      "max_output_channels": 0,
+      "default_samplerate": 44100.0
+    },
+    {
+      "index": 3,
+      "hostapi": "MME",
+      "name": "Microsoft 사운드 매퍼 - Output",
+      "max_input_channels": 0,
+      "max_output_channels": 2,
+      "default_samplerate": 44100.0
+    },
+    {
+      "index": 4,
+      "hostapi": "MME",
+      "name": "헤드폰(Buds4 Pro)",
+      "max_input_channels": 0,
+      "max_output_channels": 8,
+      "default_samplerate": 44100.0
+    },
+    {
+      "index": 5,
+      "hostapi": "MME",
+      "name": "스피커(Realtek(R) Audio)",
+      "max_input_channels": 0,
+      "max_output_channels": 2,
+      "default_samplerate": 44100.0
+    },
+    {
+      "index": 6,
+      "hostapi": "Windows DirectSound",
+      "name": "주 사운드 캡처 드라이버",
+      "max_input_channels": 2,
+      "max_output_channels": 0,
+      "default_samplerate": 44100.0
+    },
+    {
+      "index": 7,
+      "hostapi": "Windows DirectSound",
+      "name": "마이크 배열(디지털 마이크용 인텔® 스마트 사운드 기술)",
+      "max_input_channels": 2,
+      "max_output_channels": 0,
+      "default_samplerate": 44100.0
+    },
+    {
+      "index": 8,
+      "hostapi": "Windows DirectSound",
+      "name": "머리에 거는 수화기(2- Buds4 Pro)",
+      "max_input_channels": 1,
+      "max_output_channels": 0,
+      "default_samplerate": 44100.0
+    },
+    {
+      "index": 9,
+      "hostapi": "Windows DirectSound",
+      "name": "주 사운드 드라이버",
+      "max_input_channels": 0,
+      "max_output_channels": 2,
+      "default_samplerate": 44100.0
+    },
+    {
+      "index": 10,
+      "hostapi": "Windows DirectSound",
+      "name": "헤드폰(Buds4 Pro)",
+      "max_input_channels": 0,
+      "max_output_channels": 8,
+      "default_samplerate": 44100.0
+    },
+    {
+      "index": 11,
+      "hostapi": "Windows DirectSound",
+      "name": "스피커(Realtek(R) Audio)",
+      "max_input_channels": 0,
+      "max_output_channels": 2,
+      "default_samplerate": 44100.0
+    },
+    {
+      "index": 12,
+      "hostapi": "Windows WASAPI",
+      "name": "스피커(Realtek(R) Audio)",
+      "max_input_channels": 0,
+      "max_output_channels": 2,
+      "default_samplerate": 48000.0
+    },
+    {
+      "index": 13,
+      "hostapi": "Windows WASAPI",
+      "name": "헤드폰(Buds4 Pro)",
+      "max_input_channels": 0,
+      "max_output_channels": 2,
+      "default_samplerate": 48000.0
+    },
+    {
+      "index": 14,
+      "hostapi": "Windows WASAPI",
+      "name": "마이크 배열(디지털 마이크용 인텔® 스마트 사운드 기술)",
+      "max_input_channels": 2,
+      "max_output_channels": 0,
+      "default_samplerate": 48000.0
+    },
+    {
+      "index": 15,
+      "hostapi": "Windows WASAPI",
+      "name": "머리에 거는 수화기(2- Buds4 Pro)",
+      "max_input_channels": 1,
+      "max_output_channels": 0,
+      "default_samplerate": 32000.0
+    },
+    {
+      "index": 16,
+      "hostapi": "Windows WDM-KS",
+      "name": "Speakers 1 (Realtek HD Audio output with SST)",
+      "max_input_channels": 0,
+      "max_output_channels": 2,
+      "default_samplerate": 48000.0
+    },
+    {
+      "index": 17,
+      "hostapi": "Windows WDM-KS",
+      "name": "Speakers 2 (Realtek HD Audio output with SST)",
+      "max_input_channels": 0,
+      "max_output_channels": 2,
+      "default_samplerate": 44100.0
+    },
+    {
+      "index": 18,
+      "hostapi": "Windows WDM-KS",
+      "name": "PC 스피커 (Realtek HD Audio output with SST)",
+      "max_input_channels": 2,
+      "max_output_channels": 0,
+      "default_samplerate": 48000.0
+    },
+    {
+      "index": 19,
+      "hostapi": "Windows WDM-KS",
+      "name": "스테레오 믹스 (Realtek HD Audio Stereo input)",
+      "max_input_channels": 2,
+      "max_output_channels": 0,
+      "default_samplerate": 48000.0
+    },
+    {
+      "index": 20,
+      "hostapi": "Windows WDM-KS",
+      "name": "마이크 (Realtek HD Audio Mic input)",
+      "max_input_channels": 2,
+      "max_output_channels": 0,
+      "default_samplerate": 48000.0
+    },
+    {
+      "index": 21,
+      "hostapi": "Windows WDM-KS",
+      "name": "Headphones 1 (Realtek HD Audio 2nd output with SST)",
+      "max_input_channels": 0,
+      "max_output_channels": 2,
+      "default_samplerate": 48000.0
+    },
+    {
+      "index": 22,
+      "hostapi": "Windows WDM-KS",
+      "name": "Headphones 2 (Realtek HD Audio 2nd output with SST)",
+      "max_input_channels": 0,
+      "max_output_channels": 2,
+      "default_samplerate": 44100.0
+    },
+    {
+      "index": 23,
+      "hostapi": "Windows WDM-KS",
+      "name": "PC 스피커 (Realtek HD Audio 2nd output with SST)",
+      "max_input_channels": 2,
+      "max_output_channels": 0,
+      "default_samplerate": 48000.0
+    },
+    {
+      "index": 24,
+      "hostapi": "Windows WDM-KS",
+      "name": "Output 1 (BT LE Headphones)",
+      "max_input_channels": 0,
+      "max_output_channels": 2,
+      "default_samplerate": 48000.0
+    },
+    {
+      "index": 25,
+      "hostapi": "Windows WDM-KS",
+      "name": "Output 2 (BT LE Headphones)",
+      "max_input_channels": 0,
+      "max_output_channels": 8,
+      "default_samplerate": 44100.0
+    },
+    {
+      "index": 26,
+      "hostapi": "Windows WDM-KS",
+      "name": "Input (BT LE Headphones)",
+      "max_input_channels": 2,
+      "max_output_channels": 0,
+      "default_samplerate": 48000.0
+    },
+    {
+      "index": 27,
+      "hostapi": "Windows WDM-KS",
+      "name": "머리에 거는 수화기 (BT LE Microphone)",
+      "max_input_channels": 1,
+      "max_output_channels": 0,
+      "default_samplerate": 32000.0
+    },
+    {
+      "index": 28,
+      "hostapi": "Windows WDM-KS",
+      "name": "마이크 배열 1 ()",
+      "max_input_channels": 2,
+      "max_output_channels": 0,
+      "default_samplerate": 48000.0
+    },
+    {
+      "index": 29,
+      "hostapi": "Windows WDM-KS",
+      "name": "마이크 배열 2 ()",
+      "max_input_channels": 2,
+      "max_output_channels": 0,
+      "default_samplerate": 48000.0
+    }
+  ]
+}
