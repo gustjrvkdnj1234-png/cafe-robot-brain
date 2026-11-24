@@ -1,0 +1,42 @@
+{
+  "cafe_v1_stored": {
+    "strict": 112,
+    "lenient": 112,
+    "n": 120
+  },
+  "cafe_v1": {
+    "strict": 112,
+    "lenient": 112,
+    "n": 120
+  },
+  "cafe_demo": {
+    "strict": 112,
+    "lenient": 112,
+    "n": 120
+  },
+  "cafe_demo_cpu": {
+    "strict": 112,
+    "lenient": 112,
+    "n": 120
+  },
+  "live_v1_stored": {
+    "strict": 14,
+    "lenient": 14,
+    "n": 20
+  },
+  "live_v1": {
+    "strict": 12,
+    "lenient": 13,
+    "n": 20
+  },
+  "live_demo": {
+    "strict": 11,
+    "lenient": 12,
+    "n": 20
+  },
+  "live_demo_cpu": {
+    "strict": 12,
+    "lenient": 13,
+    "n": 20
+  }
+}

@@ -10,15 +10,27 @@
     "heami": true,
     "llm": true,
     "llm_warmup": {
-      "wall_s": 29.7,
-      "size": 1252020713,
-      "size_vram": 1252020713,
-      "full_igpu": true
+      "wall_s": 0.57,
+      "size": 5261251049,
+      "size_vram": 0,
+      "full_igpu": false,
+      "runner_private_gb": 12.99,
+      "gpu_shared_gb": 1.5
     },
     "errors": [],
-    "startup_s": 9.7,
+    "startup_s": 8.6,
     "ollama_up": true,
     "model": "song/gemma4-26b-cafe-64e",
+    "settings": {
+      "history": "tools",
+      "layout": "append",
+      "max_turns": 20,
+      "trim_to": 10,
+      "config": "demo",
+      "mode": "cpu",
+      "num_ctx": 8192,
+      "num_predict": 512
+    },
     "ready": true,
     "speakers": 10
   },
@@ -32,17 +44,9 @@
           "name": "add_item",
           "arguments": {
             "menu": "아메리카노",
+            "quantity": 2,
             "size": "large",
             "temperature": "iced"
-          }
-        },
-        {
-          "name": "add_item",
-          "arguments": {
-            "menu": "아메리카노",
-            "size": "large",
-            "temperature": "iced",
-            "quantity": 2
           }
         },
         {
@@ -53,14 +57,12 @@
           }
         }
       ],
-      "reply": "아이스 아메리카노 큰 사이즈 한 잔, 아이스 아메리카노 큰 사이즈 두 잔, 치즈케이크 한 개 담았습니다.",
+      "reply": "네, 아이스 아메리카노 큰 사이즈 두 잔, 치즈케이크 한 개요. 더 필요하신 거 있으세요?",
       "kinds": [
-        "add",
         "add",
         "add"
       ],
       "order": [
-        "아이스 아메리카노 큰 사이즈 한 잔",
         "아이스 아메리카노 큰 사이즈 두 잔",
         "치즈케이크 한 개"
       ],
@@ -69,18 +71,20 @@
       "staff_called": false,
       "timings": {
         "stt_s": null,
-        "llm_s": 7.702,
-        "tts_s": 1.164,
-        "total_s": 8.87,
+        "llm_s": 4.379,
+        "tts_s": 1.63,
+        "total_s": 6.016,
         "audio_in_s": null,
-        "load_s": 0.012,
-        "prompt_tokens": 3506,
-        "prompt_s": 3.637,
-        "gen_tokens": 84,
-        "gen_s": 4.023
+        "load_s": 0.009,
+        "prompt_tokens": 4084,
+        "prompt_s": 1.235,
+        "gen_tokens": 55,
+        "gen_s": 3.098,
+        "prompt_messages": 3,
+        "history_turns": 1
       },
-      "client_wall_s": 8.904,
-      "reply_audio_s": 8.3,
+      "client_wall_s": 6.047,
+      "reply_audio_s": 7.13,
       "reply_sr": 44100,
       "error": null
     },
@@ -96,12 +100,11 @@
           }
         }
       ],
-      "reply": "따뜻한 카페라떼 한 잔 담았습니다.",
+      "reply": "네, 따뜻한 카페라떼 한 잔이요.",
       "kinds": [
         "add"
       ],
       "order": [
-        "아이스 아메리카노 큰 사이즈 한 잔",
         "아이스 아메리카노 큰 사이즈 두 잔",
         "치즈케이크 한 개",
         "따뜻한 카페라떼 한 잔"
@@ -111,18 +114,20 @@
       "staff_called": false,
       "timings": {
         "stt_s": null,
-        "llm_s": 4.913,
-        "tts_s": 0.777,
-        "total_s": 5.691,
+        "llm_s": 6.006,
+        "tts_s": 1.365,
+        "total_s": 7.373,
         "audio_in_s": null,
-        "load_s": 0.076,
-        "prompt_tokens": 3604,
-        "prompt_s": 3.969,
+        "load_s": 0.028,
+        "prompt_tokens": 4300,
+        "prompt_s": 4.834,
         "gen_tokens": 17,
-        "gen_s": 0.834
+        "gen_s": 1.063,
+        "prompt_messages": 8,
+        "history_turns": 2
       },
-      "client_wall_s": 5.714,
-      "reply_audio_s": 3.0,
+      "client_wall_s": 7.383,
+      "reply_audio_s": 2.93,
       "reply_sr": 44100,
       "error": null
     },
@@ -141,13 +146,12 @@
           }
         }
       ],
-      "reply": "1번 아이스 아메리카노를 샷 한 개 추가로 바꿨습니다.",
+      "reply": "네, 아메리카노는 샷 하나 추가할게요.",
       "kinds": [
         "modify"
       ],
       "order": [
-        "아이스 아메리카노 큰 사이즈 샷 한 개 추가 한 잔",
-        "아이스 아메리카노 큰 사이즈 두 잔",
+        "아이스 아메리카노 큰 사이즈 샷 추가 두 잔",
         "치즈케이크 한 개",
         "따뜻한 카페라떼 한 잔"
       ],
@@ -156,18 +160,20 @@
       "staff_called": false,
       "timings": {
         "stt_s": null,
-        "llm_s": 5.179,
-        "tts_s": 0.898,
-        "total_s": 6.079,
+        "llm_s": 4.976,
+        "tts_s": 1.275,
+        "total_s": 6.256,
         "audio_in_s": null,
-        "load_s": 0.048,
-        "prompt_tokens": 3651,
-        "prompt_s": 3.829,
+        "load_s": 0.008,
+        "prompt_tokens": 4439,
+        "prompt_s": 3.625,
         "gen_tokens": 23,
-        "gen_s": 1.179
+        "gen_s": 1.297,
+        "prompt_messages": 12,
+        "history_turns": 3
       },
-      "client_wall_s": 6.106,
-      "reply_audio_s": 4.48,
+      "client_wall_s": 6.269,
+      "reply_audio_s": 3.48,
       "reply_sr": 44100,
       "error": null
     },
@@ -179,18 +185,17 @@
         {
           "name": "ask_clarification",
           "arguments": {
-            "question": "죄송합니다, 저희 카페에서는 디카페인 옵션을 제공하지 않습니다.",
+            "question": "죄송합니다, 디카페인은 제공하지 않습니다.",
             "reason": "off_menu"
           }
         }
       ],
-      "reply": "죄송합니다, 저희 카페에서는 디카페인 옵션을 제공하지 않습니다.",
+      "reply": "죄송합니다, 디카페인은 제공하지 않습니다.",
       "kinds": [
         "ask"
       ],
       "order": [
-        "아이스 아메리카노 큰 사이즈 샷 한 개 추가 한 잔",
-        "아이스 아메리카노 큰 사이즈 두 잔",
+        "아이스 아메리카노 큰 사이즈 샷 추가 두 잔",
         "치즈케이크 한 개",
         "따뜻한 카페라떼 한 잔"
       ],
@@ -199,18 +204,20 @@
       "staff_called": false,
       "timings": {
         "stt_s": null,
-        "llm_s": 6.286,
-        "tts_s": 0.887,
-        "total_s": 7.175,
+        "llm_s": 6.431,
+        "tts_s": 1.167,
+        "total_s": 7.6,
         "audio_in_s": null,
-        "load_s": 0.02,
-        "prompt_tokens": 3694,
-        "prompt_s": 3.848,
-        "gen_tokens": 39,
-        "gen_s": 2.171
+        "load_s": 0.069,
+        "prompt_tokens": 4598,
+        "prompt_s": 4.116,
+        "gen_tokens": 34,
+        "gen_s": 2.212,
+        "prompt_messages": 16,
+        "history_turns": 4
       },
-      "client_wall_s": 7.209,
-      "reply_audio_s": 5.39,
+      "client_wall_s": 7.613,
+      "reply_audio_s": 3.64,
       "reply_sr": 44100,
       "error": null
     },
@@ -226,13 +233,12 @@
           }
         }
       ],
-      "reply": "포장 주문 확인했습니다. 총 음료 네 잔, 디저트 한 개입니다.",
+      "reply": "네, 포장으로 주문 확인했어요. 금방 준비해 드릴게요.",
       "kinds": [
         "confirm"
       ],
       "order": [
-        "아이스 아메리카노 큰 사이즈 샷 한 개 추가 한 잔",
-        "아이스 아메리카노 큰 사이즈 두 잔",
+        "아이스 아메리카노 큰 사이즈 샷 추가 두 잔",
         "치즈케이크 한 개",
         "따뜻한 카페라떼 한 잔"
       ],
@@ -241,18 +247,20 @@
       "staff_called": false,
       "timings": {
         "stt_s": null,
-        "llm_s": 4.746,
-        "tts_s": 0.91,
-        "total_s": 5.657,
+        "llm_s": 5.424,
+        "tts_s": 1.42,
+        "total_s": 6.846,
         "audio_in_s": null,
-        "load_s": 0.014,
-        "prompt_tokens": 3729,
-        "prompt_s": 3.86,
+        "load_s": 0.084,
+        "prompt_tokens": 4760,
+        "prompt_s": 4.111,
         "gen_tokens": 18,
-        "gen_s": 0.836
+        "gen_s": 1.185,
+        "prompt_messages": 20,
+        "history_turns": 5
       },
-      "client_wall_s": 5.684,
-      "reply_audio_s": 5.38,
+      "client_wall_s": 6.866,
+      "reply_audio_s": 4.87,
       "reply_sr": 44100,
       "error": null
     },
@@ -265,35 +273,38 @@
           "name": "add_item",
           "arguments": {
             "menu": "아메리카노",
+            "quantity": 2,
             "size": "large",
             "temperature": "iced"
           }
         }
       ],
-      "reply": "아이스 아메리카노 큰 사이즈 한 잔 담았습니다.",
+      "reply": "네, 아이스 아메리카노 큰 사이즈 두 잔이요. 더 필요하신 거 있으세요?",
       "kinds": [
         "add"
       ],
       "order": [
-        "아이스 아메리카노 큰 사이즈 한 잔"
+        "아이스 아메리카노 큰 사이즈 두 잔"
       ],
       "confirmed": false,
       "dine_option": null,
       "staff_called": false,
       "timings": {
-        "stt_s": 3.27,
-        "llm_s": 5.079,
-        "tts_s": 0.703,
-        "total_s": 9.054,
+        "stt_s": 3.095,
+        "llm_s": 2.63,
+        "tts_s": 1.528,
+        "total_s": 7.259,
         "audio_in_s": 5.451,
-        "load_s": 0.012,
-        "prompt_tokens": 3501,
-        "prompt_s": 3.55,
-        "gen_tokens": 30,
-        "gen_s": 1.497
+        "load_s": 0.007,
+        "prompt_tokens": 4079,
+        "prompt_s": 0.589,
+        "gen_tokens": 34,
+        "gen_s": 1.988,
+        "prompt_messages": 3,
+        "history_turns": 1
       },
-      "client_wall_s": 9.062,
-      "reply_audio_s": 3.9,
+      "client_wall_s": 7.282,
+      "reply_audio_s": 5.79,
       "reply_sr": 44100,
       "error": null,
       "reference": "아이스 아메리카노 큰 걸로 두 잔이요"
@@ -304,46 +315,47 @@
       "transcript": "페리얼 좀 담아주세요.",
       "tool_calls": [
         {
-          "name": "ask_clarification",
+          "name": "call_staff",
           "arguments": {
-            "question": "죄송합니다, '페리얼'이 어떤 메뉴인지 잘 모르겠습니다. 메뉴판에 있는 메뉴 중 다시 말씀해 주시겠어요?",
-            "reason": "ambiguous"
+            "reason": "손님이 페리얼(또는 관련 서비스)을 요청함"
           }
         }
       ],
-      "reply": "죄송합니다, '페리얼'이 어떤 메뉴인지 잘 모르겠습니다. 메뉴판에 있는 메뉴 중 다시 말씀해 주시겠어요?",
+      "reply": "잠시만요, 직원 불러 드릴게요.",
       "kinds": [
-        "ask"
+        "staff"
       ],
       "order": [
-        "아이스 아메리카노 큰 사이즈 한 잔"
+        "아이스 아메리카노 큰 사이즈 두 잔"
       ],
       "confirmed": false,
       "dine_option": null,
-      "staff_called": false,
+      "staff_called": true,
       "timings": {
-        "stt_s": 3.074,
-        "llm_s": 6.644,
-        "tts_s": 1.128,
-        "total_s": 10.848,
+        "stt_s": 2.996,
+        "llm_s": 6.439,
+        "tts_s": 1.101,
+        "total_s": 10.54,
         "audio_in_s": 4.555,
-        "load_s": 0.011,
-        "prompt_tokens": 3544,
-        "prompt_s": 3.591,
-        "gen_tokens": 53,
-        "gen_s": 2.995
+        "load_s": 0.005,
+        "prompt_tokens": 4220,
+        "prompt_s": 3.932,
+        "gen_tokens": 28,
+        "gen_s": 2.473,
+        "prompt_messages": 7,
+        "history_turns": 2
       },
-      "client_wall_s": 10.891,
-      "reply_audio_s": 7.91,
+      "client_wall_s": 10.556,
+      "reply_audio_s": 2.79,
       "reply_sr": 44100,
       "error": null,
       "reference": "캐리어 좀 담아주세요"
     }
   ],
   "heami_preview": {
-    "tts_s": 0.123,
+    "tts_s": 0.186,
     "audio": [
-      4.24,
+      7.15,
       22050
     ],
     "voice": {

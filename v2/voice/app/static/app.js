@@ -51,7 +51,8 @@ function play(src) {
   player = new Audio(src); player.play().catch(e => say("자동 재생이 막혔어요: " + e.message));
 }
 
-const KIND_KO = { free_text: "도구 없이 말로 답함", fallback: "다시 말해 달라고 함", no_speech: "말소리 없음" };
+const KIND_KO = { inform: "메뉴 안내 (menu.json)", free_text: "도구 없이 말로 답함",
+                  free_text_blocked: "메뉴에 없는 이름이 있어 읽지 않음", fallback: "다시 말해 달라고 함", no_speech: "말소리 없음" };
 
 function show(d, t0) {
   $("heard").textContent = d.transcript || "(아무 말도 인식되지 않았어요)";
@@ -144,7 +145,12 @@ async function stopRec() {
   catch (e) { say("오류: " + e.message); } finally { setBusy(false); }
 }
 
+function bargeIn() {   // customer starts talking: stop the robot's voice at once
+  if (player && !player.paused) { player.pause(); player.currentTime = 0; }
+}
+
 function press() {
+  bargeIn();
   if ($("toggleMode").checked) { if (rec) stopRec(); else startRec(); return; }
   pressing = true; startRec();
 }

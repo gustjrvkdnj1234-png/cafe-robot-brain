@@ -19,15 +19,33 @@ APP = Path(__file__).resolve().parent
 VOICE = APP.parent
 ROOT = VOICE.parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from bench_latency import ORDER_SEP, build_messages  # noqa: E402  (v1 Step 6c deploy layout)
-from cafe_common import build_system_prompt  # noqa: E402
-from cafe_common import load_tools  # noqa: E402
+from bench_latency import ORDER_SEP  # noqa: E402  (v1 Step 6c deploy layout separator)
+from cafe_common import build_system_prompt, load_tools  # noqa: E402
 from run_exam import MODE_OPTIONS, OPTIONS, tool_calls_of  # noqa: E402
+
+sys.path.insert(0, str(APP / "demo"))
+import demo_config  # noqa: E402  (demo-only prompt + tools; v1 files untouched)
 
 THREADS = 8
 OLLAMA = "http://127.0.0.1:11434"
 MODEL = "song/gemma4-26b-cafe-64e"
-LLM_OPTIONS = {**OPTIONS, **MODE_OPTIONS["igpu"], "num_ctx": 8192, "num_predict": 512}  # same as the v1 exams
+# same request options as the v1 exams; mode (iGPU / CPU = num_gpu 0) and num_ctx can be switched at run time.
+# Default CPU-only: in the 2026-11-24 speed test it was faster (llm_s median 4.93 s vs 5.77 s on iGPU) with the
+# same ordering results; num_ctx 4096 truncates the ~4.1k-token demo prompt, so it stays 8192.
+RUN = {"config": "demo", "mode": "cpu", "num_ctx": 8192, "num_predict": 512}
+
+
+def llm_options(**over) -> dict:
+    return {**OPTIONS, **MODE_OPTIONS[RUN["mode"]], "num_ctx": RUN["num_ctx"], "num_predict": RUN["num_predict"], **over}
+
+
+def system_prompt(order_state) -> str:
+    return demo_config.system_prompt(order_state) if RUN["config"] == "demo" else build_system_prompt(order_state)
+
+
+def tools() -> list:
+    return demo_config.tools() if RUN["config"] == "demo" else load_tools()
+
 KEEP_ALIVE = "60m"
 ST3 = VOICE / "models" / "supertonic3-int8" / "sherpa-onnx-supertonic-3-tts-int8-2026-05-11"
 FW_MEDIUM = VOICE / "models" / "fw-medium"
@@ -69,7 +87,7 @@ class STT:
 def split_prompt(order_state: list) -> tuple[dict, dict]:
     """v1 system prompt split exactly like bench_latency's deploy layout:
     fixed head (rules + menu, never changes) and the '[현재 주문 내역]' system message."""
-    head, tail = build_system_prompt(order_state).split(ORDER_SEP)
+    head, tail = system_prompt(order_state).split(ORDER_SEP)
     return {"role": "system", "content": head}, {"role": "system", "content": "[현재 주문 내역]\n" + tail}
 
 
@@ -80,10 +98,10 @@ def build_prompt(layout: str, order_state: list, turns: list, text: str) -> list
                           the user turn and the assistant/tool messages, then the current state and
                           the new user turn. Nothing earlier is rewritten, so the cached prefix grows."""
     user = {"role": "user", "content": text}
-    if layout == "deploy":
-        flat = [m for t in turns for m in [t["user"]] + t["assistant"]]
-        return build_messages("deploy", order_state, flat + [user])
     head, state_msg = split_prompt(order_state)
+    if layout == "deploy":   # same as bench_latency.build_messages("deploy"), with the active config's prompt
+        flat = [m for t in turns for m in [t["user"]] + t["assistant"]]
+        return [head] + flat + [state_msg, user]
     msgs = [head]
     for t in turns:
         msgs += [t["state_msg"], t["user"]] + t["assistant"]
@@ -92,12 +110,9 @@ def build_prompt(layout: str, order_state: list, turns: list, text: str) -> list
 
 # ---------------------------------------------------------------- LLM
 class LLM:
-    def __init__(self):
-        self.tools = load_tools()
-
     def chat(self, msgs: list) -> dict:
         payload = {"model": MODEL, "messages": msgs, "stream": False, "think": False, "keep_alive": KEEP_ALIVE,
-                   "tools": self.tools, "options": LLM_OPTIONS}
+                   "tools": tools(), "options": llm_options()}
         t0 = time.perf_counter()
         r = requests.post(f"{OLLAMA}/api/chat", json=payload, timeout=600)
         wall = time.perf_counter() - t0
@@ -116,8 +131,8 @@ class LLM:
         msgs = build_prompt("append", [], [], "안녕하세요")   # same text as deploy for an empty history
         t0 = time.perf_counter()
         r = requests.post(f"{OLLAMA}/api/chat", json={"model": MODEL, "messages": msgs, "stream": False, "think": False,
-                                                      "keep_alive": KEEP_ALIVE, "tools": self.tools,
-                                                      "options": {**LLM_OPTIONS, "num_predict": 1}}, timeout=900)
+                                                      "keep_alive": KEEP_ALIVE, "tools": tools(),
+                                                      "options": llm_options(num_predict=1)}, timeout=900)
         r.raise_for_status()
         wall = round(time.perf_counter() - t0, 2)
         ps = requests.get(f"{OLLAMA}/api/ps", timeout=10).json().get("models", [])

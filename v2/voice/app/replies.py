@@ -1,8 +1,9 @@
 """Reply wording for the voice demo (templates in replies.json) and order-state updates.
 
 Tool calls are applied in order with the v1 live-page logic (scripts/robot_ui.apply_calls).
-Spoken replies never read item numbers; an item is named by the shortest description that is
-unique in the current order ("바닐라라떼" -> "아이스 바닐라라떼" -> "큰 사이즈 아이스 ..." -> ordinal).
+Replies are short. Item numbers are never read aloud; when an item must be named it is called by the
+shortest description that is unique in the order ("바닐라라떼" -> "아이스 바닐라라떼" -> ... -> ordinal).
+inform answers and the free-text guard come from demo/demo_config.py (menu.json only).
 """
 from __future__ import annotations
 
@@ -13,14 +14,18 @@ from pathlib import Path
 APP = Path(__file__).resolve().parent
 ROOT = APP.parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(APP / "demo"))
 from cafe_common import defaults, items_by_name, normalize_add  # noqa: E402
 from robot_ui import apply_calls  # noqa: E402
+import demo_config  # noqa: E402
+from demo_config import topic  # noqa: E402
 
 TEMPLATES = APP / "replies.json"
 _cache = {"mtime": None, "t": None}
 
 NATIVE = {1: "한", 2: "두", 3: "세", 4: "네", 5: "다섯", 6: "여섯", 7: "일곱", 8: "여덟", 9: "아홉", 10: "열",
           11: "열한", 12: "열두", 13: "열세", 14: "열네", 15: "열다섯", 20: "스무"}
+READ_ORDER = ("temp", "menu", "size", "shots", "sweet", "milk")
 
 
 def T() -> dict:
@@ -31,22 +36,21 @@ def T() -> dict:
     return _cache["t"]
 
 
-# ---------------------------------------------------------------- Korean helpers
 def _final(word: str):
     ch = str(word).strip()[-1:]
     if "가" <= ch <= "힣":
-        return (ord(ch) - 0xAC00) % 28   # 0 = no final consonant, 8 = ㄹ
+        return (ord(ch) - 0xAC00) % 28
     return None
-
-
-def topic(word: str) -> str:
-    f = _final(word)
-    return word + ("는" if f == 0 else "은" if f else "은(는)")
 
 
 def ro(word: str) -> str:
     f = _final(word)
     return word + ("로" if f in (0, 8) else "으로" if f else "(으)로")
+
+
+def iyo(word: str) -> str:
+    f = _final(word)
+    return word + ("이요" if f else "요")
 
 
 def _num(v, default=0.0):
@@ -82,12 +86,12 @@ def _amount(v) -> str:
 
 # ---------------------------------------------------------------- describing items
 def _words(args: dict) -> dict:
-    """Option words for one order line (normalized), in reading order."""
     w = T()["item_words"]
     a = normalize_add(args)
     item = items_by_name().get(a["menu"])
-    out = {"size": "", "shots": "", "sweet": "", "milk": "", "temp": "", "menu": str(a["menu"]),
-           "qty": count(a.get("quantity") or 1, unit_of(a["menu"]))}
+    out = {k: "" for k in READ_ORDER}
+    out["menu"] = str(a["menu"])
+    out["qty"] = count(a.get("quantity") or 1, unit_of(a["menu"]))
     if a.get("size") == "large":
         out["size"] = w["size_large"]
     if _num(a.get("shots_delta")):
@@ -106,22 +110,21 @@ def _join(parts) -> str:
 
 
 def describe(args: dict, with_count: bool = True) -> str:
-    """'큰 사이즈 샷을 하나 추가한 아이스 아메리카노 두 잔'."""
+    """'아이스 아메리카노 큰 사이즈 반샷 두 잔'."""
     w = _words(args)
-    return _join([w["size"], w["shots"], w["sweet"], w["milk"], w["temp"], w["menu"], w["qty"] if with_count else ""])
+    return _join([w[k] for k in READ_ORDER] + ([w["qty"]] if with_count else []))
 
 
 def name_in_order(state: list, i: int) -> str:
     """Shortest description of line i (0-based) that no other line in the order shares."""
-    levels = [("menu",), ("temp", "menu"), ("size", "temp", "menu"),
-              ("size", "shots", "sweet", "milk", "temp", "menu")]
+    levels = [("menu",), ("temp", "menu"), ("temp", "menu", "size"), READ_ORDER]
     words = [_words(x) for x in state]
     for keys in levels:
         mine = _join(words[i][k] for k in keys)
-        if sum(1 for j, w in enumerate(words) if _join(w[k] for k in keys) == mine) == 1:
+        if sum(1 for w in words if _join(w[k] for k in keys) == mine) == 1:
             return mine
-    full = _join(words[i][k] for k in levels[-1])
-    same = [j for j, w in enumerate(words) if _join(w[k] for k in levels[-1]) == full]
+    full = _join(words[i][k] for k in READ_ORDER)
+    same = [j for j, w in enumerate(words) if _join(w[k] for k in READ_ORDER) == full]
     ords = T()["item_words"]["ordinal"]
     k = same.index(i)
     return f"{ords[k] if k < len(ords) else str(k + 1) + ' 번째'} {full}"
@@ -143,10 +146,10 @@ def changes_text(ch: dict, menu_before) -> str:
         elif k in c and isinstance(c[k], dict) and str(v) in c[k]:
             pair = c[k][str(v)]
         else:
-            pair = [f"{k}을(를) {v}(으)로 바꾸고", f"{k}을(를) {v}(으)로 바꿔"]
+            pair = [f"{k} {v}(으)로 하고", f"{k} {v}(으)로 할게요"]
         forms.append(pair)
     if not forms:
-        return "그대로 해"
+        return "그대로 할게요"
     return " ".join([p[0] for p in forms[:-1]] + [forms[-1][1]])
 
 
@@ -158,20 +161,22 @@ def _index(a):
         return None
 
 
-def build_reply(calls: list, content: str, state: list) -> dict:
+def build_reply(calls: list, content: str, state: list, first_item_possible: bool = False) -> dict:
     """Apply tool calls and build the spoken reply.
 
+    first_item_possible: this customer has not ordered anything yet in this session, so the
+    one-time "더 필요하신 거 있으세요?" may follow the first item.
     Returns state, spoken, kinds, confirmed, dine_option, staff_reason, tool_results (one per call,
-    for the chat-format history) and legacy_history (the old exam-style text, for comparisons)."""
+    for the chat-format history), blocked (guarded free text) and legacy_history (old plain text)."""
     t = T()
-    sents, kinds, results = [], [], []   # sents: (kind, text)
+    sents, kinds, results = [], [], []
     adds = []
-    confirmed, dine, staff_reason = False, None, None
+    confirmed, dine, staff_reason, blocked = False, None, None, None
     cur = [dict(x) for x in state]
 
     def flush_adds():
         if adds:
-            sents.append(("add", t["add"].format(items=", ".join(adds))))
+            sents.append(("add", t["add"].format(items_iyo=iyo(", ".join(adds)))))
             adds.clear()
 
     for c in calls or []:
@@ -191,17 +196,24 @@ def build_reply(calls: list, content: str, state: list) -> dict:
                 results.append({"ok": False, "error": f"item_index {a.get('item_index')} not in the current order"})
                 continue
             target = topic(name_in_order(cur, i - 1))
+            several = len(cur) > 1
             if name == "modify_item":
                 kinds.append("modify")
                 ch = a.get("changes") if isinstance(a.get("changes"), dict) else {}
-                sents.append(("modify", t["modify"].format(target=target, changes=changes_text(ch, cur[i - 1].get("menu")))))
+                text = changes_text(ch, cur[i - 1].get("menu"))
+                sents.append(("modify", t["modify_target" if several else "modify"].format(target=target, changes=text)))
                 cur = apply_calls(cur, [c])
                 results.append({"ok": True, "item_index": i, "now": describe(cur[i - 1])})
             else:
                 kinds.append("remove")
-                sents.append(("remove", t["remove"].format(target=target)))
+                sents.append(("remove", t["remove_target" if several else "remove"].format(target=target)))
                 results.append({"ok": True, "removed": describe(cur[i - 1])})
                 cur = apply_calls(cur, [c])
+        elif name == "inform":
+            kinds.append("inform")
+            answer = demo_config.inform_answer(str(a.get("topic") or ""), a.get("item"))
+            sents.append(("inform", answer))
+            results.append({"ok": True, "told_customer": answer})
         elif name == "ask_clarification":
             kinds.append("ask")
             q = str(a.get("question") or "").strip()
@@ -230,13 +242,19 @@ def build_reply(calls: list, content: str, state: list) -> dict:
     if not sents:
         text = (content or "").strip()
         if text:
-            kinds.append("free_text")          # model answered in plain text, no tool call
-            sents.append(("free_text", text))
+            bad = demo_config.unknown_terms(text)
+            if bad:
+                kinds.append("free_text_blocked")      # names things that are not on the menu
+                blocked = {"text": text, "unknown_terms": bad}
+                sents.append(("blocked", t["free_text_blocked"]))
+            else:
+                kinds.append("free_text")              # plain-text answer, menu-safe
+                sents.append(("free_text", text))
         else:
             kinds.append("fallback")
             sents.append(("fallback", t["fallback"]))
-    if sents[-1][0] in ("add", "modify", "remove"):
-        sents.append(("followup", t["followup"]))
+    if first_item_possible and "add" in kinds and sents[-1][0] == "add":
+        sents.append(("followup", t["first_item_followup"]))
     spoken = []
     for k, (_, s) in enumerate(sents):
         if k > 0:
@@ -246,7 +264,7 @@ def build_reply(calls: list, content: str, state: list) -> dict:
                     break
         spoken.append(s)
     return {"state": cur, "spoken": " ".join(spoken), "kinds": kinds, "confirmed": confirmed, "dine_option": dine,
-            "staff_reason": staff_reason, "tool_results": results,
+            "staff_reason": staff_reason, "tool_results": results, "blocked": blocked,
             "legacy_history": legacy_history(calls, content, state)}
 
 

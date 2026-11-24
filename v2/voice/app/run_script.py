@@ -17,8 +17,12 @@ import requests
 VOICE = Path(__file__).resolve().parents[1]
 ROOT = VOICE.parents[1]
 OLLAMA_LOG = ROOT / "logs" / "ollama_serve_voice.log"
-SCRIPT = ["커피 한 잔 주세요", "아메리카노요", "아이스로요", "디저트 뭐 있어요?", "아아 사이즈 뭐 있어요?",
-          "아아 두잔", "카페라떼 반샷만요", "주문할게요"]
+SCRIPTS = {
+    "s8": ["커피 한 잔 주세요", "아메리카노요", "아이스로요", "디저트 뭐 있어요?", "아아 사이즈 뭐 있어요?",
+           "아아 두잔", "카페라떼 반샷만요", "주문할게요"],
+    "s9": ["커피 한 잔 주세요", "아메리카노요", "아이스로요", "디저트 뭐 있어요?", "마카롱 있어요?",
+           "아아 사이즈 뭐 있어요?", "큰 걸로 바꿔 주세요", "카페라떼 반샷만요", "주문할게요"],
+}
 
 
 def log_tasks(offset: int) -> list:
@@ -46,6 +50,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--label", required=True)
     ap.add_argument("--port", type=int, default=8770)
+    ap.add_argument("--script", choices=sorted(SCRIPTS), default="s8")
+    ap.add_argument("--warmup", action="store_true", help="one throwaway turn first (e.g. after a mode switch)")
     ap.add_argument("--settings", help='JSON for /api/settings before the run, e.g. {"history":"text","layout":"deploy","max_turns":0}')
     a = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")
@@ -55,10 +61,14 @@ def main():
     h = requests.get(f"{base}/api/health", timeout=5).json()
     if not h.get("ready"):
         sys.exit(f"app not ready: {h}")
+    if a.warmup:
+        w = requests.post(f"{base}/api/new_session", json={}, timeout=5).json()["session"]
+        requests.post(f"{base}/api/turn/text", json={"session": w, "text": "안녕하세요"}, timeout=900)
+        requests.post(f"{base}/api/new_session", json={"previous": w}, timeout=5)
     offset = OLLAMA_LOG.stat().st_size
     sess = requests.post(f"{base}/api/new_session", json={}, timeout=5).json()["session"]
     rows = []
-    for text in SCRIPT:
+    for text in SCRIPTS[a.script]:
         t = time.perf_counter()
         d = requests.post(f"{base}/api/turn/text", json={"session": sess, "text": text}, timeout=600).json()
         rows.append({"input": text, "tool_calls": d["tool_calls"], "content": d["content"], "reply": d["reply"],
@@ -77,21 +87,23 @@ def main():
     else:
         print(f"note: {len(tasks)} llama-server tasks for {len(rows)} turns; cache columns left empty")
     free = sum("free_text" in r["kinds"] for r in rows)
-    res = {"label": a.label, "settings": h.get("settings"), "free_text_turns": free, "turns": rows}
+    h = requests.get(f"{base}/api/health", timeout=5).json()
+    res = {"label": a.label, "script": a.script, "settings": h.get("settings"), "free_text_turns": free, "turns": rows}
     out = VOICE / "results"
     (out / f"app_script_{a.label}.json").write_text(json.dumps(res, ensure_ascii=False, indent=2), encoding="utf-8")
     s = h.get("settings") or {}
     L = [f"# 대화 스크립트 ({a.label})", "",
          f"- 설정: 기록 형식 `{s.get('history')}`, 배치 `{s.get('layout')}`, 기록 상한 {s.get('max_turns')}턴"
-         f"(넘으면 {s.get('trim_to')}턴으로 줄임)", f"- 도구 없이 말로만 답한 턴: {free}/{len(rows)}", "",
-         "| # | 손님 | 도구 호출 | content | 답 | 프롬프트 토큰 (재사용 / 새로 계산) | prompt_s | llm_s |",
-         "|---|---|---|---|---|---|---:|---:|"]
+         f"(넘으면 {s.get('trim_to')}턴으로 줄임), 설정 `{s.get('config')}`, 모드 `{s.get('mode')}`, num_ctx {s.get('num_ctx')}",
+         f"- 도구 없이 말로만 답한 턴: {free}/{len(rows)}", "",
+         "| # | 손님 | 도구 호출 | content | 답 | 프롬프트 토큰 (재사용 / 새로 계산) | prompt_s | gen_s | llm_s |",
+         "|---|---|---|---|---|---|---:|---:|---:|"]
     for i, r in enumerate(rows, 1):
         calls = "; ".join(f"{c['name']}({json.dumps(c['arguments'], ensure_ascii=False)})" for c in r["tool_calls"]) or "(없음)"
         c = r.get("cache")
         cache = f"{c['n_tokens']} ({c['reused']} / {c['evaluated']})" if c else str(r["timings"].get("prompt_tokens"))
         L.append(f"| {i} | {r['input']} | `{calls}` | {r['content'].strip().replace(chr(10), ' ') or '-'} | {r['reply']} | "
-                 f"{cache} | {r['timings'].get('prompt_s')} | {r['timings'].get('llm_s')} |")
+                 f"{cache} | {r['timings'].get('prompt_s')} | {r['timings'].get('gen_s')} | {r['timings'].get('llm_s')} |")
     (out / f"app_script_{a.label}.md").write_text("\n".join(L) + "\n", encoding="utf-8")
     print("\n".join(L[:4]))
 

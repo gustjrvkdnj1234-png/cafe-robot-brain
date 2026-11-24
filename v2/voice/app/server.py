@@ -100,12 +100,13 @@ app = FastAPI(lifespan=lifespan)
 # Conversation settings (command-line flags; defaults = the fixed behaviour).
 SETTINGS = {"history": "tools",   # tools = assistant tool_calls + tool result messages; text = old plain text
             "layout": "append",   # append = append-only prompt; deploy = v1 6c layout (first app version)
-            "max_turns": 6,       # keep at most this many past turns (0 = no cap) ...
-            "trim_to": 3}         # ... and when exceeded cut back to this many (so the cache is rebuilt rarely)
+            "max_turns": 20,      # keep at most this many past turns (0 = no cap) ...
+            "trim_to": 10}        # ... and when exceeded cut back to this many. Trimming forces the history to be
+                                  # recomputed (404 tokens = 10.9 s on CPU at 6->3), so the cap is set above a usual order.
 
 
 def new_session() -> dict:
-    return {"state": [], "turns": [], "confirmed": False, "dine_option": None, "staff": [], "n": 0}
+    return {"state": [], "turns": [], "confirmed": False, "dine_option": None, "staff": [], "n": 0, "ordered": False}
 
 
 def assistant_messages(calls: list, r: dict) -> list:
@@ -161,7 +162,7 @@ def run_turn(session_id: str, text: str, t_start: float, input_kind: str, stt_s:
     if not text.strip():
         calls, content, llm_s = [], "", None
         r = {"state": s["state"], "spoken": replies.T()["no_speech"], "kinds": ["no_speech"], "confirmed": False,
-             "dine_option": None, "staff_reason": None, "tool_results": [], "legacy_history": ""}
+             "dine_option": None, "staff_reason": None, "tool_results": [], "legacy_history": "", "blocked": None}
     else:
         msgs = engines.build_prompt(SETTINGS["layout"], s["state"], s["turns"], text)
         n_msgs = len(msgs)
@@ -172,7 +173,9 @@ def run_turn(session_id: str, text: str, t_start: float, input_kind: str, stt_s:
             calls, content, llm_s = llm_info["tool_calls"], llm_info["content"], llm_info["wall_s"]
         except Exception as e:  # noqa: BLE001
             calls, content, llm_s, error = [], "", None, f"LLM: {e}"
-        r = replies.build_reply(calls, content, s["state"])
+        r = replies.build_reply(calls, content, s["state"], first_item_possible=not s["ordered"])
+        if "add" in r["kinds"]:
+            s["ordered"] = True
         s["turns"].append({"state_msg": state_msg, "user": {"role": "user", "content": text},
                            "assistant": assistant_messages(calls, r)})
         if SETTINGS["max_turns"] and len(s["turns"]) > SETTINGS["max_turns"]:
@@ -204,6 +207,7 @@ def run_turn(session_id: str, text: str, t_start: float, input_kind: str, stt_s:
     log_turn({"time": datetime.now().isoformat(timespec="seconds"),
               **{k: v for k, v in out.items() if k not in ("order_state",)},
               "history_messages": s["turns"][-1]["assistant"] if text.strip() and s["turns"] else None,
+              "blocked_free_text": r.get("blocked"), "run": dict(engines.RUN),
               "done_reason": llm_info and llm_info.get("done_reason")})
     out["audio"] = audio
     out["tts_sample_rate"] = sample_rate(audio)
@@ -229,7 +233,7 @@ def health():
         llm_up = requests.get(f"{engines.OLLAMA}/api/version", timeout=2).ok
     except requests.RequestException:
         pass
-    return {**STATUS, "ollama_up": llm_up, "model": engines.MODEL, "settings": SETTINGS,
+    return {**STATUS, "ollama_up": llm_up, "model": engines.MODEL, "settings": {**SETTINGS, **engines.RUN},
             "ready": STATUS["stt"] and STATUS["tts"] and STATUS["llm"],
             "speakers": getattr(E.get("tts"), "num_speakers", 10)}
 
@@ -259,7 +263,13 @@ async def set_settings(req: Request):
         for k in ("max_turns", "trim_to"):
             if k in body:
                 SETTINGS[k] = max(0, int(body[k]))
-    return dict(SETTINGS)
+        if body.get("config") in ("demo", "v1"):
+            engines.RUN["config"] = body["config"]
+        if body.get("mode") in ("igpu", "cpu"):
+            engines.RUN["mode"] = body["mode"]
+        if "num_ctx" in body:
+            engines.RUN["num_ctx"] = int(body["num_ctx"])
+    return {**SETTINGS, **engines.RUN}
 
 
 @app.post("/api/new_session")
@@ -323,7 +333,12 @@ def main():
                     help="append = append-only prompt (default); deploy = v1 6c layout (first version)")
     ap.add_argument("--max-turns", type=int, default=SETTINGS["max_turns"], help="0 = keep all past turns")
     ap.add_argument("--trim-to", type=int, default=SETTINGS["trim_to"])
+    ap.add_argument("--config", choices=["demo", "v1"], default=engines.RUN["config"],
+                    help="demo = demo prompt + inform tool (default); v1 = experiment prompt/tools")
+    ap.add_argument("--mode", choices=["igpu", "cpu"], default=engines.RUN["mode"], help="cpu = num_gpu 0")
+    ap.add_argument("--num-ctx", type=int, default=engines.RUN["num_ctx"])
     a = ap.parse_args()
+    engines.RUN.update(config=a.config, mode=a.mode, num_ctx=a.num_ctx)
     SETTINGS.update(history=a.history, layout=a.layout, max_turns=a.max_turns, trim_to=min(a.trim_to, a.max_turns or a.trim_to))
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")

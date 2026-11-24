@@ -1,0 +1,22 @@
+{
+  "type": "function",
+  "function": {
+    "name": "inform",
+    "description": "Answer a customer's QUESTION about the menu or options without ordering anything: what a category offers, sizes, temperatures, available options, whether something is offered, or details of one item. Only choose the topic and item; the app builds the answer from the menu. Never list menu items or options yourself.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "topic": {
+          "type": "string",
+          "enum": ["category_items", "sizes", "temperatures", "options", "not_offered", "item_detail"],
+          "description": "category_items = what a category (coffee/latte/tea/ade/dessert) has; sizes / temperatures / options = for one item (or in general); not_offered = whether something the customer named is offered (e.g. macaron, decaf); item_detail = about one menu item."
+        },
+        "item": {
+          "type": "string",
+          "description": "The menu item, the category, or the exact thing the customer asked about (in Korean). Omit for general questions."
+        }
+      },
+      "required": ["topic"]
+    }
+  }
+}

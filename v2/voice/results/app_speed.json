@@ -1,0 +1,54 @@
+{
+  "igpu_8192": {
+    "runs": 3,
+    "llm_s": 5.765499999999999,
+    "prompt_s": 4.6155,
+    "gen_s": 1.071,
+    "per_run_llm_s": [
+      5.821,
+      5.8125,
+      5.6925
+    ],
+    "max_prompt_tokens": 4821,
+    "same_tools_all_runs": true
+  },
+  "igpu_4096": {
+    "runs": 3,
+    "llm_s": 11.28,
+    "prompt_s": 9.923,
+    "gen_s": 1.0495,
+    "per_run_llm_s": [
+      11.1815,
+      11.28,
+      11.45
+    ],
+    "max_prompt_tokens": 4088,
+    "same_tools_all_runs": true
+  },
+  "cpu_8192": {
+    "runs": 3,
+    "llm_s": 4.931,
+    "prompt_s": 3.207,
+    "gen_s": 1.5470000000000002,
+    "per_run_llm_s": [
+      4.9405,
+      4.952999999999999,
+      4.9085
+    ],
+    "max_prompt_tokens": 4821,
+    "same_tools_all_runs": true
+  },
+  "cpu_4096": {
+    "runs": 3,
+    "llm_s": 41.5155,
+    "prompt_s": 39.8095,
+    "gen_s": 1.3995,
+    "per_run_llm_s": [
+      41.574,
+      41.625,
+      41.0625
+    ],
+    "max_prompt_tokens": 4088,
+    "same_tools_all_runs": true
+  }
+}
