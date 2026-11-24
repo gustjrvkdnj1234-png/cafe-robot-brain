@@ -19,7 +19,8 @@ APP = Path(__file__).resolve().parent
 VOICE = APP.parent
 ROOT = VOICE.parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from bench_latency import build_messages  # noqa: E402  (v1 Step 6c deploy layout)
+from bench_latency import ORDER_SEP, build_messages  # noqa: E402  (v1 Step 6c deploy layout)
+from cafe_common import build_system_prompt  # noqa: E402
 from cafe_common import load_tools  # noqa: E402
 from run_exam import MODE_OPTIONS, OPTIONS, tool_calls_of  # noqa: E402
 
@@ -64,13 +65,37 @@ class STT:
         return (np.concatenate(out).astype(np.float32) / 32768.0)
 
 
+# ---------------------------------------------------------------- prompt layout
+def split_prompt(order_state: list) -> tuple[dict, dict]:
+    """v1 system prompt split exactly like bench_latency's deploy layout:
+    fixed head (rules + menu, never changes) and the '[현재 주문 내역]' system message."""
+    head, tail = build_system_prompt(order_state).split(ORDER_SEP)
+    return {"role": "system", "content": head}, {"role": "system", "content": "[현재 주문 내역]\n" + tail}
+
+
+def build_prompt(layout: str, order_state: list, turns: list, text: str) -> list:
+    """layout 'deploy' = v1 6c (first app version): one order-state message, moved before the newest
+                          user turn every time (earlier messages shift -> cache diverges there).
+       layout 'append' = append-only: system head, then for every past turn the order state it saw,
+                          the user turn and the assistant/tool messages, then the current state and
+                          the new user turn. Nothing earlier is rewritten, so the cached prefix grows."""
+    user = {"role": "user", "content": text}
+    if layout == "deploy":
+        flat = [m for t in turns for m in [t["user"]] + t["assistant"]]
+        return build_messages("deploy", order_state, flat + [user])
+    head, state_msg = split_prompt(order_state)
+    msgs = [head]
+    for t in turns:
+        msgs += [t["state_msg"], t["user"]] + t["assistant"]
+    return msgs + [state_msg, user]
+
+
 # ---------------------------------------------------------------- LLM
 class LLM:
     def __init__(self):
         self.tools = load_tools()
 
-    def chat(self, order_state: list, history: list, text: str) -> dict:
-        msgs = build_messages("deploy", order_state, history + [{"role": "user", "content": text}])
+    def chat(self, msgs: list) -> dict:
         payload = {"model": MODEL, "messages": msgs, "stream": False, "think": False, "keep_alive": KEEP_ALIVE,
                    "tools": self.tools, "options": LLM_OPTIONS}
         t0 = time.perf_counter()
@@ -88,7 +113,7 @@ class LLM:
 
     def warmup(self) -> dict:
         """Same as v1 bench_latency: deploy layout, empty order, one token."""
-        msgs = build_messages("deploy", None, [{"role": "user", "content": "안녕하세요"}])
+        msgs = build_prompt("append", [], [], "안녕하세요")   # same text as deploy for an empty history
         t0 = time.perf_counter()
         r = requests.post(f"{OLLAMA}/api/chat", json={"model": MODEL, "messages": msgs, "stream": False, "think": False,
                                                       "keep_alive": KEEP_ALIVE, "tools": self.tools,

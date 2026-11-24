@@ -97,8 +97,30 @@ app = FastAPI(lifespan=lifespan)
 
 
 # ---------------------------------------------------------------- core
+# Conversation settings (command-line flags; defaults = the fixed behaviour).
+SETTINGS = {"history": "tools",   # tools = assistant tool_calls + tool result messages; text = old plain text
+            "layout": "append",   # append = append-only prompt; deploy = v1 6c layout (first app version)
+            "max_turns": 6,       # keep at most this many past turns (0 = no cap) ...
+            "trim_to": 3}         # ... and when exceeded cut back to this many (so the cache is rebuilt rarely)
+
+
 def new_session() -> dict:
-    return {"state": [], "history": [], "confirmed": False, "dine_option": None, "staff": [], "turns": 0}
+    return {"state": [], "turns": [], "confirmed": False, "dine_option": None, "staff": [], "n": 0}
+
+
+def assistant_messages(calls: list, r: dict) -> list:
+    """The finished turn as chat messages for the next request."""
+    if SETTINGS["history"] == "text":
+        return [{"role": "assistant", "content": r["legacy_history"]}]
+    if not calls:
+        return [{"role": "assistant", "content": r["spoken"]}]
+    msgs = [{"role": "assistant", "content": "",
+             "tool_calls": [{"function": {"name": c["name"], "arguments": c.get("arguments") or {}}} for c in calls]}]
+    for k, (c, res) in enumerate(zip(calls, r["tool_results"])):
+        if k == len(calls) - 1:
+            res = {**res, "robot_said": r["spoken"]}
+        msgs.append({"role": "tool", "tool_name": c["name"], "content": json.dumps(res, ensure_ascii=False)})
+    return msgs
 
 
 def get_session(sid: str) -> dict:
@@ -116,6 +138,15 @@ def synthesize(text: str, voice: dict) -> tuple[bytes, float]:
     return data, time.perf_counter() - t
 
 
+def sample_rate(data_url):
+    """Sample rate of the WAV sent to the browser (no resampling in the app)."""
+    if not data_url:
+        return None
+    import io
+    import soundfile as sf
+    return sf.info(io.BytesIO(base64.b64decode(data_url.split(",", 1)[1]))).samplerate
+
+
 def log_turn(rec: dict):
     LOGS.mkdir(exist_ok=True)
     with open(LOGS / f"turns_{datetime.now():%Y%m%d}.jsonl", "a", encoding="utf-8") as f:
@@ -126,26 +157,32 @@ def run_turn(session_id: str, text: str, t_start: float, input_kind: str, stt_s:
              audio_s: float | None) -> dict:
     s = get_session(session_id)
     voice = load_voice()
-    llm_info, error = None, None
+    llm_info, error, n_msgs = None, None, None
     if not text.strip():
-        calls, content = [], ""
-        llm_s = None
+        calls, content, llm_s = [], "", None
+        r = {"state": s["state"], "spoken": replies.T()["no_speech"], "kinds": ["no_speech"], "confirmed": False,
+             "dine_option": None, "staff_reason": None, "tool_results": [], "legacy_history": ""}
     else:
+        msgs = engines.build_prompt(SETTINGS["layout"], s["state"], s["turns"], text)
+        n_msgs = len(msgs)
+        state_msg = engines.split_prompt(s["state"])[1]
         try:
-            llm_info = E["llm"].chat(s["state"], s["history"], text)
+            llm_info = E["llm"].chat(msgs)
             STATUS["llm"] = True
             calls, content, llm_s = llm_info["tool_calls"], llm_info["content"], llm_info["wall_s"]
         except Exception as e:  # noqa: BLE001
             calls, content, llm_s, error = [], "", None, f"LLM: {e}"
-    r = replies.build_reply(calls, s["state"])
+        r = replies.build_reply(calls, content, s["state"])
+        s["turns"].append({"state_msg": state_msg, "user": {"role": "user", "content": text},
+                           "assistant": assistant_messages(calls, r)})
+        if SETTINGS["max_turns"] and len(s["turns"]) > SETTINGS["max_turns"]:
+            s["turns"] = s["turns"][-SETTINGS["trim_to"]:]
     s["state"] = r["state"]
     if r["confirmed"]:
         s["confirmed"], s["dine_option"] = True, r["dine_option"]
     if r["staff_reason"]:
         s["staff"].append(r["staff_reason"])
-    if text.strip():
-        s["history"] += [{"role": "user", "content": text}, {"role": "assistant", "content": r["history"]}]
-    s["turns"] += 1
+    s["n"] += 1
     audio, tts_s = None, None
     try:
         wav, tts_s = synthesize(r["spoken"], voice)
@@ -157,15 +194,19 @@ def run_turn(session_id: str, text: str, t_start: float, input_kind: str, stt_s:
     if llm_info:
         timings.update({k: llm_info[k] for k in ("load_s", "prompt_tokens", "prompt_s", "gen_tokens", "gen_s")})
     timings = {k: (round(v, 3) if isinstance(v, float) else v) for k, v in timings.items()}
-    out = {"session": session_id, "turn": s["turns"], "input": input_kind, "transcript": text,
+    timings["prompt_messages"] = n_msgs
+    timings["history_turns"] = len(s["turns"])
+    out = {"session": session_id, "turn": s["n"], "input": input_kind, "transcript": text, "settings": dict(SETTINGS),
            "tool_calls": calls, "content": content, "reply": r["spoken"], "kinds": r["kinds"],
            "order": replies.order_lines(s["state"]), "order_state": s["state"], "confirmed": s["confirmed"],
            "dine_option": s["dine_option"], "staff_called": bool(r["staff_reason"]),
            "staff_reason": r["staff_reason"], "timings": timings, "voice": voice, "error": error}
     log_turn({"time": datetime.now().isoformat(timespec="seconds"),
-              **{k: v for k, v in out.items() if k not in ("order_state",)}, "history_reply": r["history"],
+              **{k: v for k, v in out.items() if k not in ("order_state",)},
+              "history_messages": s["turns"][-1]["assistant"] if text.strip() and s["turns"] else None,
               "done_reason": llm_info and llm_info.get("done_reason")})
     out["audio"] = audio
+    out["tts_sample_rate"] = sample_rate(audio)
     return out
 
 
@@ -175,6 +216,12 @@ def index():
     return FileResponse(APP / "static" / "index.html", headers={"Cache-Control": "no-store"})
 
 
+@app.get("/app.js")
+def app_js():
+    return FileResponse(APP / "static" / "app.js", media_type="text/javascript; charset=utf-8",
+                        headers={"Cache-Control": "no-store"})
+
+
 @app.get("/api/health")
 def health():
     llm_up = False
@@ -182,7 +229,7 @@ def health():
         llm_up = requests.get(f"{engines.OLLAMA}/api/version", timeout=2).ok
     except requests.RequestException:
         pass
-    return {**STATUS, "ollama_up": llm_up, "model": engines.MODEL,
+    return {**STATUS, "ollama_up": llm_up, "model": engines.MODEL, "settings": SETTINGS,
             "ready": STATUS["stt"] and STATUS["tts"] and STATUS["llm"],
             "speakers": getattr(E.get("tts"), "num_speakers", 10)}
 
@@ -199,18 +246,35 @@ async def set_config(req: Request):
     return v
 
 
-@app.post("/api/new_session")
-def new_session_route():
-    sid = uuid.uuid4().hex
-    SESSIONS[sid] = new_session()
-    return {"session": sid}
-
-
-@app.post("/api/reset")
-async def reset(req: Request):
+@app.post("/api/settings")
+async def set_settings(req: Request):
+    """Change the conversation settings at run time (used for same-server A/B comparisons).
+    Applies to turns that follow; existing sessions keep their stored history."""
     body = await req.json()
-    SESSIONS[str(body.get("session"))] = new_session()
-    return {"ok": True}
+    with TURN_LOCK:
+        if body.get("history") in ("tools", "text"):
+            SETTINGS["history"] = body["history"]
+        if body.get("layout") in ("append", "deploy"):
+            SETTINGS["layout"] = body["layout"]
+        for k in ("max_turns", "trim_to"):
+            if k in body:
+                SETTINGS[k] = max(0, int(body[k]))
+    return dict(SETTINGS)
+
+
+@app.post("/api/new_session")
+async def new_session_route(req: Request):
+    """New customer: drop the previous session completely (order, history, staff/confirm flags)."""
+    try:
+        old = (await req.json()).get("previous")
+    except ValueError:
+        old = None
+    with TURN_LOCK:
+        if old:
+            SESSIONS.pop(str(old), None)
+        sid = uuid.uuid4().hex
+        SESSIONS[sid] = new_session()
+    return {"session": sid, "reset": bool(old)}
 
 
 @app.post("/api/turn/text")
@@ -243,7 +307,7 @@ async def turn_audio(req: Request, session: str):
 async def tts_preview(req: Request):
     body = await req.json()
     voice = clean_voice({**load_voice(), **body})
-    text = str(body.get("text") or "아이스 아메리카노 큰 사이즈 두 잔 담았습니다.")[:200]
+    text = str(body.get("text") or "네! 아이스 아메리카노 한 잔 추가했어요. 더 필요하신 거 있으세요?")[:200]
     with TURN_LOCK:
         wav, s = synthesize(text, voice)
     return {"audio": "data:audio/wav;base64," + base64.b64encode(wav).decode("ascii"), "tts_s": round(s, 3),
@@ -253,7 +317,14 @@ async def tts_preview(req: Request):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--port", type=int, default=8770)
+    ap.add_argument("--history", choices=["tools", "text"], default=SETTINGS["history"],
+                    help="tools = assistant tool_calls + tool results (default); text = first version's plain text")
+    ap.add_argument("--layout", choices=["append", "deploy"], default=SETTINGS["layout"],
+                    help="append = append-only prompt (default); deploy = v1 6c layout (first version)")
+    ap.add_argument("--max-turns", type=int, default=SETTINGS["max_turns"], help="0 = keep all past turns")
+    ap.add_argument("--trim-to", type=int, default=SETTINGS["trim_to"])
     a = ap.parse_args()
+    SETTINGS.update(history=a.history, layout=a.layout, max_turns=a.max_turns, trim_to=min(a.trim_to, a.max_turns or a.trim_to))
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
     uvicorn.run(app, host="127.0.0.1", port=a.port, log_level="warning")

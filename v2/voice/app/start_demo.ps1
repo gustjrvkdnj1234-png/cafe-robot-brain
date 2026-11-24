@@ -7,7 +7,9 @@
 # 2. Starts the app (v2\voice\app\server.py, 127.0.0.1 only). The app loads faster-whisper medium,
 #    Supertonic 3 and the Heami worker, and warms up song/gemma4-26b-cafe-64e.
 # 3. Prints the URL when everything is ready. Ctrl+C stops the app and the Ollama server it started.
-param([int]$Port = 8770, [switch]$Open, [switch]$UseRunning)
+#    To stop Ollama by hand at any time: powershell -ExecutionPolicy Bypass -File v2\scripts\stop_ollama.ps1
+# Extra arguments for server.py (e.g. '--history text --layout deploy --max-turns 0') go in -AppArgs.
+param([int]$Port = 8770, [switch]$Open, [switch]$UseRunning, [string]$AppArgs = '')
 $ErrorActionPreference = 'Stop'
 $App = $PSScriptRoot
 $Root = (Resolve-Path (Join-Path $App '..\..\..')).Path
@@ -35,8 +37,8 @@ try {
     }
 
     Write-Host '[2/3] starting the app (STT / TTS load + 64e warm-up, about 30-60 s) ...'
-    $server = Start-Process -FilePath $Py -ArgumentList @("`"$(Join-Path $App 'server.py')`"", '--port', $Port) `
-        -NoNewWindow -PassThru
+    $argv = @("`"$(Join-Path $App 'server.py')`"", '--port', $Port) + @($AppArgs -split '\s+' | Where-Object { $_ })
+    $server = Start-Process -FilePath $Py -ArgumentList $argv -NoNewWindow -PassThru
     $url = "http://127.0.0.1:$Port/"
     $ready = $false
     for ($i = 0; $i -lt 240 -and -not $server.HasExited; $i++) {
@@ -57,9 +59,23 @@ try {
     if ($Open) { Start-Process $url }
     $server.WaitForExit()
 } finally {
-    if ($server -and -not $server.HasExited) { Stop-Process -Id $server.Id -Force -ErrorAction SilentlyContinue }
+    # Every step must run even if an earlier one fails: with 'Stop', a native command's stderr
+    # (e.g. taskkill "process not found") aborted this block before Ollama was stopped.
+    $ErrorActionPreference = 'Continue'
+    # app: the venv python.exe is a launcher with a child interpreter, so end the whole tree
+    try {
+        $ids = @()
+        if ($server) { $ids += $server.Id }
+        $ids += Get-CimInstance Win32_Process -Filter "Name='python.exe'" -ErrorAction SilentlyContinue |
+            Where-Object { $_.CommandLine -match 'voice\\app\\server\.py' } | ForEach-Object { $_.ProcessId }
+        foreach ($id in ($ids | Select-Object -Unique)) {
+            if (Get-Process -Id $id -ErrorAction SilentlyContinue) { cmd.exe /c "taskkill /PID $id /T /F >nul 2>&1" }
+        }
+    } catch { Write-Host "app stop: $($_.Exception.Message)" }
     if ($startedOllama) {
-        Get-Process ollama -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
-        Write-Host 'Ollama server stopped.'
+        # verified stop (checks processes and port 11434, prints a warning if anything is left)
+        try {
+            & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root 'v2\scripts\stop_ollama.ps1') | Write-Host
+        } catch { Write-Host "Ollama stop: $($_.Exception.Message)" }
     }
 }

@@ -1,0 +1,326 @@
+{
+  "label": "tools_deploy",
+  "settings": {
+    "history": "tools",
+    "layout": "deploy",
+    "max_turns": 0,
+    "trim_to": 3
+  },
+  "free_text_turns": 2,
+  "turns": [
+    {
+      "input": "커피 한 잔 주세요",
+      "tool_calls": [
+        {
+          "name": "ask_clarification",
+          "arguments": {
+            "question": "커피 메뉴 중 어떤 것으로 드릴까요? 아메리카노, 카페라떼, 바닐라라떼, 카라멜마키아또, 카페모카, 에스프레소, 콜드브루 중에서 선택해 주세요.",
+            "reason": "ambiguous"
+          }
+        }
+      ],
+      "content": "",
+      "reply": "커피 메뉴 중 어떤 것으로 드릴까요? 아메리카노, 카페라떼, 바닐라라떼, 카라멜마키아또, 카페모카, 에스프레소, 콜드브루 중에서 선택해 주세요.",
+      "kinds": [
+        "ask"
+      ],
+      "order": [],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 7.958,
+        "tts_s": 1.617,
+        "total_s": 9.58,
+        "audio_in_s": null,
+        "load_s": 0.006,
+        "prompt_tokens": 3493,
+        "prompt_s": 3.812,
+        "gen_tokens": 73,
+        "gen_s": 4.122,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_s": 9.597,
+      "cache": {
+        "n_tokens": 3493,
+        "reused": 3479,
+        "evaluated": 14,
+        "eval_s": 3.812
+      }
+    },
+    {
+      "input": "아메리카노요",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "아메리카노"
+          }
+        }
+      ],
+      "content": "",
+      "reply": "네! 따뜻한 아메리카노 한 잔 추가했어요. 더 필요하신 거 있으세요?",
+      "kinds": [
+        "add"
+      ],
+      "order": [
+        "따뜻한 아메리카노 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 5.494,
+        "tts_s": 1.045,
+        "total_s": 6.542,
+        "audio_in_s": null,
+        "load_s": 0.027,
+        "prompt_tokens": 3716,
+        "prompt_s": 4.535,
+        "gen_tokens": 18,
+        "gen_s": 0.865,
+        "prompt_messages": 6,
+        "history_turns": 2
+      },
+      "client_s": 6.581,
+      "cache": {
+        "n_tokens": 3716,
+        "reused": 3460,
+        "evaluated": 256,
+        "eval_s": 4.535
+      }
+    },
+    {
+      "input": "아이스로요",
+      "tool_calls": [
+        {
+          "name": "modify_item",
+          "arguments": {
+            "changes": {
+              "temperature": "iced"
+            },
+            "item_index": 1
+          }
+        }
+      ],
+      "content": "",
+      "reply": "네, 아메리카노는 아이스로 바꿔 드릴게요. 더 필요하신 거 있으세요?",
+      "kinds": [
+        "modify"
+      ],
+      "order": [
+        "아이스 아메리카노 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 5.243,
+        "tts_s": 1.045,
+        "total_s": 6.291,
+        "audio_in_s": null,
+        "load_s": 0.018,
+        "prompt_tokens": 3814,
+        "prompt_s": 3.934,
+        "gen_tokens": 23,
+        "gen_s": 1.247,
+        "prompt_messages": 9,
+        "history_turns": 3
+      },
+      "client_s": 6.305,
+      "cache": {
+        "n_tokens": 3814,
+        "reused": 3683,
+        "evaluated": 131,
+        "eval_s": 3.934
+      }
+    },
+    {
+      "input": "디저트 뭐 있어요?",
+      "tool_calls": [],
+      "content": "저희 카페에는 치즈케이크와 초콜릿케이크가 준비되어 있습니다. 어떤 걸로 드릴까요?",
+      "reply": "저희 카페에는 치즈케이크와 초콜릿케이크가 준비되어 있습니다. 어떤 걸로 드릴까요?",
+      "kinds": [
+        "free_text"
+      ],
+      "order": [
+        "아이스 아메리카노 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 5.749,
+        "tts_s": 1.08,
+        "total_s": 6.832,
+        "audio_in_s": null,
+        "load_s": 0.054,
+        "prompt_tokens": 3917,
+        "prompt_s": 4.085,
+        "gen_tokens": 26,
+        "gen_s": 1.551,
+        "prompt_messages": 12,
+        "history_turns": 4
+      },
+      "client_s": 6.852,
+      "cache": {
+        "n_tokens": 3917,
+        "reused": 3775,
+        "evaluated": 142,
+        "eval_s": 4.085
+      }
+    },
+    {
+      "input": "아아 사이즈 뭐 있어요?",
+      "tool_calls": [],
+      "content": "아메리카노는 레귤러와 라지 사이즈 중에서 선택하실 수 있습니다. 어떤 사이즈로 드릴까요?",
+      "reply": "아메리카노는 레귤러와 라지 사이즈 중에서 선택하실 수 있습니다. 어떤 사이즈로 드릴까요?",
+      "kinds": [
+        "free_text"
+      ],
+      "order": [
+        "아이스 아메리카노 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 4.994,
+        "tts_s": 1.139,
+        "total_s": 6.136,
+        "audio_in_s": null,
+        "load_s": 0.019,
+        "prompt_tokens": 3958,
+        "prompt_s": 3.721,
+        "gen_tokens": 25,
+        "gen_s": 1.215,
+        "prompt_messages": 14,
+        "history_turns": 5
+      },
+      "client_s": 6.163,
+      "cache": {
+        "n_tokens": 3958,
+        "reused": 3877,
+        "evaluated": 81,
+        "eval_s": 3.721
+      }
+    },
+    {
+      "input": "아아 두잔",
+      "tool_calls": [
+        {
+          "name": "modify_item",
+          "arguments": {
+            "changes": {
+              "quantity": 2
+            },
+            "item_index": 1
+          }
+        }
+      ],
+      "content": "",
+      "reply": "네, 아메리카노는 두 잔으로 바꿔 드릴게요. 더 필요하신 거 있으세요?",
+      "kinds": [
+        "modify"
+      ],
+      "order": [
+        "아이스 아메리카노 두 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 4.776,
+        "tts_s": 1.033,
+        "total_s": 5.813,
+        "audio_in_s": null,
+        "load_s": 0.021,
+        "prompt_tokens": 3996,
+        "prompt_s": 3.673,
+        "gen_tokens": 21,
+        "gen_s": 1.023,
+        "prompt_messages": 16,
+        "history_turns": 6
+      },
+      "client_s": 5.837,
+      "cache": {
+        "n_tokens": 3996,
+        "reused": 3918,
+        "evaluated": 78,
+        "eval_s": 3.673
+      }
+    },
+    {
+      "input": "카페라떼 반샷만요",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "카페라떼",
+            "shots_delta": -0.5
+          }
+        }
+      ],
+      "content": "",
+      "reply": "네! 샷을 반만 넣은 따뜻한 카페라떼 한 잔 추가했어요. 더 필요하신 거 있으세요?",
+      "kinds": [
+        "add"
+      ],
+      "order": [
+        "아이스 아메리카노 두 잔",
+        "샷을 반만 넣은 따뜻한 카페라떼 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 5.441,
+        "tts_s": 1.123,
+        "total_s": 6.567,
+        "audio_in_s": null,
+        "load_s": 0.039,
+        "prompt_tokens": 4100,
+        "prompt_s": 4.117,
+        "gen_tokens": 25,
+        "gen_s": 1.238,
+        "prompt_messages": 19,
+        "history_turns": 7
+      },
+      "client_s": 6.592,
+      "cache": {
+        "n_tokens": 4100,
+        "reused": 3958,
+        "evaluated": 142,
+        "eval_s": 4.117
+      }
+    },
+    {
+      "input": "주문할게요",
+      "tool_calls": [
+        {
+          "name": "confirm_order",
+          "arguments": {
+            "dine_option": "dine_in"
+          }
+        }
+      ],
+      "content": "",
+      "reply": "네! 주문 확인했습니다. 빠르게 준비해 드릴게요!",
+      "kinds": [
+        "confirm"
+      ],
+      "order": [
+        "아이스 아메리카노 두 잔",
+        "샷을 반만 넣은 따뜻한 카페라떼 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 5.588,
+        "tts_s": 1.247,
+        "total_s": 6.838,
+        "audio_in_s": null,
+        "load_s": 0.018,
+        "prompt_tokens": 4228,
+        "prompt_s": 4.666,
+        "gen_tokens": 19,
+        "gen_s": 0.861,
+        "prompt_messages": 22,
+        "history_turns": 8
+      },
+      "client_s": 6.846,
+      "cache": {
+        "n_tokens": 4228,
+        "reused": 4059,
+        "evaluated": 169,
+        "eval_s": 4.666
+      }
+    }
+  ]
+}
