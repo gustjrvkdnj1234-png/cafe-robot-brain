@@ -15,6 +15,7 @@ import sys
 import threading
 import time
 import uuid
+from collections import OrderedDict
 from contextlib import asynccontextmanager
 from datetime import datetime
 from pathlib import Path
@@ -27,7 +28,9 @@ from fastapi.responses import FileResponse, JSONResponse
 APP = Path(__file__).resolve().parent
 sys.path.insert(0, str(APP))
 import engines  # noqa: E402
+import flow  # noqa: E402
 import replies  # noqa: E402
+import tts_text  # noqa: E402
 
 LOGS = APP / "logs"
 CONFIG = APP / "config.local.json"
@@ -67,9 +70,13 @@ def save_voice(v: dict):
 def warm_llm():
     try:
         STATUS["llm_warmup"] = E["llm"].warmup()
-        STATUS["llm"] = True
     except Exception as e:  # noqa: BLE001
         STATUS["errors"].append(f"LLM warm-up: {e}")
+        return
+    while "tts" not in E:
+        time.sleep(0.5)
+    prewarm_tts()
+    STATUS["llm"] = True
 
 
 @asynccontextmanager
@@ -99,14 +106,18 @@ app = FastAPI(lifespan=lifespan)
 # ---------------------------------------------------------------- core
 # Conversation settings (command-line flags; defaults = the fixed behaviour).
 SETTINGS = {"history": "tools",   # tools = assistant tool_calls + tool result messages; text = old plain text
-            "layout": "append",   # append = append-only prompt; deploy = v1 6c layout (first app version)
+            "layout": "append",   # append = append-only prompt (default: fastest on CPU, 2026-11-25 replay); compact = D1
+                                  # (fixed head + last 2 exchanges + state, re-evaluated every turn); deploy = v1 6c layout
             "max_turns": 20,      # keep at most this many past turns (0 = no cap) ...
             "trim_to": 10}        # ... and when exceeded cut back to this many. Trimming forces the history to be
                                   # recomputed (404 tokens = 10.9 s on CPU at 6->3), so the cap is set above a usual order.
 
 
 def new_session() -> dict:
-    return {"state": [], "turns": [], "confirmed": False, "dine_option": None, "staff": [], "n": 0, "ordered": False}
+    # phase: ordering -> awaiting (order read back, waiting for yes / dine option) -> confirmed (locked)
+    # dine: what the customer said about dine-in / takeout in this session (None = not said)
+    return {"state": [], "turns": [], "confirmed": False, "dine_option": None, "staff": [], "n": 0, "ordered": False,
+            "phase": "ordering", "dine": None}
 
 
 def assistant_messages(calls: list, r: dict) -> list:
@@ -124,19 +135,54 @@ def assistant_messages(calls: list, r: dict) -> list:
     return msgs
 
 
+def assistant_short(calls: list, r: dict) -> list:
+    """Short form of the finished turn for the compact layout: the tool calls and what the robot said."""
+    if not calls:
+        return [{"role": "assistant", "content": r["spoken"]}]
+    msgs = [{"role": "assistant", "content": "",
+             "tool_calls": [{"function": {"name": c["name"], "arguments": c.get("arguments") or {}}} for c in calls]}]
+    for k, c in enumerate(calls):
+        res = {"robot_said": r["spoken"]} if k == len(calls) - 1 else {"ok": True}
+        msgs.append({"role": "tool", "tool_name": c["name"], "content": json.dumps(res, ensure_ascii=False)})
+    return msgs
+
+
 def get_session(sid: str) -> dict:
     if not sid or len(sid) > 64:
         raise HTTPException(400, "bad session id")
     return SESSIONS.setdefault(sid, new_session())
 
 
+TTS_CACHE: OrderedDict = OrderedDict()   # (engine, sid, steps, text) -> wav; fixed sentences repeat a lot
+TTS_CACHE_MAX = 300
+TTS_PREWARM = ("ask_dine", "call_staff", "locked", "confirm", "confirm_takeout", "already_confirmed", "not_yet",
+               "no_speech", "fallback", "free_text_blocked", "read_order_empty", "remove", "confirm_empty")
+
+
 def synthesize(text: str, voice: dict) -> tuple[bytes, float]:
     t = time.perf_counter()
-    if voice["engine"] == "heami" and "heami" in E:
-        data = E["heami"].say(text)
-    else:
-        data = E["tts"].say(text, voice["sid"], voice["steps"])
+    eng = "heami" if voice["engine"] == "heami" and "heami" in E else "supertonic"
+    key = (eng, voice["sid"], voice["steps"], text)
+    if key in TTS_CACHE:
+        TTS_CACHE.move_to_end(key)
+        return TTS_CACHE[key], time.perf_counter() - t
+    data = E["heami"].say(text) if eng == "heami" else E["tts"].say(text, voice["sid"], voice["steps"])
+    TTS_CACHE[key] = data
+    while len(TTS_CACHE) > TTS_CACHE_MAX:
+        TTS_CACHE.popitem(last=False)
     return data, time.perf_counter() - t
+
+
+def prewarm_tts():
+    """Synthesize the fixed template replies once for the current voice (between turns)."""
+    voice = load_voice()
+    for k in TTS_PREWARM + ("temp_question",):
+        text = tts_text.normalize("따뜻한 거요, 아이스요?" if k == "temp_question" else replies.T()[k])
+        with TURN_LOCK:
+            try:
+                synthesize(text, voice)
+            except Exception:  # noqa: BLE001
+                return
 
 
 def sample_rate(data_url):
@@ -158,29 +204,60 @@ def run_turn(session_id: str, text: str, t_start: float, input_kind: str, stt_s:
              audio_s: float | None) -> dict:
     s = get_session(session_id)
     voice = load_voice()
-    llm_info, error, n_msgs = None, None, None
+    llm_info, error, n_msgs, fast = None, None, None, None
+    said = flow.dine_of(text)
+    if said:
+        s["dine"] = said
+    phase_before = s["phase"]
+    calls, content, llm_s = [], "", None
     if not text.strip():
-        calls, content, llm_s = [], "", None
         r = {"state": s["state"], "spoken": replies.T()["no_speech"], "kinds": ["no_speech"], "confirmed": False,
-             "dine_option": None, "staff_reason": None, "tool_results": [], "legacy_history": "", "blocked": None}
+             "phase": s["phase"], "dine_option": None, "staff_reason": None, "tool_results": [], "legacy_history": "",
+             "blocked": None}
     else:
-        msgs = engines.build_prompt(SETTINGS["layout"], s["state"], s["turns"], text)
-        n_msgs = len(msgs)
-        state_msg = engines.split_prompt(s["state"])[1]
-        try:
-            llm_info = E["llm"].chat(msgs)
-            STATUS["llm"] = True
-            calls, content, llm_s = llm_info["tool_calls"], llm_info["content"], llm_info["wall_s"]
-        except Exception as e:  # noqa: BLE001
-            calls, content, llm_s, error = [], "", None, f"LLM: {e}"
-        r = replies.build_reply(calls, content, s["state"], first_item_possible=not s["ordered"])
+        state_msg = engines.split_prompt(s["state"], s["phase"])[1]
+        # A1 short answers that need no model: yes / dine option / no while the order is read back,
+        # "that's all" while ordering. The synthetic call goes into the history like a model call.
+        ans = flow.awaiting_answer(text) if s["phase"] == "awaiting" else None
+        if ans == "yes" or (s["phase"] == "ordering" and s["state"] and flow.is_done(text)):
+            fast = "yes" if ans else "done"
+            calls = [{"name": "confirm_order", "arguments": {"dine_option": s["dine"] or "dine_in"}}]
+            r = replies.build_reply(calls, "", s["state"], phase=s["phase"], dine=s["dine"])
+        elif ans == "no":
+            fast = "no"
+            r = {"state": s["state"], "spoken": replies.T()["not_yet"], "kinds": ["not_yet"], "confirmed": False,
+                 "phase": "ordering", "dine_option": None, "staff_reason": None, "tool_results": [],
+                 "legacy_history": "", "blocked": None}
+        else:
+            msgs = engines.build_prompt(SETTINGS["layout"], s["state"], s["turns"], text, s["phase"])
+            n_msgs = len(msgs)
+            try:
+                llm_info = E["llm"].chat(msgs)
+                STATUS["llm"] = True
+                calls, content, llm_s = llm_info["tool_calls"], llm_info["content"], llm_info["wall_s"]
+            except Exception as e:  # noqa: BLE001
+                error = f"LLM: {e}"
+            # the turn before counts only when the robot had asked (e.g. "따뜻한 거요, 아이스요?" -> "라떼요")
+            prev = s["turns"][-1]["user"]["content"] if s["turns"] and s["turns"][-1]["asked"] else ""
+            r = replies.build_reply(calls, content, s["state"], first_item_possible=not s["ordered"],
+                                    phase=s["phase"], dine=s["dine"], temp_said=flow.temp_said(text, prev))
+        if fast:
+            r["kinds"] = ["fast_path"] + r["kinds"]
+        r["spoken"] = tts_text.normalize(r["spoken"])
         if "add" in r["kinds"]:
             s["ordered"] = True
         s["turns"].append({"state_msg": state_msg, "user": {"role": "user", "content": text},
-                           "assistant": assistant_messages(calls, r)})
+                           "assistant": assistant_messages(r.get("history_calls", calls), r),
+                           "assistant_short": assistant_short(r.get("history_calls", calls), r),
+                           # a real question that the next turn may answer (not "더 필요하신 거 있으세요?")
+                           "asked": bool(set(r["kinds"]) & {"ask", "ask_temp", "ask_dine", "readback"})})
         if SETTINGS["max_turns"] and len(s["turns"]) > SETTINGS["max_turns"]:
             s["turns"] = s["turns"][-SETTINGS["trim_to"]:]
+    r["spoken"] = tts_text.normalize(r["spoken"])
     s["state"] = r["state"]
+    s["phase"] = r["phase"]
+    if r.get("dine_option") and not s["dine"]:
+        s["dine"] = r["dine_option"]
     if r["confirmed"]:
         s["confirmed"], s["dine_option"] = True, r["dine_option"]
     if r["staff_reason"]:
@@ -202,6 +279,7 @@ def run_turn(session_id: str, text: str, t_start: float, input_kind: str, stt_s:
     out = {"session": session_id, "turn": s["n"], "input": input_kind, "transcript": text, "settings": dict(SETTINGS),
            "tool_calls": calls, "content": content, "reply": r["spoken"], "kinds": r["kinds"],
            "order": replies.order_lines(s["state"]), "order_state": s["state"], "confirmed": s["confirmed"],
+           "phase": s["phase"], "phase_before": phase_before, "dine_said": s["dine"], "fast_path": fast,
            "dine_option": s["dine_option"], "staff_called": bool(r["staff_reason"]),
            "staff_reason": r["staff_reason"], "timings": timings, "voice": voice, "error": error}
     log_turn({"time": datetime.now().isoformat(timespec="seconds"),
@@ -233,7 +311,8 @@ def health():
         llm_up = requests.get(f"{engines.OLLAMA}/api/version", timeout=2).ok
     except requests.RequestException:
         pass
-    return {**STATUS, "ollama_up": llm_up, "model": engines.MODEL, "settings": {**SETTINGS, **engines.RUN},
+    return {**STATUS, "ollama_up": llm_up, "model": engines.MODEL,
+            "settings": {**SETTINGS, **engines.RUN, "a3": engines.demo_config.A3["mode"]},
             "ready": STATUS["stt"] and STATUS["tts"] and STATUS["llm"],
             "speakers": getattr(E.get("tts"), "num_speakers", 10)}
 
@@ -258,7 +337,7 @@ async def set_settings(req: Request):
     with TURN_LOCK:
         if body.get("history") in ("tools", "text"):
             SETTINGS["history"] = body["history"]
-        if body.get("layout") in ("append", "deploy"):
+        if body.get("layout") in ("compact", "append", "deploy"):
             SETTINGS["layout"] = body["layout"]
         for k in ("max_turns", "trim_to"):
             if k in body:
@@ -317,7 +396,7 @@ async def turn_audio(req: Request, session: str):
 async def tts_preview(req: Request):
     body = await req.json()
     voice = clean_voice({**load_voice(), **body})
-    text = str(body.get("text") or "네! 아이스 아메리카노 한 잔 추가했어요. 더 필요하신 거 있으세요?")[:200]
+    text = tts_text.normalize(str(body.get("text") or "네, 아이스 아메리카노 한 잔이요. 더 필요하신 거 있으세요?")[:200])
     with TURN_LOCK:
         wav, s = synthesize(text, voice)
     return {"audio": "data:audio/wav;base64," + base64.b64encode(wav).decode("ascii"), "tts_s": round(s, 3),
@@ -329,16 +408,20 @@ def main():
     ap.add_argument("--port", type=int, default=8770)
     ap.add_argument("--history", choices=["tools", "text"], default=SETTINGS["history"],
                     help="tools = assistant tool_calls + tool results (default); text = first version's plain text")
-    ap.add_argument("--layout", choices=["append", "deploy"], default=SETTINGS["layout"],
-                    help="append = append-only prompt (default); deploy = v1 6c layout (first version)")
+    ap.add_argument("--layout", choices=["compact", "append", "deploy"], default=SETTINGS["layout"],
+                    help="append = append-only prompt (default); compact = fixed head + last 2 exchanges + state; "
+                         "deploy = v1 6c layout (first version)")
     ap.add_argument("--max-turns", type=int, default=SETTINGS["max_turns"], help="0 = keep all past turns")
     ap.add_argument("--trim-to", type=int, default=SETTINGS["trim_to"])
     ap.add_argument("--config", choices=["demo", "v1"], default=engines.RUN["config"],
                     help="demo = demo prompt + inform tool (default); v1 = experiment prompt/tools")
     ap.add_argument("--mode", choices=["igpu", "cpu"], default=engines.RUN["mode"], help="cpu = num_gpu 0")
     ap.add_argument("--num-ctx", type=int, default=engines.RUN["num_ctx"])
+    ap.add_argument("--a3", choices=["prompt", "app"], default=engines.demo_config.A3["mode"],
+                    help="temperature question: demo prompt rule + app safety net (prompt), or app safety net only (app)")
     a = ap.parse_args()
     engines.RUN.update(config=a.config, mode=a.mode, num_ctx=a.num_ctx)
+    engines.demo_config.A3["mode"] = a.a3
     SETTINGS.update(history=a.history, layout=a.layout, max_turns=a.max_turns, trim_to=min(a.trim_to, a.max_turns or a.trim_to))
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")

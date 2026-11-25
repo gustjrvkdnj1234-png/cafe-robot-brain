@@ -1,0 +1,22 @@
+{
+  "cafe": {
+    "n": 120,
+    "old": 112,
+    "new": 110,
+    "by_design": 21,
+    "by_design_was_correct": 20,
+    "new_plus_by_design": 110,
+    "other_changes": 3,
+    "read_order_calls": 0
+  },
+  "live": {
+    "n": 20,
+    "old": 12,
+    "new": 10,
+    "by_design": 3,
+    "by_design_was_correct": 1,
+    "new_plus_by_design": 12,
+    "other_changes": 4,
+    "read_order_calls": 0
+  }
+}

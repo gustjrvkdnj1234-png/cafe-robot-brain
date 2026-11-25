@@ -10,15 +10,15 @@
     "heami": true,
     "llm": true,
     "llm_warmup": {
-      "wall_s": 0.57,
+      "wall_s": 0.61,
       "size": 5261251049,
       "size_vram": 0,
       "full_igpu": false,
       "runner_private_gb": 12.99,
-      "gpu_shared_gb": 1.5
+      "gpu_shared_gb": 1.61
     },
     "errors": [],
-    "startup_s": 8.6,
+    "startup_s": 9.6,
     "ollama_up": true,
     "model": "song/gemma4-26b-cafe-64e",
     "settings": {
@@ -29,7 +29,8 @@
       "config": "demo",
       "mode": "cpu",
       "num_ctx": 8192,
-      "num_predict": 512
+      "num_predict": 512,
+      "a3": "app"
     },
     "ready": true,
     "speakers": 10
@@ -71,19 +72,19 @@
       "staff_called": false,
       "timings": {
         "stt_s": null,
-        "llm_s": 4.379,
-        "tts_s": 1.63,
-        "total_s": 6.016,
+        "llm_s": 5.23,
+        "tts_s": 1.137,
+        "total_s": 6.371,
         "audio_in_s": null,
-        "load_s": 0.009,
-        "prompt_tokens": 4084,
-        "prompt_s": 1.235,
+        "load_s": 0.006,
+        "prompt_tokens": 4199,
+        "prompt_s": 1.224,
         "gen_tokens": 55,
-        "gen_s": 3.098,
+        "gen_s": 3.964,
         "prompt_messages": 3,
         "history_turns": 1
       },
-      "client_wall_s": 6.047,
+      "client_wall_s": 6.401,
       "reply_audio_s": 7.13,
       "reply_sr": 44100,
       "error": null
@@ -114,19 +115,19 @@
       "staff_called": false,
       "timings": {
         "stt_s": null,
-        "llm_s": 6.006,
-        "tts_s": 1.365,
-        "total_s": 7.373,
+        "llm_s": 7.562,
+        "tts_s": 0.89,
+        "total_s": 8.454,
         "audio_in_s": null,
-        "load_s": 0.028,
-        "prompt_tokens": 4300,
-        "prompt_s": 4.834,
+        "load_s": 0.016,
+        "prompt_tokens": 4415,
+        "prompt_s": 6.159,
         "gen_tokens": 17,
-        "gen_s": 1.063,
+        "gen_s": 1.324,
         "prompt_messages": 8,
         "history_turns": 2
       },
-      "client_wall_s": 7.383,
+      "client_wall_s": 8.462,
       "reply_audio_s": 2.93,
       "reply_sr": 44100,
       "error": null
@@ -151,7 +152,7 @@
         "modify"
       ],
       "order": [
-        "아이스 아메리카노 큰 사이즈 샷 추가 두 잔",
+        "아이스 아메리카노 큰 사이즈 한 샷 추가 두 잔",
         "치즈케이크 한 개",
         "따뜻한 카페라떼 한 잔"
       ],
@@ -160,19 +161,19 @@
       "staff_called": false,
       "timings": {
         "stt_s": null,
-        "llm_s": 4.976,
-        "tts_s": 1.275,
-        "total_s": 6.256,
+        "llm_s": 6.335,
+        "tts_s": 1.033,
+        "total_s": 7.371,
         "audio_in_s": null,
-        "load_s": 0.008,
-        "prompt_tokens": 4439,
-        "prompt_s": 3.625,
+        "load_s": 0.01,
+        "prompt_tokens": 4554,
+        "prompt_s": 4.564,
         "gen_tokens": 23,
-        "gen_s": 1.297,
+        "gen_s": 1.712,
         "prompt_messages": 12,
         "history_turns": 3
       },
-      "client_wall_s": 6.269,
+      "client_wall_s": 7.379,
       "reply_audio_s": 3.48,
       "reply_sr": 44100,
       "error": null
@@ -195,7 +196,7 @@
         "ask"
       ],
       "order": [
-        "아이스 아메리카노 큰 사이즈 샷 추가 두 잔",
+        "아이스 아메리카노 큰 사이즈 한 샷 추가 두 잔",
         "치즈케이크 한 개",
         "따뜻한 카페라떼 한 잔"
       ],
@@ -204,19 +205,19 @@
       "staff_called": false,
       "timings": {
         "stt_s": null,
-        "llm_s": 6.431,
-        "tts_s": 1.167,
-        "total_s": 7.6,
+        "llm_s": 8.28,
+        "tts_s": 1.08,
+        "total_s": 9.362,
         "audio_in_s": null,
-        "load_s": 0.069,
-        "prompt_tokens": 4598,
-        "prompt_s": 4.116,
+        "load_s": 0.021,
+        "prompt_tokens": 4714,
+        "prompt_s": 5.125,
         "gen_tokens": 34,
-        "gen_s": 2.212,
+        "gen_s": 3.037,
         "prompt_messages": 16,
         "history_turns": 4
       },
-      "client_wall_s": 7.613,
+      "client_wall_s": 9.371,
       "reply_audio_s": 3.64,
       "reply_sr": 44100,
       "error": null
@@ -233,34 +234,34 @@
           }
         }
       ],
-      "reply": "네, 포장으로 주문 확인했어요. 금방 준비해 드릴게요.",
+      "reply": "아이스 아메리카노 큰 사이즈 한 샷 추가 두 잔, 치즈케이크 한 개, 따뜻한 카페라떼 한 잔이요. 포장으로 주문할까요?",
       "kinds": [
-        "confirm"
+        "readback"
       ],
       "order": [
-        "아이스 아메리카노 큰 사이즈 샷 추가 두 잔",
+        "아이스 아메리카노 큰 사이즈 한 샷 추가 두 잔",
         "치즈케이크 한 개",
         "따뜻한 카페라떼 한 잔"
       ],
-      "confirmed": true,
-      "dine_option": "takeout",
+      "confirmed": false,
+      "dine_option": null,
       "staff_called": false,
       "timings": {
         "stt_s": null,
-        "llm_s": 5.424,
-        "tts_s": 1.42,
-        "total_s": 6.846,
+        "llm_s": 7.368,
+        "tts_s": 1.742,
+        "total_s": 9.114,
         "audio_in_s": null,
-        "load_s": 0.084,
-        "prompt_tokens": 4760,
-        "prompt_s": 4.111,
+        "load_s": 0.02,
+        "prompt_tokens": 4876,
+        "prompt_s": 5.876,
         "gen_tokens": 18,
-        "gen_s": 1.185,
+        "gen_s": 1.423,
         "prompt_messages": 20,
         "history_turns": 5
       },
-      "client_wall_s": 6.866,
-      "reply_audio_s": 4.87,
+      "client_wall_s": 9.129,
+      "reply_audio_s": 9.66,
       "reply_sr": 44100,
       "error": null
     },
@@ -290,20 +291,20 @@
       "dine_option": null,
       "staff_called": false,
       "timings": {
-        "stt_s": 3.095,
-        "llm_s": 2.63,
-        "tts_s": 1.528,
-        "total_s": 7.259,
+        "stt_s": 3.578,
+        "llm_s": 3.229,
+        "tts_s": 1.157,
+        "total_s": 7.968,
         "audio_in_s": 5.451,
-        "load_s": 0.007,
-        "prompt_tokens": 4079,
-        "prompt_s": 0.589,
+        "load_s": 0.011,
+        "prompt_tokens": 4194,
+        "prompt_s": 0.726,
         "gen_tokens": 34,
-        "gen_s": 1.988,
+        "gen_s": 2.457,
         "prompt_messages": 3,
         "history_turns": 1
       },
-      "client_wall_s": 7.282,
+      "client_wall_s": 7.977,
       "reply_audio_s": 5.79,
       "reply_sr": 44100,
       "error": null,
@@ -315,47 +316,48 @@
       "transcript": "페리얼 좀 담아주세요.",
       "tool_calls": [
         {
-          "name": "call_staff",
+          "name": "ask_clarification",
           "arguments": {
-            "reason": "손님이 페리얼(또는 관련 서비스)을 요청함"
+            "question": "죄송합니다, 페리얼이 무엇인지 잘 모르겠어요. 다시 말씀해 주시겠어요?",
+            "reason": "ambiguous"
           }
         }
       ],
-      "reply": "잠시만요, 직원 불러 드릴게요.",
+      "reply": "죄송합니다, 페리얼이 무엇인지 잘 모르겠어요. 다시 말씀해 주시겠어요?",
       "kinds": [
-        "staff"
+        "ask"
       ],
       "order": [
         "아이스 아메리카노 큰 사이즈 두 잔"
       ],
       "confirmed": false,
       "dine_option": null,
-      "staff_called": true,
+      "staff_called": false,
       "timings": {
-        "stt_s": 2.996,
-        "llm_s": 6.439,
-        "tts_s": 1.101,
-        "total_s": 10.54,
+        "stt_s": 3.621,
+        "llm_s": 8.873,
+        "tts_s": 1.013,
+        "total_s": 13.517,
         "audio_in_s": 4.555,
-        "load_s": 0.005,
-        "prompt_tokens": 4220,
-        "prompt_s": 3.932,
-        "gen_tokens": 28,
-        "gen_s": 2.473,
+        "load_s": 0.009,
+        "prompt_tokens": 4335,
+        "prompt_s": 4.577,
+        "gen_tokens": 45,
+        "gen_s": 4.254,
         "prompt_messages": 7,
         "history_turns": 2
       },
-      "client_wall_s": 10.556,
-      "reply_audio_s": 2.79,
+      "client_wall_s": 13.527,
+      "reply_audio_s": 6.02,
       "reply_sr": 44100,
       "error": null,
       "reference": "캐리어 좀 담아주세요"
     }
   ],
   "heami_preview": {
-    "tts_s": 0.186,
+    "tts_s": 0.09,
     "audio": [
-      7.15,
+      6.1,
       22050
     ],
     "voice": {

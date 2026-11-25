@@ -25,6 +25,17 @@ SCRIPTS = {
 }
 
 
+def from_log(prefix: str) -> list:
+    """Transcripts of one real session (session id prefix), in order, from the local turn logs (not committed)."""
+    out = []
+    for p in sorted((VOICE / "app" / "logs").glob("turns_*.jsonl")):
+        for line in p.read_text(encoding="utf-8").splitlines():
+            d = json.loads(line)
+            if str(d.get("session", "")).startswith(prefix) and (d.get("transcript") or "").strip():
+                out.append(d["transcript"])
+    return out
+
+
 def log_tasks(offset: int) -> list:
     """llama-server tasks written after `offset`: total prompt tokens, reused (cached) and evaluated."""
     text = OLLAMA_LOG.read_bytes()[offset:].decode("utf-8", errors="replace")
@@ -51,6 +62,7 @@ def main():
     ap.add_argument("--label", required=True)
     ap.add_argument("--port", type=int, default=8770)
     ap.add_argument("--script", choices=sorted(SCRIPTS), default="s8")
+    ap.add_argument("--from-log", help="replay the transcripts of this session id (prefix) from app/logs instead")
     ap.add_argument("--warmup", action="store_true", help="one throwaway turn first (e.g. after a mode switch)")
     ap.add_argument("--settings", help='JSON for /api/settings before the run, e.g. {"history":"text","layout":"deploy","max_turns":0}')
     a = ap.parse_args()
@@ -68,11 +80,15 @@ def main():
     offset = OLLAMA_LOG.stat().st_size
     sess = requests.post(f"{base}/api/new_session", json={}, timeout=5).json()["session"]
     rows = []
-    for text in SCRIPTS[a.script]:
+    texts = from_log(a.from_log) if a.from_log else SCRIPTS[a.script]
+    if not texts:
+        sys.exit(f"no transcripts for session {a.from_log}")
+    for text in texts:
         t = time.perf_counter()
         d = requests.post(f"{base}/api/turn/text", json={"session": sess, "text": text}, timeout=600).json()
         rows.append({"input": text, "tool_calls": d["tool_calls"], "content": d["content"], "reply": d["reply"],
                      "kinds": d["kinds"], "order": d["order"], "timings": d["timings"],
+                     "confirmed": d.get("confirmed"), "phase": d.get("phase"), "dine_option": d.get("dine_option"),
                      "client_s": round(time.perf_counter() - t, 3)})
         tt = d["timings"]
         print(f"{text} | {json.dumps(d['tool_calls'], ensure_ascii=False)[:110]} | content={d['content'][:40]!r} | "
@@ -88,7 +104,7 @@ def main():
         print(f"note: {len(tasks)} llama-server tasks for {len(rows)} turns; cache columns left empty")
     free = sum("free_text" in r["kinds"] for r in rows)
     h = requests.get(f"{base}/api/health", timeout=5).json()
-    res = {"label": a.label, "script": a.script, "settings": h.get("settings"), "free_text_turns": free, "turns": rows}
+    res = {"label": a.label, "script": f"log:{a.from_log}" if a.from_log else a.script, "settings": h.get("settings"), "free_text_turns": free, "turns": rows}
     out = VOICE / "results"
     (out / f"app_script_{a.label}.json").write_text(json.dumps(res, ensure_ascii=False, indent=2), encoding="utf-8")
     s = h.get("settings") or {}
@@ -96,14 +112,20 @@ def main():
          f"- 설정: 기록 형식 `{s.get('history')}`, 배치 `{s.get('layout')}`, 기록 상한 {s.get('max_turns')}턴"
          f"(넘으면 {s.get('trim_to')}턴으로 줄임), 설정 `{s.get('config')}`, 모드 `{s.get('mode')}`, num_ctx {s.get('num_ctx')}",
          f"- 도구 없이 말로만 답한 턴: {free}/{len(rows)}", "",
-         "| # | 손님 | 도구 호출 | content | 답 | 프롬프트 토큰 (재사용 / 새로 계산) | prompt_s | gen_s | llm_s |",
-         "|---|---|---|---|---|---|---:|---:|---:|"]
+         "| # | 손님 | 도구 호출 | 답 | 주문 | 확정 상태 | 프롬프트 토큰 (재사용 / 새로 계산) | prompt_s | gen_s | llm_s | total_s |",
+         "|---|---|---|---|---|---|---|---:|---:|---:|---:|"]
     for i, r in enumerate(rows, 1):
         calls = "; ".join(f"{c['name']}({json.dumps(c['arguments'], ensure_ascii=False)})" for c in r["tool_calls"]) or "(없음)"
         c = r.get("cache")
         cache = f"{c['n_tokens']} ({c['reused']} / {c['evaluated']})" if c else str(r["timings"].get("prompt_tokens"))
-        L.append(f"| {i} | {r['input']} | `{calls}` | {r['content'].strip().replace(chr(10), ' ') or '-'} | {r['reply']} | "
-                 f"{cache} | {r['timings'].get('prompt_s')} | {r['timings'].get('gen_s')} | {r['timings'].get('llm_s')} |")
+        state = r["phase"] or ("확정" if r["confirmed"] else "주문 중")
+        state = {"ordering": "주문 중", "awaiting": "확인 대기", "confirmed": "확정"}.get(state, state)
+        if r["confirmed"] and r.get("dine_option"):
+            state += f" ({'포장' if r['dine_option'] == 'takeout' else '매장'})"
+        reply = r["reply"].replace(chr(10), " / ")
+        L.append(f"| {i} | {r['input']} | `{calls}` | {reply} | {' / '.join(r['order']) or '-'} | {state} | "
+                 f"{cache} | {r['timings'].get('prompt_s')} | {r['timings'].get('gen_s')} | {r['timings'].get('llm_s')} | "
+                 f"{r['timings'].get('total_s')} |")
     (out / f"app_script_{a.label}.md").write_text("\n".join(L) + "\n", encoding="utf-8")
     print("\n".join(L[:4]))
 

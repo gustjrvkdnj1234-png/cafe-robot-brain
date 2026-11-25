@@ -8,6 +8,7 @@ inform answers and the free-text guard come from demo/demo_config.py (menu.json 
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -18,6 +19,7 @@ sys.path.insert(0, str(APP / "demo"))
 from cafe_common import defaults, items_by_name, normalize_add  # noqa: E402
 from robot_ui import apply_calls  # noqa: E402
 import demo_config  # noqa: E402
+from tts_text import shot_delta  # noqa: E402
 from demo_config import topic  # noqa: E402
 
 TEMPLATES = APP / "replies.json"
@@ -96,7 +98,7 @@ def _words(args: dict) -> dict:
         out["size"] = w["size_large"]
     if _num(a.get("shots_delta")):
         v = a["shots_delta"]
-        out["shots"] = w["shots"].get(_key(v)) or (w["shots_more"] if _num(v) > 0 else w["shots_less"]).format(n=_amount(v))
+        out["shots"] = w["shots"].get(_key(v)) or shot_delta(_num(v))
     out["sweet"] = w["sweetness"].get(a.get("sweetness"), "")
     if a.get("milk") == "oat":
         out["milk"] = w["milk_oat"]
@@ -161,17 +163,62 @@ def _index(a):
         return None
 
 
-def build_reply(calls: list, content: str, state: list, first_item_possible: bool = False) -> dict:
+def ieyo(word: str) -> str:
+    f = _final(word)
+    return word + ("이에요" if f else "예요")
+
+
+def order_listing(state: list) -> str:
+    """'아이스 아메리카노 한 잔, 청포도에이드 덜 달게 한 잔' (from the order state, never from model text)."""
+    return ", ".join(describe(it) for it in state)
+
+
+def read_order_text(state: list) -> str:
+    t = T()
+    return t["read_order"].format(items_ieyo=ieyo(order_listing(state))) if state else t["read_order_empty"]
+
+
+def readback_text(state: list, dine) -> str:
+    t = T()
+    ask = {"takeout": t["readback_ok_takeout"], "dine_in": t["readback_ok_dine_in"]}.get(dine, t["ask_dine"])
+    return t["readback"].format(items_iyo=iyo(order_listing(state)), question=ask)
+
+
+def needs_temperature(args: dict, temp_said: bool) -> bool:
+    """add_item for an item that comes both hot and iced, with no temperature from the model or the customer."""
+    if temp_said or str(args.get("temperature") or "").strip():
+        return False
+    item = items_by_name().get(normalize_add(args)["menu"])
+    return bool(item) and len(item["temperatures"]) > 1
+
+
+def listing_ko(words) -> str:
+    return ", ".join(words)
+
+
+ORDER_LIST = re.compile(r"주문\s*내역|^\s*\d+\s*[.)]", re.M)
+CHANGES_ORDER = ("add_item", "modify_item", "remove_item")
+
+
+def build_reply(calls: list, content: str, state: list, first_item_possible: bool = False,
+                phase: str = "ordering", dine=None, temp_said: bool = True) -> dict:
     """Apply tool calls and build the spoken reply.
 
     first_item_possible: this customer has not ordered anything yet in this session, so the
     one-time "더 필요하신 거 있으세요?" may follow the first item.
-    Returns state, spoken, kinds, confirmed, dine_option, staff_reason, tool_results (one per call,
+    phase: ordering -> awaiting (confirm_order read the order back and asked) -> confirmed (locked).
+      - confirm_order while ordering does not confirm: it reads the order back and asks dine-in/takeout
+        when unknown (A1). It confirms only in "awaiting" (the customer said yes) with a known dine option.
+      - a change while awaiting is applied and the order goes back to "ordering" (unconfirmed).
+      - once confirmed, add/modify/remove are not applied: the robot says so and calls staff (A2).
+    dine: dine option the customer stated in this session (None = not said).
+    Returns state, spoken, kinds, phase, confirmed, dine_option, staff_reason, tool_results (one per call,
     for the chat-format history), blocked (guarded free text) and legacy_history (old plain text)."""
     t = T()
     sents, kinds, results = [], [], []
     adds = []
-    confirmed, dine, staff_reason, blocked = False, None, None, None
+    confirmed, staff_reason, blocked = False, None, None
+    new_phase, readback, changed = phase, False, False
     cur = [dict(x) for x in state]
 
     def flush_adds():
@@ -179,12 +226,32 @@ def build_reply(calls: list, content: str, state: list, first_item_possible: boo
             sents.append(("add", t["add"].format(items_iyo=iyo(", ".join(adds)))))
             adds.clear()
 
+    held, history_calls = [], []
     for c in calls or []:
         name, a = c.get("name"), c.get("arguments") or {}
+        if phase == "confirmed" and name in CHANGES_ORDER:
+            history_calls.append(c)
+            flush_adds()
+            if "locked" not in kinds:
+                kinds += ["locked", "staff"]
+                sents.append(("locked", t["locked"]))
+                staff_reason = t["locked_staff_reason"]
+            results.append({"ok": False, "error": "order already placed; staff called"})
+            continue
+        if name == "add_item" and needs_temperature(a, temp_said):
+            # A3 safety net: the model added a hot-or-iced item although the customer said no temperature.
+            # Not added; the robot asks, and the history records the question instead of the add.
+            kinds.append("ask_temp")
+            held.append(str(normalize_add(a)["menu"]))
+            results.append({"ok": False, "not_added": "temperature not given; asked the customer"})
+            history_calls.append(None)
+            continue
+        history_calls.append(c)
         if name == "add_item":
             kinds.append("add")
             adds.append(describe(a))
             cur = apply_calls(cur, [c])
+            changed = True
             results.append({"ok": True, "added": describe(a)})
             continue
         flush_adds()
@@ -197,6 +264,7 @@ def build_reply(calls: list, content: str, state: list, first_item_possible: boo
                 continue
             target = topic(name_in_order(cur, i - 1))
             several = len(cur) > 1
+            changed = True
             if name == "modify_item":
                 kinds.append("modify")
                 ch = a.get("changes") if isinstance(a.get("changes"), dict) else {}
@@ -209,6 +277,10 @@ def build_reply(calls: list, content: str, state: list, first_item_possible: boo
                 sents.append(("remove", t["remove_target" if several else "remove"].format(target=target)))
                 results.append({"ok": True, "removed": describe(cur[i - 1])})
                 cur = apply_calls(cur, [c])
+        elif name == "read_order":
+            kinds.append("read_order")
+            sents.append(("read_order", read_order_text(cur)))
+            results.append({"ok": True})
         elif name == "inform":
             kinds.append("inform")
             answer = demo_config.inform_answer(str(a.get("topic") or ""), a.get("item"))
@@ -225,23 +297,57 @@ def build_reply(calls: list, content: str, state: list, first_item_possible: boo
             sents.append(("staff", t["call_staff"]))
             results.append({"ok": True, "staff_called": True})
         elif name == "confirm_order":
-            kinds.append("confirm")
-            dine = a.get("dine_option") if a.get("dine_option") in ("dine_in", "takeout") else defaults()["dine_option"]
+            if phase == "confirmed":
+                kinds.append("already_confirmed")
+                sents.append(("already", t["already_confirmed"]))
+                results.append({"ok": True, "already_placed": True})
+                continue
             if not cur:
+                kinds.append("confirm_empty")
                 sents.append(("confirm_empty", t["confirm_empty"]))
                 results.append({"ok": False, "error": "order is empty"})
                 continue
-            confirmed = True
-            sents.append(("confirm", t["confirm_takeout" if dine == "takeout" else "confirm"]))
-            results.append({"ok": True, "confirmed": True, "dine_option": dine})
+            dine = dine or ("takeout" if a.get("dine_option") == "takeout" else None)
+            if phase == "awaiting" and not changed:
+                if dine:
+                    kinds.append("confirm")
+                    confirmed, new_phase = True, "confirmed"
+                    sents.append(("confirm", t["confirm_takeout" if dine == "takeout" else "confirm"]))
+                    results.append({"ok": True, "confirmed": True, "dine_option": dine})
+                else:
+                    kinds.append("ask_dine")
+                    sents.append(("ask_dine", t["ask_dine"]))
+                    results.append({"ok": True, "waiting_for": "dine_option"})
+            else:
+                kinds.append("readback")
+                readback, new_phase = True, "awaiting"
+                results.append({"ok": True, "read_back_and_asked": True})
         else:
             kinds.append("unknown")
             results.append({"ok": False, "error": f"unknown tool {name}"})
     flush_adds()
+    if held:
+        only = len(sents) == 0 and len(held) == 1
+        q = t["ask_temp"] if only else t["ask_temp_item"].format(menu_topic=topic(listing_ko(held)))
+        sents.append(("ask_temp", q))
+        hc = {"name": "ask_clarification", "arguments": {"question": q, "reason": "ambiguous"}}
+        results = [res for x, res in zip(history_calls, results) if x is not None] + [{"ok": True, "said_to_customer": q}]
+        history_calls = [x for x in history_calls if x is not None] + [hc]
+        if readback:                                   # cannot read back an order that is still missing a choice
+            readback, new_phase = False, phase if phase != "awaiting" else "ordering"
+            kinds.remove("readback")
+    if changed and phase == "awaiting" and not readback:
+        new_phase = "ordering"                     # changed instead of confirming: stays unconfirmed
+    if readback:
+        sents.append(("readback", readback_text(cur, dine)))
 
     if not sents:
         text = (content or "").strip()
-        if text:
+        if text and ORDER_LIST.search(text):
+            kinds += ["read_order", "free_text_replaced"]   # model wrote the order out: read it from the state
+            blocked = {"text": text, "replaced_by": "read_order"}
+            sents.append(("read_order", read_order_text(cur)))
+        elif text:
             bad = demo_config.unknown_terms(text)
             if bad:
                 kinds.append("free_text_blocked")      # names things that are not on the menu
@@ -263,8 +369,9 @@ def build_reply(calls: list, content: str, state: list, first_item_possible: boo
                     s = s[len(p):]
                     break
         spoken.append(s)
-    return {"state": cur, "spoken": " ".join(spoken), "kinds": kinds, "confirmed": confirmed, "dine_option": dine,
-            "staff_reason": staff_reason, "tool_results": results, "blocked": blocked,
+    return {"state": cur, "spoken": " ".join(spoken), "kinds": kinds, "phase": new_phase, "confirmed": confirmed,
+            "dine_option": dine, "staff_reason": staff_reason, "tool_results": results, "blocked": blocked,
+            "history_calls": [x for x in history_calls if x is not None] if held else list(calls or []),
             "legacy_history": legacy_history(calls, content, state)}
 
 

@@ -1,0 +1,39 @@
+{
+  "method_sections": "llama-server /tokenize",
+  "prompt_with_tools": 4480,
+  "prompt_without_tools": 3041,
+  "tools": 1439,
+  "sections": {
+    "system_rules": 1048,
+    "demo_rules": 582,
+    "menu": 810,
+    "menu_rules_aliases": 564
+  },
+  "tools_json_tokens_each": {
+    "add_item": 455,
+    "modify_item": 226,
+    "remove_item": 76,
+    "ask_clarification": 200,
+    "call_staff": 117,
+    "confirm_order": 109,
+    "inform": 249,
+    "read_order": 78
+  },
+  "menu_line_avg": 52.6,
+  "by_heading": {
+    "너는 카페 주문 로봇의 언어 두뇌다. 손님의 마지막 말을 듣고, 반드시 제공된 도구를 하나 이상 호출해서 처리한다.": 33,
+    "[기본값]": 231,
+    "[주문 처리]": 244,
+    "[되묻기·거절: ask_clarification]": 235,
+    "[조건부 요청]": 157,
+    "[직원 호출: call_staff]": 148,
+    "[메뉴 안내: inform]": 297,
+    "[주문 내역 읽기: read_order]": 51,
+    "[온도 묻기]": 196,
+    "[되묻기 말투]": 38,
+    "[메뉴판]": 810,
+    "[메뉴 규칙]": 247,
+    "[줄임말/다른 이름]": 317
+  },
+  "state_and_user_overhead": 37
+}

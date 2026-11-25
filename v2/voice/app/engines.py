@@ -84,23 +84,43 @@ class STT:
 
 
 # ---------------------------------------------------------------- prompt layout
-def split_prompt(order_state: list) -> tuple[dict, dict]:
+def split_prompt(order_state: list, phase: str | None = None) -> tuple[dict, dict]:
     """v1 system prompt split exactly like bench_latency's deploy layout:
-    fixed head (rules + menu, never changes) and the '[현재 주문 내역]' system message."""
+    fixed head (rules + menu, never changes) and the '[현재 주문 내역]' system message.
+    Demo config: the order-flow phase line (확인 대기 / 주문 완료) is appended to the state message."""
     head, tail = system_prompt(order_state).split(ORDER_SEP)
+    if RUN["config"] == "demo":
+        tail += demo_config.phase_line(phase)
     return {"role": "system", "content": head}, {"role": "system", "content": "[현재 주문 내역]\n" + tail}
 
 
-def build_prompt(layout: str, order_state: list, turns: list, text: str) -> list:
+COMPACT_LAST = 2   # compact layout: the last N exchanges (+ the robot's last question if it is older)
+
+
+def compact_turns(turns: list) -> list:
+    keep = set(range(max(0, len(turns) - COMPACT_LAST), len(turns)))
+    asked = [i for i, t in enumerate(turns) if t.get("asked")]
+    if asked and asked[-1] not in keep:
+        keep.add(asked[-1])
+    return [turns[i] for i in sorted(keep)]
+
+
+def build_prompt(layout: str, order_state: list, turns: list, text: str, phase: str | None = None) -> list:
     """layout 'deploy' = v1 6c (first app version): one order-state message, moved before the newest
                           user turn every time (earlier messages shift -> cache diverges there).
        layout 'append' = append-only: system head, then for every past turn the order state it saw,
                           the user turn and the assistant/tool messages, then the current state and
-                          the new user turn. Nothing earlier is rewritten, so the cached prefix grows."""
+                          the new user turn. Nothing earlier is rewritten, so the cached prefix grows.
+       layout 'compact' = D1: fixed head (byte-identical every turn, cached) + the last 2 exchanges
+                          (+ the robot's last question) in short form + current order state + new turn.
+                          The order state is authoritative, so older turns are dropped."""
     user = {"role": "user", "content": text}
-    head, state_msg = split_prompt(order_state)
+    head, state_msg = split_prompt(order_state, phase)
     if layout == "deploy":   # same as bench_latency.build_messages("deploy"), with the active config's prompt
         flat = [m for t in turns for m in [t["user"]] + t["assistant"]]
+        return [head] + flat + [state_msg, user]
+    if layout == "compact":
+        flat = [m for t in compact_turns(turns) for m in [t["user"]] + t.get("assistant_short", t["assistant"])]
         return [head] + flat + [state_msg, user]
     msgs = [head]
     for t in turns:

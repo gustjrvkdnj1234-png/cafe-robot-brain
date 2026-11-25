@@ -1,0 +1,8 @@
+{
+  "type": "function",
+  "function": {
+    "name": "read_order",
+    "description": "Tell the customer what is in the current order, when they ask what they ordered or ask to hear / check the order again. The app reads the order aloud from the order state; never list the order yourself.",
+    "parameters": {"type": "object", "properties": {}}
+  }
+}

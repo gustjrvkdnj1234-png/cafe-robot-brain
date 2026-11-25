@@ -22,19 +22,72 @@ from cafe_common import build_system_prompt, canonical_menu, items_by_name, load
 MENU_ANCHOR = "\n[메뉴판]\n"
 
 
+# A3 can come from the prompt ("prompt": rule + edits below, and the app safety net) or from the app only
+# ("app": v1 temperature wording, no [온도 묻기] section; the app holds a hot-or-iced add_item without a
+# temperature and asks). Set by engines.RUN["a3"] / server --a3.
+A3 = {"mode": "app"}   # default: app safety net only (2026-11-25 regression: prompt rule cost 8 other cafe items)
+A3_SECTION = "[온도 묻기]"
+
+
 def rules_text() -> str:
-    return (DEMO / "rules.txt").read_text(encoding="utf-8").strip()
+    text = (DEMO / "rules.txt").read_text(encoding="utf-8").strip()
+    if A3["mode"] != "prompt":
+        parts = re.split(r"\n\n(?=\[)", text)
+        text = "\n\n".join(p for p in parts if not p.startswith(A3_SECTION))
+    return text
+
+
+# A3 (ask the temperature): the v1 text says "hot unless stated"; the demo copy says "ask" for items that
+# come both hot and iced. Each replacement must match exactly once, so a v1 wording change fails loudly.
+PROMPT_EDITS = [
+    ("손님이 말하지 않은 옵션은 묻지 말고 기본값을 쓴다. (Don't ask about options the customer didn't mention; use defaults.)",
+     "손님이 말하지 않은 옵션은 묻지 말고 기본값을 쓴다. 단, 온도는 예외다(아래 [온도 묻기]). "
+     "(Don't ask about options the customer didn't mention; use defaults. Exception: temperature.)"),
+    ("- 온도: 따뜻하게(hot). 단, 콜드브루와 아이스만 되는 메뉴(에이드)는 아이스(iced). 디저트는 온도 없음.",
+     "- 온도: 기본값 없음. 따뜻한 것과 아이스가 둘 다 되는 메뉴는 손님이 말하지 않으면 묻는다(아래 [온도 묻기]). "
+     "아이스만 되는 메뉴(에이드)는 아이스(iced), 따뜻하게만 되는 메뉴(에스프레소)는 따뜻하게(hot). 디저트는 온도 없음."),
+]
+BOTH_TEMPS = re.compile(r"온도 따뜻한/아이스\(기본 [^)]*\)")
+TEMP_TOOL_DESC = ("Drink temperature, exactly as the customer said it. No default for items that come both hot and iced: "
+                  "if the customer did not say, ask instead of adding. Ade: iced only; espresso: hot only.")
 
 
 def system_prompt(order_state) -> str:
     sp = build_system_prompt(order_state)
+    for old, new in (PROMPT_EDITS if A3["mode"] == "prompt" else []):
+        assert sp.count(old) == 1, f"v1 prompt text changed: {old[:30]}"
+        sp = sp.replace(old, new)
+    if A3["mode"] == "prompt":
+        sp = BOTH_TEMPS.sub("온도 따뜻한/아이스(말하지 않으면 묻기)", sp)
     i = sp.index(MENU_ANCHOR)
     return sp[:i] + "\n\n" + rules_text() + sp[i:]
 
 
-@lru_cache(maxsize=1)
 def tools() -> list:
-    return load_tools() + [json.loads((DEMO / "inform_tool.json").read_text(encoding="utf-8"))]
+    return _tools(A3["mode"])
+
+
+@lru_cache(maxsize=2)
+def _tools(_mode) -> list:
+    v1 = json.loads(json.dumps(load_tools()))               # deep copy: data/tools.json is not changed
+    for t in v1:
+        if t["function"]["name"] == "add_item" and A3["mode"] == "prompt":
+            t["function"]["parameters"]["properties"]["temperature"]["description"] = TEMP_TOOL_DESC
+    extra = [json.loads((DEMO / f).read_text(encoding="utf-8")) for f in ("inform_tool.json", "read_order_tool.json")]
+    return v1 + extra
+
+
+# Order-flow line appended to the "[현재 주문 내역]" message (A1/A2). Nothing is added while ordering,
+# so the exams (which never have a phase) see exactly the same message as before.
+PHASE_LINES = {
+    "awaiting": "\n[주문 확인 대기] 위 주문을 손님에게 읽어 드리고 확인을 물었다. 손님이 맞다고 하거나 매장/포장을 말하면 "
+                "confirm_order를 호출한다(포장이면 dine_option=\"takeout\"). 메뉴를 더하거나 바꾸면 그 도구를 호출한다.",
+    "confirmed": "\n[주문 완료] 이 주문은 이미 들어갔다. 메뉴를 더하거나 바꿀 수 없다.",
+}
+
+
+def phase_line(phase) -> str:
+    return PHASE_LINES.get(phase or "", "")
 
 
 # ---------------------------------------------------------------- Korean particles
@@ -47,7 +100,7 @@ def _final(word: str):
 
 def _p(word, with_final, without, unknown):
     f = _final(word)
-    return f"{word}{with_final if f else without if f == 0 else unknown}"
+    return f"{word}{with_final if f else without}"   # non-Hangul ending: vowel form (never "은(는)" aloud)
 
 
 def topic(w):
@@ -127,6 +180,15 @@ def items_in(cat) -> list:
     return [it["name"] for it in load_menu()["items"] if it["category"] == cat]
 
 
+OPTION_WORDS = {w: k for k, ws in {
+    "sweetness": ["sweetness", "당도", "단맛", "달기", "단정도", "당도조절"],
+    "shots": ["shots", "shot", "shots_delta", "샷", "샷추가", "에스프레소샷"],
+    "size": ["size", "사이즈", "크기", "용량"],
+    "temperature": ["temperature", "온도"],
+    "milk": ["milk", "우유", "오트", "오트우유", "오트밀크"],
+}.items() for w in ws}
+
+
 # ---------------------------------------------------------------- inform answers
 def inform_answer(topic_: str, item=None) -> str:
     import replies  # templates live in replies.json
@@ -136,6 +198,9 @@ def inform_answer(topic_: str, item=None) -> str:
     name = resolve_menu(item)
     it = items_by_name().get(name) if name else None
     size_words = lambda sizes: listing(t["size_names"].get(s, s) for s in sizes)  # noqa: E731
+    opt = OPTION_WORDS.get(_norm(item))
+    if opt and not it:                    # a question about an option itself ("당도가 어느 정도예요?")
+        return t["option_detail"][opt]
 
     if topic_ == "category_items":
         cat = resolve_category(item) or (it and it["category"])

@@ -51,7 +51,8 @@ function play(src) {
   player = new Audio(src); player.play().catch(e => say("자동 재생이 막혔어요: " + e.message));
 }
 
-const KIND_KO = { inform: "메뉴 안내 (menu.json)", free_text: "도구 없이 말로 답함",
+const KIND_KO = { readback: "주문 확인 질문", ask_dine: "매장/포장 질문", confirm: "주문 확정", locked: "확정 후 변경 → 직원",
+                  read_order: "주문 내역 (주문 상태에서 읽음)", inform: "메뉴 안내 (menu.json)", free_text: "도구 없이 말로 답함",
                   free_text_blocked: "메뉴에 없는 이름이 있어 읽지 않음", fallback: "다시 말해 달라고 함", no_speech: "말소리 없음" };
 
 function show(d, t0) {
@@ -63,8 +64,14 @@ function show(d, t0) {
   $("kindTag").textContent = tag || ""; $("kindTag").classList.toggle("hidden", !tag);
   $("calls").textContent = JSON.stringify({ tool_calls: d.tool_calls, content: d.content || undefined }, null, 2);
   renderOrder(d.order);
-  if (d.confirmed) { $("confirmed").textContent = d.dine_option === "takeout" ? "✅ 주문 확정 · 포장" : "✅ 주문 확정 · 매장";
-    $("confirmed").classList.remove("hidden"); }
+  // order flow: 주문 중 -> 확인 대기 (read back, waiting for yes / dine option) -> 확정 (locked)
+  const dine = d.dine_said === "takeout" ? "포장" : d.dine_said === "dine_in" ? "매장" : "매장/포장 미정";
+  if (d.confirmed) {
+    $("confirmed").textContent = d.dine_option === "takeout" ? "✅ 주문 확정 · 포장 (변경은 직원)" : "✅ 주문 확정 · 매장 (변경은 직원)";
+    $("confirmed").className = "badge done";
+  } else if (d.phase === "awaiting") {
+    $("confirmed").textContent = `⏳ 확인 대기 · ${dine}`; $("confirmed").className = "badge wait";
+  } else { $("confirmed").className = "badge hidden"; }
   if (d.staff_called) { $("staffReason").textContent = d.staff_reason; $("staff").classList.remove("hidden"); }
   const t = d.timings;
   $("tStt").textContent = fmt(t.stt_s); $("tLlm").textContent = fmt(t.llm_s); $("tTts").textContent = fmt(t.tts_s);

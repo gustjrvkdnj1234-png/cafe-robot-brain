@@ -41,7 +41,7 @@ try {
     $server = Start-Process -FilePath $Py -ArgumentList $argv -NoNewWindow -PassThru
     $url = "http://127.0.0.1:$Port/"
     $ready = $false
-    for ($i = 0; $i -lt 240 -and -not $server.HasExited; $i++) {
+    for ($i = 0; $i -lt 480 -and -not $server.HasExited; $i++) {
         Start-Sleep -Milliseconds 1000
         try {
             $h = Invoke-RestMethod "$($url)api/health" -TimeoutSec 3
