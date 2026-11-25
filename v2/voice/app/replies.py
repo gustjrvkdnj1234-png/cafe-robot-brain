@@ -339,7 +339,11 @@ def build_reply(calls: list, content: str, state: list, first_item_possible: boo
     if changed and phase == "awaiting" and not readback:
         new_phase = "ordering"                     # changed instead of confirming: stays unconfirmed
     if readback:
-        sents.append(("readback", readback_text(cur, dine)))
+        # the read-back names the whole order, so an add/modify sentence of the same turn would repeat it
+        # ("아바라 테이크아웃이요" -> "네, 아이스 바닐라라떼 한 잔이요. 아이스 바닐라라떼 한 잔이요. ...")
+        same = [s for s in sents if s[0] in ("add", "modify")]
+        sents = [s for s in sents if s[0] not in ("add", "modify")]
+        sents.append(("readback", ("네, " if same else "") + readback_text(cur, dine)))
 
     if not sents:
         text = (content or "").strip()

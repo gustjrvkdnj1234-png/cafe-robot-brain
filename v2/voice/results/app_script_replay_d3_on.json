@@ -1,0 +1,772 @@
+{
+  "label": "replay_d3_on",
+  "stream": 1,
+  "script": "log:f68fd4",
+  "settings": {
+    "history": "tools",
+    "layout": "append",
+    "max_turns": 20,
+    "trim_to": 10,
+    "stream_tts": true,
+    "config": "demo",
+    "mode": "cpu",
+    "num_ctx": 8192,
+    "num_predict": 512,
+    "a3": "app",
+    "stt": {
+      "model": "fw-medium",
+      "hints": "none",
+      "window": "full",
+      "vad": false
+    }
+  },
+  "free_text_turns": 0,
+  "turns": [
+    {
+      "input": "아이스 아메리카노 한잔 주세요",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "아메리카노",
+            "temperature": "iced"
+          }
+        }
+      ],
+      "content": "",
+      "reply": "네, 아이스 아메리카노 한 잔이요. 더 필요하신 거 있으세요?",
+      "kinds": [
+        "add"
+      ],
+      "order": [
+        "아이스 아메리카노 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 2.211,
+        "tts_s": 1.321,
+        "first_audio_s": 3.534,
+        "total_s": 5.048,
+        "audio_in_s": null,
+        "audio_parts": 2,
+        "load_s": 0.022,
+        "prompt_tokens": 4190,
+        "prompt_s": 0.606,
+        "gen_tokens": 24,
+        "gen_s": 1.322,
+        "prompt_messages": 3,
+        "history_turns": 1,
+        "tts_rest_s": 1.506
+      },
+      "confirmed": false,
+      "phase": "ordering",
+      "dine_option": null,
+      "client_first_audio_s": 3.764,
+      "client_s": 5.108,
+      "cache": {
+        "n_tokens": 4190,
+        "reused": 4185,
+        "evaluated": 5,
+        "eval_s": 0.606
+      }
+    },
+    {
+      "input": "안녕 없어요",
+      "tool_calls": [
+        {
+          "name": "confirm_order",
+          "arguments": {
+            "dine_option": "dine_in"
+          }
+        }
+      ],
+      "content": "",
+      "reply": "아이스 아메리카노 한 잔이요. 드시고 가세요, 포장이세요?",
+      "kinds": [
+        "readback"
+      ],
+      "order": [
+        "아이스 아메리카노 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 4.094,
+        "tts_s": 0.992,
+        "first_audio_s": 5.088,
+        "total_s": 5.1,
+        "audio_in_s": null,
+        "audio_parts": 2,
+        "load_s": 0.032,
+        "prompt_tokens": 4308,
+        "prompt_s": 2.822,
+        "gen_tokens": 19,
+        "gen_s": 1.206,
+        "prompt_messages": 7,
+        "history_turns": 2,
+        "tts_rest_s": 0.0
+      },
+      "confirmed": false,
+      "phase": "awaiting",
+      "dine_option": null,
+      "client_first_audio_s": 5.178,
+      "client_s": 5.224,
+      "cache": {
+        "n_tokens": 4308,
+        "reused": 4186,
+        "evaluated": 122,
+        "eval_s": 2.822
+      }
+    },
+    {
+      "input": "초코라떼 한잔이랑 뜨거운 뜨거운 한잔이요.",
+      "tool_calls": [
+        {
+          "name": "ask_clarification",
+          "arguments": {
+            "question": "초코라떼는 저희 메뉴에 없는데, 초콜릿케이크를 말씀하시는 걸까요? 아니면 다른 음료를 찾으시나요?",
+            "reason": "off_menu"
+          }
+        }
+      ],
+      "content": "",
+      "reply": "초코라떼는 저희 메뉴에 없는데, 초콜릿케이크를 말씀하시는 걸까요? 아니면 다른 음료를 찾으시나요?",
+      "kinds": [
+        "ask"
+      ],
+      "order": [
+        "아이스 아메리카노 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 10.522,
+        "tts_s": 1.39,
+        "first_audio_s": 11.917,
+        "total_s": 13.348,
+        "audio_in_s": null,
+        "audio_parts": 2,
+        "load_s": 0.02,
+        "prompt_tokens": 4496,
+        "prompt_s": 5.738,
+        "gen_tokens": 56,
+        "gen_s": 4.71,
+        "prompt_messages": 11,
+        "history_turns": 3,
+        "tts_rest_s": 1.418
+      },
+      "confirmed": false,
+      "phase": "awaiting",
+      "dine_option": null,
+      "client_first_audio_s": 12.754,
+      "client_s": 13.385,
+      "cache": {
+        "n_tokens": 4496,
+        "reused": 4304,
+        "evaluated": 192,
+        "eval_s": 5.738
+      }
+    },
+    {
+      "input": "아 초코라떼 없어요? 그러면 뭐 에이드 한잔 에이드 뭐 있어요 레몬에이드?",
+      "tool_calls": [
+        {
+          "name": "inform",
+          "arguments": {
+            "item": "에이드",
+            "topic": "category_items"
+          }
+        }
+      ],
+      "content": "",
+      "reply": "에이드는 레몬에이드, 자몽에이드, 청포도에이드가 있어요.",
+      "kinds": [
+        "inform"
+      ],
+      "order": [
+        "아이스 아메리카노 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 8.712,
+        "tts_s": 0.855,
+        "first_audio_s": 9.57,
+        "total_s": 9.574,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.018,
+        "prompt_tokens": 4772,
+        "prompt_s": 6.889,
+        "gen_tokens": 22,
+        "gen_s": 1.766,
+        "prompt_messages": 15,
+        "history_turns": 4,
+        "tts_rest_s": 0.0
+      },
+      "confirmed": false,
+      "phase": "awaiting",
+      "dine_option": null,
+      "client_first_audio_s": 9.687,
+      "client_s": 9.687,
+      "cache": {
+        "n_tokens": 4772,
+        "reused": 4492,
+        "evaluated": 280,
+        "eval_s": 6.889
+      }
+    },
+    {
+      "input": "아 그럼 청포도에이드랑 아까 주문한 거 뜨한잔 주세요",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "청포도에이드"
+          }
+        },
+        {
+          "name": "modify_item",
+          "arguments": {
+            "changes": {
+              "temperature": "hot"
+            },
+            "item_index": 1
+          }
+        }
+      ],
+      "content": "",
+      "reply": "네, 청포도에이드 한 잔이요. 아메리카노는 따뜻하게 바꿀게요.",
+      "kinds": [
+        "add",
+        "modify"
+      ],
+      "order": [
+        "따뜻한 아메리카노 한 잔",
+        "청포도에이드 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 8.4,
+        "tts_s": 1.141,
+        "first_audio_s": 9.545,
+        "total_s": 10.807,
+        "audio_in_s": null,
+        "audio_parts": 2,
+        "load_s": 0.013,
+        "prompt_tokens": 4979,
+        "prompt_s": 5.596,
+        "gen_tokens": 41,
+        "gen_s": 2.704,
+        "prompt_messages": 19,
+        "history_turns": 5,
+        "tts_rest_s": 1.254
+      },
+      "confirmed": false,
+      "phase": "ordering",
+      "dine_option": null,
+      "client_first_audio_s": 9.714,
+      "client_s": 10.942,
+      "cache": {
+        "n_tokens": 4979,
+        "reused": 4768,
+        "evaluated": 211,
+        "eval_s": 5.596
+      }
+    },
+    {
+      "input": "아 근데 청포도에이드 덜 달게 해주세요",
+      "tool_calls": [
+        {
+          "name": "modify_item",
+          "arguments": {
+            "changes": {
+              "sweetness": "less"
+            },
+            "item_index": 2
+          }
+        }
+      ],
+      "content": "",
+      "reply": "네, 청포도에이드는 덜 달게 할게요.",
+      "kinds": [
+        "modify"
+      ],
+      "order": [
+        "따뜻한 아메리카노 한 잔",
+        "청포도에이드 덜 달게 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 6.825,
+        "tts_s": 1.194,
+        "first_audio_s": 8.021,
+        "total_s": 8.027,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.028,
+        "prompt_tokens": 5178,
+        "prompt_s": 4.985,
+        "gen_tokens": 24,
+        "gen_s": 1.777,
+        "prompt_messages": 24,
+        "history_turns": 6,
+        "tts_rest_s": 0.0
+      },
+      "confirmed": false,
+      "phase": "ordering",
+      "dine_option": null,
+      "client_first_audio_s": 8.149,
+      "client_s": 8.149,
+      "cache": {
+        "n_tokens": 5178,
+        "reused": 4975,
+        "evaluated": 203,
+        "eval_s": 4.985
+      }
+    },
+    {
+      "input": "덜 달으면 어떤거랑 비교 되나요? 좀 단거 싫어해가지고 어느정도라고 보면 되죠?",
+      "tool_calls": [
+        {
+          "name": "inform",
+          "arguments": {
+            "item": "청포도에이드",
+            "topic": "options"
+          }
+        }
+      ],
+      "content": "",
+      "reply": "청포도에이드는 사이즈, 당도를 고를 수 있어요.",
+      "kinds": [
+        "inform"
+      ],
+      "order": [
+        "따뜻한 아메리카노 한 잔",
+        "청포도에이드 덜 달게 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 6.146,
+        "tts_s": 1.422,
+        "first_audio_s": 7.57,
+        "total_s": 7.574,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.048,
+        "prompt_tokens": 5340,
+        "prompt_s": 4.352,
+        "gen_tokens": 23,
+        "gen_s": 1.705,
+        "prompt_messages": 28,
+        "history_turns": 7,
+        "tts_rest_s": 0.0
+      },
+      "confirmed": false,
+      "phase": "ordering",
+      "dine_option": null,
+      "client_first_audio_s": 7.748,
+      "client_s": 7.748,
+      "cache": {
+        "n_tokens": 5340,
+        "reused": 5174,
+        "evaluated": 166,
+        "eval_s": 4.352
+      }
+    },
+    {
+      "input": "아 그건 저도 알아요. 당도가 어느 정도냐고요. 비교공이 없어요?",
+      "tool_calls": [
+        {
+          "name": "ask_clarification",
+          "arguments": {
+            "question": "죄송합니다, 당도에 대해 더 자세히 안내해 드릴까요?",
+            "reason": "ambiguous"
+          }
+        }
+      ],
+      "content": "",
+      "reply": "죄송합니다, 당도에 대해 더 자세히 안내해 드릴까요?",
+      "kinds": [
+        "ask"
+      ],
+      "order": [
+        "따뜻한 아메리카노 한 잔",
+        "청포도에이드 덜 달게 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 9.128,
+        "tts_s": 0.994,
+        "first_audio_s": 10.125,
+        "total_s": 10.128,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.011,
+        "prompt_tokens": 5492,
+        "prompt_s": 5.151,
+        "gen_tokens": 38,
+        "gen_s": 3.924,
+        "prompt_messages": 32,
+        "history_turns": 8,
+        "tts_rest_s": 0.0
+      },
+      "confirmed": false,
+      "phase": "ordering",
+      "dine_option": null,
+      "client_first_audio_s": 10.212,
+      "client_s": 10.212,
+      "cache": {
+        "n_tokens": 5492,
+        "reused": 5336,
+        "evaluated": 156,
+        "eval_s": 5.151
+      }
+    },
+    {
+      "input": "아 그럼 됐구요 그냥 라떼 반셈만 해서 주세요",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "카페라떼",
+            "shots_delta": -0.5
+          }
+        }
+      ],
+      "content": "",
+      "reply": "따뜻한 거요, 아이스요?",
+      "kinds": [
+        "ask_temp"
+      ],
+      "order": [
+        "따뜻한 아메리카노 한 잔",
+        "청포도에이드 덜 달게 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 7.351,
+        "tts_s": 0.0,
+        "first_audio_s": 7.353,
+        "total_s": 7.356,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.006,
+        "prompt_tokens": 5657,
+        "prompt_s": 5.336,
+        "gen_tokens": 25,
+        "gen_s": 1.963,
+        "prompt_messages": 36,
+        "history_turns": 9,
+        "tts_rest_s": 0.0
+      },
+      "confirmed": false,
+      "phase": "ordering",
+      "dine_option": null,
+      "client_first_audio_s": 7.405,
+      "client_s": 7.405,
+      "cache": {
+        "n_tokens": 5657,
+        "reused": 5488,
+        "evaluated": 169,
+        "eval_s": 5.336
+      }
+    },
+    {
+      "input": "아니 전 따뜻하기라고 말한 적 없는데 카페라떼 말고 바닐라라떼 반삼만 넣어가지고 해줘요",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "바닐라라떼",
+            "shots_delta": -0.5
+          }
+        }
+      ],
+      "content": "",
+      "reply": "네, 따뜻한 바닐라라떼 반 샷 한 잔이요.",
+      "kinds": [
+        "add"
+      ],
+      "order": [
+        "따뜻한 아메리카노 한 잔",
+        "청포도에이드 덜 달게 한 잔",
+        "따뜻한 바닐라라떼 반 샷 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 7.63,
+        "tts_s": 0.957,
+        "first_audio_s": 8.596,
+        "total_s": 8.604,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.013,
+        "prompt_tokens": 5822,
+        "prompt_s": 5.496,
+        "gen_tokens": 27,
+        "gen_s": 2.06,
+        "prompt_messages": 40,
+        "history_turns": 10,
+        "tts_rest_s": 0.0
+      },
+      "confirmed": false,
+      "phase": "ordering",
+      "dine_option": null,
+      "client_first_audio_s": 8.716,
+      "client_s": 8.717,
+      "cache": {
+        "n_tokens": 5822,
+        "reused": 5653,
+        "evaluated": 169,
+        "eval_s": 5.496
+      }
+    },
+    {
+      "input": "아니 저는 따뜻하게라고 말한 적이 없다니까요 아이스로 좀 해줘요",
+      "tool_calls": [
+        {
+          "name": "modify_item",
+          "arguments": {
+            "changes": {
+              "temperature": "iced"
+            },
+            "item_index": 3
+          }
+        }
+      ],
+      "content": "",
+      "reply": "네, 바닐라라떼는 아이스로 바꿀게요.",
+      "kinds": [
+        "modify"
+      ],
+      "order": [
+        "따뜻한 아메리카노 한 잔",
+        "청포도에이드 덜 달게 한 잔",
+        "아이스 바닐라라떼 반 샷 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 8.468,
+        "tts_s": 0.869,
+        "first_audio_s": 9.34,
+        "total_s": 9.342,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.007,
+        "prompt_tokens": 6000,
+        "prompt_s": 6.418,
+        "gen_tokens": 23,
+        "gen_s": 2.01,
+        "prompt_messages": 44,
+        "history_turns": 11,
+        "tts_rest_s": 0.0
+      },
+      "confirmed": false,
+      "phase": "ordering",
+      "dine_option": null,
+      "client_first_audio_s": 9.515,
+      "client_s": 9.518,
+      "cache": {
+        "n_tokens": 6000,
+        "reused": 5818,
+        "evaluated": 182,
+        "eval_s": 6.418
+      }
+    },
+    {
+      "input": "아니 지금 바닐라 라떼, 눈이 아니라 바닐라 라떼 많이 시켰어요.",
+      "tool_calls": [
+        {
+          "name": "ask_clarification",
+          "arguments": {
+            "question": "바닐라라떼를 몇 잔 주문하시겠어요?",
+            "reason": "ambiguous"
+          }
+        }
+      ],
+      "content": "",
+      "reply": "바닐라라떼를 몇 잔 주문하시겠어요?",
+      "kinds": [
+        "ask"
+      ],
+      "order": [
+        "따뜻한 아메리카노 한 잔",
+        "청포도에이드 덜 달게 한 잔",
+        "아이스 바닐라라떼 반 샷 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 8.47,
+        "tts_s": 0.855,
+        "first_audio_s": 9.333,
+        "total_s": 9.337,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.052,
+        "prompt_tokens": 6178,
+        "prompt_s": 5.435,
+        "gen_tokens": 35,
+        "gen_s": 2.931,
+        "prompt_messages": 48,
+        "history_turns": 12,
+        "tts_rest_s": 0.0
+      },
+      "confirmed": false,
+      "phase": "ordering",
+      "dine_option": null,
+      "client_first_audio_s": 9.489,
+      "client_s": 9.49,
+      "cache": {
+        "n_tokens": 6178,
+        "reused": 5996,
+        "evaluated": 182,
+        "eval_s": 5.435
+      }
+    },
+    {
+      "input": "한잔이요. 한잔. 한잔만. 바닐라라떼 만이라고 했잖아요. 바닐라라떼 그럼 제가 뭘로 주문했는지 다시 말해줘요.",
+      "tool_calls": [
+        {
+          "name": "read_order",
+          "arguments": {}
+        }
+      ],
+      "content": "",
+      "reply": "지금 따뜻한 아메리카노 한 잔, 청포도에이드 덜 달게 한 잔, 아이스 바닐라라떼 반 샷 한 잔이에요.",
+      "kinds": [
+        "read_order"
+      ],
+      "order": [
+        "따뜻한 아메리카노 한 잔",
+        "청포도에이드 덜 달게 한 잔",
+        "아이스 바닐라라떼 반 샷 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 6.657,
+        "tts_s": 1.269,
+        "first_audio_s": 7.93,
+        "total_s": 7.937,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.013,
+        "prompt_tokens": 6382,
+        "prompt_s": 5.971,
+        "gen_tokens": 9,
+        "gen_s": 0.614,
+        "prompt_messages": 52,
+        "history_turns": 13,
+        "tts_rest_s": 0.0
+      },
+      "confirmed": false,
+      "phase": "ordering",
+      "dine_option": null,
+      "client_first_audio_s": 8.229,
+      "client_s": 8.229,
+      "cache": {
+        "n_tokens": 6382,
+        "reused": 6174,
+        "evaluated": 208,
+        "eval_s": 5.971
+      }
+    },
+    {
+      "input": "아, 되게 느리네. 아이스 바닐라 라떼 한 잔만 주시면 되는데요. 샷 반샷만 넣어가지고, 당도 덜 달게 해주시면 됩니다.",
+      "tool_calls": [
+        {
+          "name": "modify_item",
+          "arguments": {
+            "changes": {
+              "shots_delta": -0.5,
+              "sweetness": "less"
+            },
+            "item_index": 3
+          }
+        }
+      ],
+      "content": "",
+      "reply": "네, 바닐라라떼는 샷 반만 넣고 덜 달게 할게요.",
+      "kinds": [
+        "modify"
+      ],
+      "order": [
+        "따뜻한 아메리카노 한 잔",
+        "청포도에이드 덜 달게 한 잔",
+        "아이스 바닐라라떼 반 샷 덜 달게 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 9.527,
+        "tts_s": 1.458,
+        "first_audio_s": 10.987,
+        "total_s": 10.994,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.006,
+        "prompt_tokens": 6564,
+        "prompt_s": 5.894,
+        "gen_tokens": 32,
+        "gen_s": 3.593,
+        "prompt_messages": 56,
+        "history_turns": 14,
+        "tts_rest_s": 0.0
+      },
+      "confirmed": false,
+      "phase": "ordering",
+      "dine_option": null,
+      "client_first_audio_s": 11.228,
+      "client_s": 11.234,
+      "cache": {
+        "n_tokens": 6564,
+        "reused": 6378,
+        "evaluated": 186,
+        "eval_s": 5.894
+      }
+    },
+    {
+      "input": "그래서 제 주문 내용이 어떻게 된다고요?",
+      "tool_calls": [
+        {
+          "name": "read_order",
+          "arguments": {}
+        }
+      ],
+      "content": "",
+      "reply": "지금 따뜻한 아메리카노 한 잔, 청포도에이드 덜 달게 한 잔, 아이스 바닐라라떼 반 샷 덜 달게 한 잔이에요.",
+      "kinds": [
+        "read_order"
+      ],
+      "order": [
+        "따뜻한 아메리카노 한 잔",
+        "청포도에이드 덜 달게 한 잔",
+        "아이스 바닐라라떼 반 샷 덜 달게 한 잔"
+      ],
+      "timings": {
+        "stt_s": null,
+        "llm_s": 6.34,
+        "tts_s": 1.909,
+        "first_audio_s": 8.256,
+        "total_s": 8.272,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.025,
+        "prompt_tokens": 6754,
+        "prompt_s": 5.537,
+        "gen_tokens": 9,
+        "gen_s": 0.682,
+        "prompt_messages": 60,
+        "history_turns": 15,
+        "tts_rest_s": 0.0
+      },
+      "confirmed": false,
+      "phase": "ordering",
+      "dine_option": null,
+      "client_first_audio_s": 8.69,
+      "client_s": 8.69,
+      "cache": {
+        "n_tokens": 6754,
+        "reused": 6560,
+        "evaluated": 194,
+        "eval_s": 5.537
+      }
+    }
+  ]
+}

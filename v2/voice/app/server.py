@@ -23,7 +23,7 @@ from pathlib import Path
 import requests
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 
 APP = Path(__file__).resolve().parent
 sys.path.insert(0, str(APP))
@@ -41,6 +41,7 @@ E: dict = {}
 STATUS = {"stt": False, "tts": False, "heami": False, "llm": False, "llm_warmup": None, "errors": []}
 SESSIONS: dict = {}
 TURN_LOCK = threading.Lock()
+TTS_LOCK = threading.Lock()     # D3: the rest of a reply is synthesized after the turn lock is released
 
 
 # ---------------------------------------------------------------- config
@@ -109,8 +110,9 @@ SETTINGS = {"history": "tools",   # tools = assistant tool_calls + tool result m
             "layout": "append",   # append = append-only prompt (default: fastest on CPU, 2026-11-25 replay); compact = D1
                                   # (fixed head + last 2 exchanges + state, re-evaluated every turn); deploy = v1 6c layout
             "max_turns": 20,      # keep at most this many past turns (0 = no cap) ...
-            "trim_to": 10}        # ... and when exceeded cut back to this many. Trimming forces the history to be
+            "trim_to": 10,        # ... and when exceeded cut back to this many. Trimming forces the history to be
                                   # recomputed (404 tokens = 10.9 s on CPU at 6->3), so the cap is set above a usual order.
+            "stream_tts": True}   # D3: send the first sentence's audio first, the other sentences while it plays
 
 
 def new_session() -> dict:
@@ -163,13 +165,14 @@ def synthesize(text: str, voice: dict) -> tuple[bytes, float]:
     t = time.perf_counter()
     eng = "heami" if voice["engine"] == "heami" and "heami" in E else "supertonic"
     key = (eng, voice["sid"], voice["steps"], text)
-    if key in TTS_CACHE:
-        TTS_CACHE.move_to_end(key)
-        return TTS_CACHE[key], time.perf_counter() - t
-    data = E["heami"].say(text) if eng == "heami" else E["tts"].say(text, voice["sid"], voice["steps"])
-    TTS_CACHE[key] = data
-    while len(TTS_CACHE) > TTS_CACHE_MAX:
-        TTS_CACHE.popitem(last=False)
+    with TTS_LOCK:
+        if key in TTS_CACHE:
+            TTS_CACHE.move_to_end(key)
+            return TTS_CACHE[key], time.perf_counter() - t
+        data = E["heami"].say(text) if eng == "heami" else E["tts"].say(text, voice["sid"], voice["steps"])
+        TTS_CACHE[key] = data
+        while len(TTS_CACHE) > TTS_CACHE_MAX:
+            TTS_CACHE.popitem(last=False)
     return data, time.perf_counter() - t
 
 
@@ -178,11 +181,13 @@ def prewarm_tts():
     voice = load_voice()
     for k in TTS_PREWARM + ("temp_question",):
         text = tts_text.normalize("따뜻한 거요, 아이스요?" if k == "temp_question" else replies.T()[k])
-        with TURN_LOCK:
-            try:
-                synthesize(text, voice)
-            except Exception:  # noqa: BLE001
-                return
+        # the whole reply (no streaming) and its sentences (streaming), so both paths hit the cache
+        for piece in dict.fromkeys([text] + tts_text.sentences(text)):
+            with TURN_LOCK:
+                try:
+                    synthesize(piece, voice)
+                except Exception:  # noqa: BLE001
+                    return
 
 
 def sample_rate(data_url):
@@ -200,8 +205,14 @@ def log_turn(rec: dict):
         f.write(json.dumps(rec, ensure_ascii=False) + "\n")
 
 
+def wav_url(wav: bytes) -> str:
+    return "data:audio/wav;base64," + base64.b64encode(wav).decode("ascii")
+
+
 def run_turn(session_id: str, text: str, t_start: float, input_kind: str, stt_s: float | None,
-             audio_s: float | None) -> dict:
+             audio_s: float | None, stream: bool = False):
+    """One turn. Returns (out, rest): rest is None without streaming (out has the whole reply's audio);
+    with streaming, out has the first sentence's audio and rest is what stream_rest() needs for the others."""
     s = get_session(session_id)
     voice = load_voice()
     llm_info, error, n_msgs, fast = None, None, None, None
@@ -264,13 +275,18 @@ def run_turn(session_id: str, text: str, t_start: float, input_kind: str, stt_s:
         s["staff"].append(r["staff_reason"])
     s["n"] += 1
     audio, tts_s = None, None
+    parts = tts_text.sentences(r["spoken"]) if stream else [r["spoken"]]
     try:
-        wav, tts_s = synthesize(r["spoken"], voice)
-        audio = "data:audio/wav;base64," + base64.b64encode(wav).decode("ascii")
+        wav, tts_s = synthesize(parts[0], voice)
+        audio = wav_url(wav)
     except Exception as e:  # noqa: BLE001
         error = (error + " / " if error else "") + f"TTS: {e}"
-    total = time.perf_counter() - t_start
-    timings = {"stt_s": stt_s, "llm_s": llm_s, "tts_s": tts_s, "total_s": total, "audio_in_s": audio_s}
+        parts = parts[:1]
+    first = time.perf_counter() - t_start
+    # first_audio_s = request start -> first audio ready (without streaming: the whole reply's audio)
+    # total_s = request start -> all audio ready (streaming: set again by the last stream line)
+    timings = {"stt_s": stt_s, "llm_s": llm_s, "tts_s": tts_s, "first_audio_s": first, "total_s": first,
+               "audio_in_s": audio_s, "audio_parts": len(parts)}
     if llm_info:
         timings.update({k: llm_info[k] for k in ("load_s", "prompt_tokens", "prompt_s", "gen_tokens", "gen_s")})
     timings = {k: (round(v, 3) if isinstance(v, float) else v) for k, v in timings.items()}
@@ -282,14 +298,49 @@ def run_turn(session_id: str, text: str, t_start: float, input_kind: str, stt_s:
            "phase": s["phase"], "phase_before": phase_before, "dine_said": s["dine"], "fast_path": fast,
            "dine_option": s["dine_option"], "staff_called": bool(r["staff_reason"]),
            "staff_reason": r["staff_reason"], "timings": timings, "voice": voice, "error": error}
-    log_turn({"time": datetime.now().isoformat(timespec="seconds"),
-              **{k: v for k, v in out.items() if k not in ("order_state",)},
-              "history_messages": s["turns"][-1]["assistant"] if text.strip() and s["turns"] else None,
-              "blocked_free_text": r.get("blocked"), "run": dict(engines.RUN),
-              "done_reason": llm_info and llm_info.get("done_reason")})
+    rec = {"time": datetime.now().isoformat(timespec="seconds"),
+           **{k: v for k, v in out.items() if k not in ("order_state",)},
+           "history_messages": s["turns"][-1]["assistant"] if text.strip() and s["turns"] else None,
+           "blocked_free_text": r.get("blocked"), "run": dict(engines.RUN),
+           "done_reason": llm_info and llm_info.get("done_reason"), "stream": stream, "stt": engines.STT_CFG}
     out["audio"] = audio
     out["tts_sample_rate"] = sample_rate(audio)
-    return out
+    if not stream:
+        log_turn(rec)
+        return out, None
+    return out, {"parts": parts[1:], "voice": voice, "rec": rec, "t_start": t_start}
+
+
+def stream_rest(out: dict, rest: dict):
+    """D3 NDJSON: line 1 = the turn with the first sentence's audio, then one line per further sentence,
+    then {"done": true, "timings": ...}. Runs after the turn lock is released (TTS_LOCK guards the engine)."""
+    yield json.dumps(out, ensure_ascii=False) + "\n"
+    tts_rest, err = 0.0, None
+    for k, piece in enumerate(rest["parts"], 1):
+        try:
+            wav, sec = synthesize(piece, rest["voice"])
+        except Exception as e:  # noqa: BLE001
+            err = f"TTS: {e}"
+            break
+        tts_rest += sec
+        yield json.dumps({"part": k, "audio": wav_url(wav)}) + "\n"
+    t = rest["rec"]["timings"]
+    t.update(total_s=round(time.perf_counter() - rest["t_start"], 3), tts_rest_s=round(tts_rest, 3))
+    if err:
+        rest["rec"]["error"] = (rest["rec"].get("error") or "") + err
+    log_turn(rest["rec"])
+    yield json.dumps({"done": True, "timings": t, "error": err}, ensure_ascii=False) + "\n"
+
+
+def respond(res):
+    out, rest = res
+    if rest is None:
+        return JSONResponse(out)
+    return StreamingResponse(stream_rest(out, rest), media_type="application/x-ndjson")
+
+
+def want_stream(flag) -> bool:
+    return SETTINGS["stream_tts"] if flag is None else bool(int(flag))
 
 
 # ---------------------------------------------------------------- routes
@@ -312,7 +363,7 @@ def health():
     except requests.RequestException:
         pass
     return {**STATUS, "ollama_up": llm_up, "model": engines.MODEL,
-            "settings": {**SETTINGS, **engines.RUN, "a3": engines.demo_config.A3["mode"]},
+            "settings": {**SETTINGS, **engines.RUN, "a3": engines.demo_config.A3["mode"], "stt": engines.STT_CFG},
             "ready": STATUS["stt"] and STATUS["tts"] and STATUS["llm"],
             "speakers": getattr(E.get("tts"), "num_speakers", 10)}
 
@@ -337,6 +388,11 @@ async def set_settings(req: Request):
     with TURN_LOCK:
         if body.get("history") in ("tools", "text"):
             SETTINGS["history"] = body["history"]
+        if "stream_tts" in body:
+            SETTINGS["stream_tts"] = bool(body["stream_tts"])
+        if body.get("tts_cache") == "reset":      # empty the TTS cache, then synthesize the fixed replies again
+            with TTS_LOCK:
+                TTS_CACHE.clear()
         if body.get("layout") in ("compact", "append", "deploy"):
             SETTINGS["layout"] = body["layout"]
         for k in ("max_turns", "trim_to"):
@@ -348,7 +404,9 @@ async def set_settings(req: Request):
             engines.RUN["mode"] = body["mode"]
         if "num_ctx" in body:
             engines.RUN["num_ctx"] = int(body["num_ctx"])
-    return {**SETTINGS, **engines.RUN}
+    if body.get("tts_cache") == "reset":
+        prewarm_tts()                              # outside the turn lock (it takes the lock per sentence)
+    return {**SETTINGS, **engines.RUN, "tts_cache": len(TTS_CACHE)}
 
 
 @app.post("/api/new_session")
@@ -367,16 +425,17 @@ async def new_session_route(req: Request):
 
 
 @app.post("/api/turn/text")
-async def turn_text(req: Request):
+async def turn_text(req: Request, stream: int | None = None):
     t0 = time.perf_counter()
     body = await req.json()
     text = str(body.get("text") or "").strip()[:300]
     with TURN_LOCK:
-        return JSONResponse(run_turn(str(body.get("session")), text, t0, "text", None, None))
+        res = run_turn(str(body.get("session")), text, t0, "text", None, None, want_stream(stream))
+    return respond(res)
 
 
 @app.post("/api/turn/audio")
-async def turn_audio(req: Request, session: str):
+async def turn_audio(req: Request, session: str, stream: int | None = None):
     t0 = time.perf_counter()
     data = await req.body()
     if not data or len(data) > MAX_AUDIO_BYTES:
@@ -389,7 +448,8 @@ async def turn_audio(req: Request, session: str):
         except Exception as e:  # noqa: BLE001
             raise HTTPException(400, f"audio decode/STT failed: {e}") from e
         stt_s = time.perf_counter() - ts
-        return JSONResponse(run_turn(session, text, t0, "audio", stt_s, len(audio) / 16000))
+        res = run_turn(session, text, t0, "audio", stt_s, len(audio) / 16000, want_stream(stream))
+    return respond(res)
 
 
 @app.post("/api/tts/preview")
@@ -419,7 +479,14 @@ def main():
     ap.add_argument("--num-ctx", type=int, default=engines.RUN["num_ctx"])
     ap.add_argument("--a3", choices=["prompt", "app"], default=engines.demo_config.A3["mode"],
                     help="temperature question: demo prompt rule + app safety net (prompt), or app safety net only (app)")
+    ap.add_argument("--no-stream", action="store_true", help="D3 off: send the whole reply's audio at once")
+    ap.add_argument("--stt-model", default=engines.STT_CFG["model"], help="faster-whisper model folder under v2/voice/models")
+    ap.add_argument("--stt-hints", choices=["none", "prompt", "hotwords"], default=engines.STT_CFG["hints"],
+                    help="menu-word hints (initial_prompt / hotwords); see results/stt_hints.md")
+    ap.add_argument("--stt-vad", choices=["on", "off"], default="on" if engines.STT_CFG["vad"] else "off")
     a = ap.parse_args()
+    SETTINGS["stream_tts"] = not a.no_stream
+    engines.STT_CFG.update(model=a.stt_model, hints=a.stt_hints, vad=a.stt_vad == "on")
     engines.RUN.update(config=a.config, mode=a.mode, num_ctx=a.num_ctx)
     engines.demo_config.A3["mode"] = a.a3
     SETTINGS.update(history=a.history, layout=a.layout, max_turns=a.max_turns, trim_to=min(a.trim_to, a.max_turns or a.trim_to))

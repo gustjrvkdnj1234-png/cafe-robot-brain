@@ -288,6 +288,8 @@ def main():
     ap.add_argument("--tag", default="", help="suffix for the output file (a later version of the demo config)")
     ap.add_argument("--a3", choices=["prompt", "app"], default="app",
                     help="temperature question from the demo prompt rule (prompt) or from the app only (app)")
+    ap.add_argument("--no-read-order", action="store_true", help="demo config without the read_order tool and rule")
+    ap.add_argument("--no-read-order-rule", action="store_true", help="keep the read_order tool, drop its prompt rule")
     a = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")
     if a.cmd == "run":
@@ -297,6 +299,8 @@ def main():
             sys.exit("Ollama is not running: start it with v2/scripts/start_ollama.ps1")
         t = time.time()
         engines.demo_config.A3["mode"] = a.a3
+        engines.demo_config.READ_ORDER["on"] = not a.no_read_order
+        engines.demo_config.READ_ORDER["rule"] = not a.no_read_order_rule
         run(a.config, a.exam, a.mode, a.tag)
         print(f"done in {time.time() - t:.0f} s")
     else:

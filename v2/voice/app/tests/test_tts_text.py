@@ -78,3 +78,15 @@ class Markup(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Sentences(unittest.TestCase):
+    def test_split(self):
+        from tts_text import sentences
+        self.assertEqual(sentences("네, 아이스 아메리카노 한 잔이요. 더 필요하신 거 있으세요?"),
+                         ["네, 아이스 아메리카노 한 잔이요.", "더 필요하신 거 있으세요?"])
+        self.assertEqual(sentences("따뜻한 거요, 아이스요?"), ["따뜻한 거요, 아이스요?"])
+        self.assertEqual(sentences("네. 바꿔 드릴게요. 더 필요하신 거 있으세요?"),
+                         ["네. 바꿔 드릴게요.", "더 필요하신 거 있으세요?"])
+        self.assertEqual(sentences("1.5배요"), ["1.5배요"])
+        self.assertEqual(sentences(""), [""])

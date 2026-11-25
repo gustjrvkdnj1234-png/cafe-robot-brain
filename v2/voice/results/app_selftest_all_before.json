@@ -1,0 +1,1206 @@
+{
+  "voice": {
+    "engine": "supertonic",
+    "sid": 0,
+    "steps": 4
+  },
+  "health": {
+    "stt": true,
+    "tts": true,
+    "heami": true,
+    "llm": true,
+    "llm_warmup": {
+      "wall_s": 384.74,
+      "size": 5261251049,
+      "size_vram": 0,
+      "full_igpu": false,
+      "runner_private_gb": 12.6,
+      "gpu_shared_gb": 1.28
+    },
+    "errors": [],
+    "startup_s": 8.6,
+    "ollama_up": true,
+    "model": "song/gemma4-26b-cafe-64e",
+    "settings": {
+      "history": "tools",
+      "layout": "append",
+      "max_turns": 20,
+      "trim_to": 10,
+      "stream_tts": true,
+      "config": "demo",
+      "mode": "cpu",
+      "num_ctx": 8192,
+      "num_predict": 512,
+      "a3": "app",
+      "stt": {
+        "model": "fw-medium",
+        "hints": "none",
+        "window": "full",
+        "vad": false
+      }
+    },
+    "ready": true,
+    "speakers": 10
+  },
+  "stream": 0,
+  "turns": [
+    {
+      "kind": "text",
+      "input": "아이스 아메리카노 큰 걸로 두 잔이랑 치즈케이크 하나요",
+      "transcript": "아이스 아메리카노 큰 걸로 두 잔이랑 치즈케이크 하나요",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "아메리카노",
+            "quantity": 2,
+            "size": "large",
+            "temperature": "iced"
+          }
+        },
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "치즈케이크",
+            "quantity": 1
+          }
+        }
+      ],
+      "reply": "네, 아이스 아메리카노 큰 사이즈 두 잔, 치즈케이크 한 개요. 더 필요하신 거 있으세요?",
+      "kinds": [
+        "add",
+        "add"
+      ],
+      "order": [
+        "아이스 아메리카노 큰 사이즈 두 잔",
+        "치즈케이크 한 개"
+      ],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": null,
+        "llm_s": 5.539,
+        "tts_s": 1.298,
+        "first_audio_s": 6.841,
+        "total_s": 6.841,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.123,
+        "prompt_tokens": 4199,
+        "prompt_s": 0.767,
+        "gen_tokens": 55,
+        "gen_s": 4.603,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 6.867,
+      "client_first_audio_s": 6.867,
+      "reply_audio_s": 7.13,
+      "reply_sr": 44100,
+      "error": null
+    },
+    {
+      "kind": "text",
+      "input": "녹차라떼 있으면 녹차라떼, 없으면 그냥 카페라떼로 주세요",
+      "transcript": "녹차라떼 있으면 녹차라떼, 없으면 그냥 카페라떼로 주세요",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "카페라떼"
+          }
+        }
+      ],
+      "reply": "따뜻한 거요, 아이스요?",
+      "kinds": [
+        "ask_temp"
+      ],
+      "order": [
+        "아이스 아메리카노 큰 사이즈 두 잔",
+        "치즈케이크 한 개"
+      ],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": null,
+        "llm_s": 6.853,
+        "tts_s": 0.0,
+        "first_audio_s": 6.855,
+        "total_s": 6.855,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.018,
+        "prompt_tokens": 4415,
+        "prompt_s": 5.414,
+        "gen_tokens": 17,
+        "gen_s": 1.244,
+        "prompt_messages": 8,
+        "history_turns": 2
+      },
+      "client_wall_s": 6.878,
+      "client_first_audio_s": 6.878,
+      "reply_audio_s": 2.0,
+      "reply_sr": 44100,
+      "error": null
+    },
+    {
+      "kind": "text",
+      "input": "첫 번째 아메리카노에 샷 하나 추가해 주세요",
+      "transcript": "첫 번째 아메리카노에 샷 하나 추가해 주세요",
+      "tool_calls": [
+        {
+          "name": "modify_item",
+          "arguments": {
+            "changes": {
+              "shots_delta": 1
+            },
+            "item_index": 1
+          }
+        }
+      ],
+      "reply": "네, 아메리카노는 샷 하나 추가할게요.",
+      "kinds": [
+        "modify"
+      ],
+      "order": [
+        "아이스 아메리카노 큰 사이즈 한 샷 추가 두 잔",
+        "치즈케이크 한 개"
+      ],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": null,
+        "llm_s": 6.153,
+        "tts_s": 0.0,
+        "first_audio_s": 6.156,
+        "total_s": 6.156,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.016,
+        "prompt_tokens": 4560,
+        "prompt_s": 4.502,
+        "gen_tokens": 23,
+        "gen_s": 1.604,
+        "prompt_messages": 12,
+        "history_turns": 3
+      },
+      "client_wall_s": 6.179,
+      "client_first_audio_s": 6.179,
+      "reply_audio_s": 3.48,
+      "reply_sr": 44100,
+      "error": null
+    },
+    {
+      "kind": "text",
+      "input": "디카페인으로도 되나요?",
+      "transcript": "디카페인으로도 되나요?",
+      "tool_calls": [
+        {
+          "name": "ask_clarification",
+          "arguments": {
+            "question": "죄송합니다, 디카페인은 제공하지 않습니다.",
+            "reason": "off_menu"
+          }
+        }
+      ],
+      "reply": "죄송합니다, 디카페인은 제공하지 않습니다.",
+      "kinds": [
+        "ask"
+      ],
+      "order": [
+        "아이스 아메리카노 큰 사이즈 한 샷 추가 두 잔",
+        "치즈케이크 한 개"
+      ],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": null,
+        "llm_s": 8.371,
+        "tts_s": 0.0,
+        "first_audio_s": 8.375,
+        "total_s": 8.375,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.011,
+        "prompt_tokens": 4708,
+        "prompt_s": 5.19,
+        "gen_tokens": 34,
+        "gen_s": 3.133,
+        "prompt_messages": 16,
+        "history_turns": 4
+      },
+      "client_wall_s": 8.394,
+      "client_first_audio_s": 8.394,
+      "reply_audio_s": 3.64,
+      "reply_sr": 44100,
+      "error": null
+    },
+    {
+      "kind": "text",
+      "input": "이제 주문할게요, 포장해 주세요",
+      "transcript": "이제 주문할게요, 포장해 주세요",
+      "tool_calls": [
+        {
+          "name": "confirm_order",
+          "arguments": {
+            "dine_option": "takeout"
+          }
+        }
+      ],
+      "reply": "아이스 아메리카노 큰 사이즈 한 샷 추가 두 잔, 치즈케이크 한 개요. 포장으로 주문할까요?",
+      "kinds": [
+        "readback"
+      ],
+      "order": [
+        "아이스 아메리카노 큰 사이즈 한 샷 추가 두 잔",
+        "치즈케이크 한 개"
+      ],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": null,
+        "llm_s": 7.067,
+        "tts_s": 1.201,
+        "first_audio_s": 8.272,
+        "total_s": 8.272,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.012,
+        "prompt_tokens": 4858,
+        "prompt_s": 5.59,
+        "gen_tokens": 18,
+        "gen_s": 1.416,
+        "prompt_messages": 20,
+        "history_turns": 5
+      },
+      "client_wall_s": 8.298,
+      "client_first_audio_s": 8.298,
+      "reply_audio_s": 7.67,
+      "reply_sr": 44100,
+      "error": null
+    },
+    {
+      "kind": "audio",
+      "input": "builtin/01.wav (정답: 아이스 아메리카노 큰 걸로 두 잔이요)",
+      "transcript": "아이스 아메리카노 큰 걸로 두 잔요.",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "아메리카노",
+            "quantity": 2,
+            "size": "large",
+            "temperature": "iced"
+          }
+        }
+      ],
+      "reply": "네, 아이스 아메리카노 큰 사이즈 두 잔이요. 더 필요하신 거 있으세요?",
+      "kinds": [
+        "add"
+      ],
+      "order": [
+        "아이스 아메리카노 큰 사이즈 두 잔"
+      ],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.511,
+        "llm_s": 2.972,
+        "tts_s": 0.998,
+        "first_audio_s": 7.483,
+        "total_s": 7.483,
+        "audio_in_s": 5.451,
+        "audio_parts": 1,
+        "load_s": 0.01,
+        "prompt_tokens": 4194,
+        "prompt_s": 0.681,
+        "gen_tokens": 34,
+        "gen_s": 2.252,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 7.527,
+      "client_first_audio_s": 7.527,
+      "reply_audio_s": 5.79,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "아이스 아메리카노 큰 걸로 두 잔이요"
+    },
+    {
+      "kind": "audio",
+      "input": "builtin/02.wav (정답: 아아 하나랑 따뜻한 라떼 하나요)",
+      "transcript": "아 하나랑 따뜻한 라떼 하나요",
+      "tool_calls": [
+        {
+          "name": "ask_clarification",
+          "arguments": {
+            "question": "'하나'는 어떤 메뉴를 말씀하시는 걸까요?",
+            "reason": "ambiguous"
+          }
+        }
+      ],
+      "reply": "'하나'는 어떤 메뉴를 말씀하시는 걸까요?",
+      "kinds": [
+        "ask"
+      ],
+      "order": [],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.355,
+        "llm_s": 4.287,
+        "tts_s": 0.792,
+        "first_audio_s": 8.437,
+        "total_s": 8.437,
+        "audio_in_s": 5.408,
+        "audio_parts": 1,
+        "load_s": 0.01,
+        "prompt_tokens": 4191,
+        "prompt_s": 0.998,
+        "gen_tokens": 34,
+        "gen_s": 3.249,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 8.442,
+      "client_first_audio_s": 8.442,
+      "reply_audio_s": 2.94,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "아아 하나랑 따뜻한 라떼 하나요"
+    },
+    {
+      "kind": "audio",
+      "input": "builtin/03.wav (정답: 바닐라라떼 덜 달게 해주세요)",
+      "transcript": "바닐라 라떼에 덜 달게 해주세요.",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "바닐라라떼",
+            "sweetness": "less"
+          }
+        }
+      ],
+      "reply": "따뜻한 거요, 아이스요?",
+      "kinds": [
+        "ask_temp"
+      ],
+      "order": [],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 4.07,
+        "llm_s": 2.834,
+        "tts_s": 0.0,
+        "first_audio_s": 6.906,
+        "total_s": 6.906,
+        "audio_in_s": 3.84,
+        "audio_parts": 1,
+        "load_s": 0.01,
+        "prompt_tokens": 4194,
+        "prompt_s": 1.045,
+        "gen_tokens": 26,
+        "gen_s": 1.747,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 6.913,
+      "client_first_audio_s": 6.913,
+      "reply_audio_s": 2.0,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "바닐라라떼 덜 달게 해주세요"
+    },
+    {
+      "kind": "audio",
+      "input": "builtin/04.wav (정답: 카페라떼 반샷만 넣어주세요)",
+      "transcript": "카페라떼에 반샷만 넣어주세요",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "카페라떼",
+            "shots_delta": -0.5
+          }
+        }
+      ],
+      "reply": "따뜻한 거요, 아이스요?",
+      "kinds": [
+        "ask_temp"
+      ],
+      "order": [],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.436,
+        "llm_s": 2.671,
+        "tts_s": 0.0,
+        "first_audio_s": 6.11,
+        "total_s": 6.11,
+        "audio_in_s": 4.661,
+        "audio_parts": 1,
+        "load_s": 0.009,
+        "prompt_tokens": 4191,
+        "prompt_s": 0.91,
+        "gen_tokens": 25,
+        "gen_s": 1.722,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 6.118,
+      "client_first_audio_s": 6.118,
+      "reply_audio_s": 2.0,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "카페라떼 반샷만 넣어주세요"
+    },
+    {
+      "kind": "audio",
+      "input": "builtin/05.wav (정답: 녹차라떼 되나요 안 되면 그냥 라떼요)",
+      "transcript": "녹차라떼 되나요? 안되면 그냥 라떼요.",
+      "tool_calls": [
+        {
+          "name": "ask_clarification",
+          "arguments": {
+            "question": "죄송합니다. 녹차라떼는 메뉴에 없어서, 대신 카페라떼로 준비해 드릴까요?",
+            "reason": "off_menu"
+          }
+        }
+      ],
+      "reply": "죄송합니다. 녹차라떼는 메뉴에 없어서, 대신 카페라떼로 준비해 드릴까요?",
+      "kinds": [
+        "ask"
+      ],
+      "order": [],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.43,
+        "llm_s": 5.344,
+        "tts_s": 1.028,
+        "first_audio_s": 9.805,
+        "total_s": 9.805,
+        "audio_in_s": 6.229,
+        "audio_parts": 1,
+        "load_s": 0.009,
+        "prompt_tokens": 4195,
+        "prompt_s": 1.056,
+        "gen_tokens": 47,
+        "gen_s": 4.25,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 9.825,
+      "client_first_audio_s": 9.825,
+      "reply_audio_s": 6.27,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "녹차라떼 되나요 안 되면 그냥 라떼요"
+    },
+    {
+      "kind": "audio",
+      "input": "builtin/06.wav (정답: 디카페인 있어요)",
+      "transcript": "티카페인이 있어요?",
+      "tool_calls": [
+        {
+          "name": "ask_clarification",
+          "arguments": {
+            "question": "죄송합니다, 디카페인은 제공하지 않습니다.",
+            "reason": "off_menu"
+          }
+        }
+      ],
+      "reply": "죄송합니다, 디카페인은 제공하지 않습니다.",
+      "kinds": [
+        "ask"
+      ],
+      "order": [],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.577,
+        "llm_s": 3.975,
+        "tts_s": 0.0,
+        "first_audio_s": 7.556,
+        "total_s": 7.556,
+        "audio_in_s": 5.312,
+        "audio_parts": 1,
+        "load_s": 0.01,
+        "prompt_tokens": 4186,
+        "prompt_s": 0.721,
+        "gen_tokens": 34,
+        "gen_s": 3.215,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 7.587,
+      "client_first_audio_s": 7.587,
+      "reply_audio_s": 3.64,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "디카페인 있어요"
+    },
+    {
+      "kind": "audio",
+      "input": "builtin/07.wav (정답: 캐리어 좀 담아주세요)",
+      "transcript": "페리얼 좀 담아주세요.",
+      "tool_calls": [
+        {
+          "name": "ask_clarification",
+          "arguments": {
+            "question": "죄송합니다, 페리얼이 무엇인지 잘 모르겠어요. 메뉴판에 있는 메뉴 중 어떤 것을 말씀하시는 걸까요?",
+            "reason": "off_menu"
+          }
+        }
+      ],
+      "reply": "죄송합니다, 페리얼이 무엇인지 잘 모르겠어요. 메뉴판에 있는 메뉴 중 어떤 것을 말씀하시는 걸까요?",
+      "kinds": [
+        "ask"
+      ],
+      "order": [],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.383,
+        "llm_s": 5.82,
+        "tts_s": 1.184,
+        "first_audio_s": 10.391,
+        "total_s": 10.391,
+        "audio_in_s": 4.555,
+        "audio_parts": 1,
+        "load_s": 0.009,
+        "prompt_tokens": 4190,
+        "prompt_s": 0.889,
+        "gen_tokens": 51,
+        "gen_s": 4.889,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 10.414,
+      "client_first_audio_s": 10.414,
+      "reply_audio_s": 8.35,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "캐리어 좀 담아주세요"
+    },
+    {
+      "kind": "audio",
+      "input": "builtin/08.wav (정답: 아바라 테이크아웃이요)",
+      "transcript": "아바라 테이크아웃이요.",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "바닐라라떼",
+            "temperature": "iced"
+          }
+        },
+        {
+          "name": "confirm_order",
+          "arguments": {
+            "dine_option": "takeout"
+          }
+        }
+      ],
+      "reply": "네, 아이스 바닐라라떼 한 잔이요. 아이스 바닐라라떼 한 잔이요. 포장으로 주문할까요?",
+      "kinds": [
+        "add",
+        "readback"
+      ],
+      "order": [
+        "아이스 바닐라라떼 한 잔"
+      ],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.489,
+        "llm_s": 3.695,
+        "tts_s": 1.193,
+        "first_audio_s": 8.381,
+        "total_s": 8.381,
+        "audio_in_s": 4.864,
+        "audio_parts": 1,
+        "load_s": 0.01,
+        "prompt_tokens": 4191,
+        "prompt_s": 0.908,
+        "gen_tokens": 42,
+        "gen_s": 2.75,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 8.401,
+      "client_first_audio_s": 8.401,
+      "reply_audio_s": 7.5,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "아바라 테이크아웃이요"
+    },
+    {
+      "kind": "audio",
+      "input": "builtin/09.wav (정답: 방금 시킨 거 취소할게요)",
+      "transcript": "방금 시킨 거 취소할게요.",
+      "tool_calls": [],
+      "reply": "아직 담긴 게 없어요.",
+      "kinds": [
+        "read_order",
+        "free_text_replaced"
+      ],
+      "order": [],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.412,
+        "llm_s": 3.552,
+        "tts_s": 0.0,
+        "first_audio_s": 6.967,
+        "total_s": 6.967,
+        "audio_in_s": 5.312,
+        "audio_parts": 1,
+        "load_s": 0.01,
+        "prompt_tokens": 4191,
+        "prompt_s": 0.949,
+        "gen_tokens": 26,
+        "gen_s": 2.559,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 6.989,
+      "client_first_audio_s": 6.989,
+      "reply_audio_s": 2.08,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "방금 시킨 거 취소할게요"
+    },
+    {
+      "kind": "audio",
+      "input": "builtin/10.wav (정답: 레몬에이드 한 잔이랑 치즈케이크 하나요)",
+      "transcript": "레몬에이드 한잔이랑 치즈케이크 하나요.",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "레몬에이드",
+            "quantity": 1
+          }
+        },
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "치즈케이크",
+            "quantity": 1
+          }
+        }
+      ],
+      "reply": "네, 레몬에이드 한 잔, 치즈케이크 한 개요. 더 필요하신 거 있으세요?",
+      "kinds": [
+        "add",
+        "add"
+      ],
+      "order": [
+        "레몬에이드 한 잔",
+        "치즈케이크 한 개"
+      ],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.514,
+        "llm_s": 3.857,
+        "tts_s": 1.311,
+        "first_audio_s": 8.685,
+        "total_s": 8.685,
+        "audio_in_s": 6.261,
+        "audio_parts": 1,
+        "load_s": 0.006,
+        "prompt_tokens": 4195,
+        "prompt_s": 1.118,
+        "gen_tokens": 43,
+        "gen_s": 2.703,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 8.72,
+      "client_first_audio_s": 8.72,
+      "reply_audio_s": 5.93,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "레몬에이드 한 잔이랑 치즈케이크 하나요"
+    },
+    {
+      "kind": "audio",
+      "input": "bluetooth/01.wav (정답: 아이스 아메리카노 큰 걸로 두 잔이요)",
+      "transcript": "아이스 아메리카노 큰 걸로 두잔이요.",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "아메리카노",
+            "quantity": 2,
+            "size": "large",
+            "temperature": "iced"
+          }
+        }
+      ],
+      "reply": "네, 아이스 아메리카노 큰 사이즈 두 잔이요. 더 필요하신 거 있으세요?",
+      "kinds": [
+        "add"
+      ],
+      "order": [
+        "아이스 아메리카노 큰 사이즈 두 잔"
+      ],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.579,
+        "llm_s": 3.104,
+        "tts_s": 0.0,
+        "first_audio_s": 6.687,
+        "total_s": 6.687,
+        "audio_in_s": 5.824,
+        "audio_parts": 1,
+        "load_s": 0.008,
+        "prompt_tokens": 4195,
+        "prompt_s": 0.98,
+        "gen_tokens": 34,
+        "gen_s": 2.082,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 6.698,
+      "client_first_audio_s": 6.698,
+      "reply_audio_s": 5.79,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "아이스 아메리카노 큰 걸로 두 잔이요"
+    },
+    {
+      "kind": "audio",
+      "input": "bluetooth/02.wav (정답: 아아 하나랑 따뜻한 라떼 하나요)",
+      "transcript": "아 하나랑 따뜻한 것 같아 하나야",
+      "tool_calls": [
+        {
+          "name": "ask_clarification",
+          "arguments": {
+            "question": "어떤 메뉴를 주문하시겠어요?",
+            "reason": "ambiguous"
+          }
+        }
+      ],
+      "reply": "어떤 메뉴를 주문하시겠어요?",
+      "kinds": [
+        "ask"
+      ],
+      "order": [],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.224,
+        "llm_s": 3.361,
+        "tts_s": 1.177,
+        "first_audio_s": 7.763,
+        "total_s": 7.763,
+        "audio_in_s": 5.584,
+        "audio_parts": 1,
+        "load_s": 0.011,
+        "prompt_tokens": 4192,
+        "prompt_s": 0.838,
+        "gen_tokens": 31,
+        "gen_s": 2.488,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 7.778,
+      "client_first_audio_s": 7.778,
+      "reply_audio_s": 2.42,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "아아 하나랑 따뜻한 라떼 하나요"
+    },
+    {
+      "kind": "audio",
+      "input": "bluetooth/03.wav (정답: 바닐라라떼 덜 달게 해주세요)",
+      "transcript": "바닐라 라떼 덜 달게 해주세요.",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "바닐라라떼",
+            "sweetness": "less"
+          }
+        }
+      ],
+      "reply": "따뜻한 거요, 아이스요?",
+      "kinds": [
+        "ask_temp"
+      ],
+      "order": [],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.382,
+        "llm_s": 2.542,
+        "tts_s": 0.0,
+        "first_audio_s": 5.926,
+        "total_s": 5.926,
+        "audio_in_s": 5.344,
+        "audio_parts": 1,
+        "load_s": 0.008,
+        "prompt_tokens": 4193,
+        "prompt_s": 0.878,
+        "gen_tokens": 26,
+        "gen_s": 1.63,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 5.932,
+      "client_first_audio_s": 5.932,
+      "reply_audio_s": 2.0,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "바닐라라떼 덜 달게 해주세요"
+    },
+    {
+      "kind": "audio",
+      "input": "bluetooth/04.wav (정답: 카페라떼 반샷만 넣어주세요)",
+      "transcript": "카페라떼에 반샷만 넣어주세요",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "카페라떼",
+            "shots_delta": -0.5
+          }
+        }
+      ],
+      "reply": "따뜻한 거요, 아이스요?",
+      "kinds": [
+        "ask_temp"
+      ],
+      "order": [],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.149,
+        "llm_s": 2.586,
+        "tts_s": 0.0,
+        "first_audio_s": 5.737,
+        "total_s": 5.737,
+        "audio_in_s": 4.56,
+        "audio_parts": 1,
+        "load_s": 0.006,
+        "prompt_tokens": 4191,
+        "prompt_s": 0.853,
+        "gen_tokens": 25,
+        "gen_s": 1.707,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 5.744,
+      "client_first_audio_s": 5.744,
+      "reply_audio_s": 2.0,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "카페라떼 반샷만 넣어주세요"
+    },
+    {
+      "kind": "audio",
+      "input": "bluetooth/05.wav (정답: 녹차라떼 되나요 안 되면 그냥 라떼요)",
+      "transcript": "녹차라떼 되나요? 안 되면 그냥 라떼요.",
+      "tool_calls": [
+        {
+          "name": "ask_clarification",
+          "arguments": {
+            "question": "죄송합니다. 녹차라떼는 메뉴에 없어서, 대신 카페라떼로 준비해 드릴까요?",
+            "reason": "off_menu"
+          }
+        }
+      ],
+      "reply": "죄송합니다. 녹차라떼는 메뉴에 없어서, 대신 카페라떼로 준비해 드릴까요?",
+      "kinds": [
+        "ask"
+      ],
+      "order": [],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.278,
+        "llm_s": 4.537,
+        "tts_s": 0.0,
+        "first_audio_s": 7.818,
+        "total_s": 7.818,
+        "audio_in_s": 5.984,
+        "audio_parts": 1,
+        "load_s": 0.005,
+        "prompt_tokens": 4195,
+        "prompt_s": 0.954,
+        "gen_tokens": 47,
+        "gen_s": 3.557,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 7.852,
+      "client_first_audio_s": 7.852,
+      "reply_audio_s": 6.27,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "녹차라떼 되나요 안 되면 그냥 라떼요"
+    },
+    {
+      "kind": "audio",
+      "input": "bluetooth/06.wav (정답: 디카페인 있어요)",
+      "transcript": "디카페인이 있어요?",
+      "tool_calls": [
+        {
+          "name": "ask_clarification",
+          "arguments": {
+            "question": "죄송합니다. 디카페인은 제공하지 않습니다.",
+            "reason": "off_menu"
+          }
+        }
+      ],
+      "reply": "죄송합니다. 디카페인은 제공하지 않습니다.",
+      "kinds": [
+        "ask"
+      ],
+      "order": [],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 2.989,
+        "llm_s": 2.742,
+        "tts_s": 1.56,
+        "first_audio_s": 7.298,
+        "total_s": 7.298,
+        "audio_in_s": 4.272,
+        "audio_parts": 1,
+        "load_s": 0.008,
+        "prompt_tokens": 4186,
+        "prompt_s": 0.67,
+        "gen_tokens": 34,
+        "gen_s": 2.034,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 7.304,
+      "client_first_audio_s": 7.304,
+      "reply_audio_s": 3.93,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "디카페인 있어요"
+    },
+    {
+      "kind": "audio",
+      "input": "bluetooth/07.wav (정답: 캐리어 좀 담아주세요)",
+      "transcript": "캐리어 좀 담아주세요",
+      "tool_calls": [
+        {
+          "name": "call_staff",
+          "arguments": {
+            "reason": "캐리어 요청"
+          }
+        }
+      ],
+      "reply": "잠시만요, 직원 불러 드릴게요.",
+      "kinds": [
+        "staff"
+      ],
+      "order": [],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": true,
+      "timings": {
+        "stt_s": 3.468,
+        "llm_s": 1.847,
+        "tts_s": 0.0,
+        "first_audio_s": 5.318,
+        "total_s": 5.318,
+        "audio_in_s": 4.56,
+        "audio_parts": 1,
+        "load_s": 0.008,
+        "prompt_tokens": 4188,
+        "prompt_s": 0.702,
+        "gen_tokens": 17,
+        "gen_s": 1.113,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 5.333,
+      "client_first_audio_s": 5.333,
+      "reply_audio_s": 2.79,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "캐리어 좀 담아주세요"
+    },
+    {
+      "kind": "audio",
+      "input": "bluetooth/08.wav (정답: 아바라 테이크아웃이요)",
+      "transcript": "아바라 테이크아웃 이어",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "바닐라라떼",
+            "temperature": "iced"
+          }
+        }
+      ],
+      "reply": "네, 아이스 바닐라라떼 한 잔이요. 더 필요하신 거 있으세요?",
+      "kinds": [
+        "add"
+      ],
+      "order": [
+        "아이스 바닐라라떼 한 잔"
+      ],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.336,
+        "llm_s": 2.581,
+        "tts_s": 1.004,
+        "first_audio_s": 6.923,
+        "total_s": 6.923,
+        "audio_in_s": 3.888,
+        "audio_parts": 1,
+        "load_s": 0.006,
+        "prompt_tokens": 4189,
+        "prompt_s": 0.833,
+        "gen_tokens": 25,
+        "gen_s": 1.717,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 6.945,
+      "client_first_audio_s": 6.945,
+      "reply_audio_s": 5.13,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "아바라 테이크아웃이요"
+    },
+    {
+      "kind": "audio",
+      "input": "bluetooth/09.wav (정답: 방금 시킨 거 취소할게요)",
+      "transcript": "방금 시킨 거 취소할게요.",
+      "tool_calls": [],
+      "reply": "아직 담긴 게 없어요.",
+      "kinds": [
+        "read_order",
+        "free_text_replaced"
+      ],
+      "order": [],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.706,
+        "llm_s": 3.274,
+        "tts_s": 0.0,
+        "first_audio_s": 6.983,
+        "total_s": 6.983,
+        "audio_in_s": 5.376,
+        "audio_parts": 1,
+        "load_s": 0.007,
+        "prompt_tokens": 4191,
+        "prompt_s": 0.917,
+        "gen_tokens": 26,
+        "gen_s": 2.325,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 7.01,
+      "client_first_audio_s": 7.01,
+      "reply_audio_s": 2.08,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "방금 시킨 거 취소할게요"
+    },
+    {
+      "kind": "audio",
+      "input": "bluetooth/10.wav (정답: 레몬에이드 한 잔이랑 치즈케이크 하나요)",
+      "transcript": "레몬에이드 한잔이랑 치즈케이크 하나",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "레몬에이드",
+            "quantity": 1
+          }
+        },
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "치즈케이크",
+            "quantity": 1
+          }
+        }
+      ],
+      "reply": "네, 레몬에이드 한 잔, 치즈케이크 한 개요. 더 필요하신 거 있으세요?",
+      "kinds": [
+        "add",
+        "add"
+      ],
+      "order": [
+        "레몬에이드 한 잔",
+        "치즈케이크 한 개"
+      ],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.041,
+        "llm_s": 3.447,
+        "tts_s": 0.0,
+        "first_audio_s": 6.491,
+        "total_s": 6.491,
+        "audio_in_s": 5.36,
+        "audio_parts": 1,
+        "load_s": 0.006,
+        "prompt_tokens": 4193,
+        "prompt_s": 0.892,
+        "gen_tokens": 43,
+        "gen_s": 2.51,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 6.503,
+      "client_first_audio_s": 6.503,
+      "reply_audio_s": 5.93,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "레몬에이드 한 잔이랑 치즈케이크 하나요"
+    }
+  ],
+  "heami_preview": {
+    "tts_s": 0.0,
+    "audio": [
+      6.1,
+      22050
+    ],
+    "voice": {
+      "engine": "heami",
+      "sid": 0,
+      "steps": 4
+    }
+  }
+}

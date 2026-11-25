@@ -48,20 +48,37 @@ def tools() -> list:
 
 KEEP_ALIVE = "60m"
 ST3 = VOICE / "models" / "supertonic3-int8" / "sherpa-onnx-supertonic-3-tts-int8-2026-05-11"
-FW_MEDIUM = VOICE / "models" / "fw-medium"
+# STT setting (server --stt '{"model": ..., "hints": ...}'). model = folder under v2/voice/models;
+# hints none | prompt (initial_prompt) | hotwords, from stt_hints.hint_text(); window full (30 s encoder window,
+# faster-whisper default) | short (clip length + 1 s, by replacing pad_or_trim; see bench_stt_hints.py); vad on/off.
+# Default (2026-11-25, results/stt_hints.md): medium + VAD = the fastest setting with CER no worse than medium alone
+# (6.7% vs 7.1%, 2.99 s vs 2.92 s median) and no made-up text on silence / noise.
+STT_CFG = {"model": "fw-medium", "hints": "none", "window": "full", "vad": True}
 
 
 # ---------------------------------------------------------------- STT
 class STT:
     def __init__(self):
         from faster_whisper import WhisperModel
-        self.model = WhisperModel(str(FW_MEDIUM), device="cpu", compute_type="int8", cpu_threads=THREADS)
+        cfg = STT_CFG
+        self.model = WhisperModel(str(VOICE / "models" / cfg["model"]), device="cpu", compute_type="int8",
+                                  cpu_threads=THREADS)
+        self.kw = dict(language="ko", beam_size=1, best_of=1, temperature=0.0, condition_on_previous_text=False,
+                       without_timestamps=True, vad_filter=bool(cfg["vad"]))
+        if cfg["hints"] in ("prompt", "hotwords"):
+            from stt_hints import hint_text
+            self.kw["initial_prompt" if cfg["hints"] == "prompt" else "hotwords"] = hint_text()
+        if cfg["window"] == "short":
+            import faster_whisper.transcribe as FT
+            orig = FT.pad_or_trim
+
+            def pad(array, length=3000, *, axis=-1):
+                return orig(array, min(3000, array.shape[axis] + 100), axis=axis)
+            FT.pad_or_trim = pad
         self.transcribe(np.zeros(16000, dtype=np.float32))  # warm-up
 
     def transcribe(self, audio: np.ndarray) -> str:
-        segs, _ = self.model.transcribe(audio, language="ko", beam_size=1, best_of=1, temperature=0.0,
-                                        condition_on_previous_text=False, without_timestamps=True,
-                                        vad_filter=False)
+        segs, _ = self.model.transcribe(audio, **self.kw)
         return "".join(s.text for s in segs).strip()
 
     @staticmethod

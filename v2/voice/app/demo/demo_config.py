@@ -27,14 +27,16 @@ MENU_ANCHOR = "\n[메뉴판]\n"
 # temperature and asks). Set by engines.RUN["a3"] / server --a3.
 A3 = {"mode": "app"}   # default: app safety net only (2026-11-25 regression: prompt rule cost 8 other cafe items)
 A3_SECTION = "[온도 묻기]"
+# B1 read_order tool + its rule; off only for the repeat-regression check (does the tool list change cost items?)
+READ_ORDER = {"on": True, "rule": True}   # on = tool (and rule) in; rule False = tool without its rule
+READ_ORDER_SECTION = "[주문 내역 읽기"
 
 
 def rules_text() -> str:
     text = (DEMO / "rules.txt").read_text(encoding="utf-8").strip()
-    if A3["mode"] != "prompt":
-        parts = re.split(r"\n\n(?=\[)", text)
-        text = "\n\n".join(p for p in parts if not p.startswith(A3_SECTION))
-    return text
+    parts = re.split(r"\n\n(?=\[)", text)
+    drop = ([] if A3["mode"] == "prompt" else [A3_SECTION]) + ([] if READ_ORDER["on"] and READ_ORDER["rule"] else [READ_ORDER_SECTION])
+    return "\n\n".join(p for p in parts if not any(p.startswith(d) for d in drop))
 
 
 # A3 (ask the temperature): the v1 text says "hot unless stated"; the demo copy says "ask" for items that
@@ -64,16 +66,17 @@ def system_prompt(order_state) -> str:
 
 
 def tools() -> list:
-    return _tools(A3["mode"])
+    return _tools(A3["mode"], READ_ORDER["on"])
 
 
-@lru_cache(maxsize=2)
-def _tools(_mode) -> list:
+@lru_cache(maxsize=4)
+def _tools(_mode, read_order=True) -> list:
     v1 = json.loads(json.dumps(load_tools()))               # deep copy: data/tools.json is not changed
     for t in v1:
         if t["function"]["name"] == "add_item" and A3["mode"] == "prompt":
             t["function"]["parameters"]["properties"]["temperature"]["description"] = TEMP_TOOL_DESC
-    extra = [json.loads((DEMO / f).read_text(encoding="utf-8")) for f in ("inform_tool.json", "read_order_tool.json")]
+    extra = [json.loads((DEMO / f).read_text(encoding="utf-8")) for f in ("inform_tool.json", "read_order_tool.json")
+             if read_order or f != "read_order_tool.json"]
     return v1 + extra
 
 

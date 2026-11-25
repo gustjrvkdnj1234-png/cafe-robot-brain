@@ -1,0 +1,394 @@
+{
+  "voice": {
+    "engine": "supertonic",
+    "sid": 0,
+    "steps": 4
+  },
+  "health": {
+    "stt": true,
+    "tts": true,
+    "heami": true,
+    "llm": true,
+    "llm_warmup": {
+      "wall_s": 384.74,
+      "size": 5261251049,
+      "size_vram": 0,
+      "full_igpu": false,
+      "runner_private_gb": 12.6,
+      "gpu_shared_gb": 1.28
+    },
+    "errors": [],
+    "startup_s": 8.6,
+    "ollama_up": true,
+    "model": "song/gemma4-26b-cafe-64e",
+    "settings": {
+      "history": "tools",
+      "layout": "append",
+      "max_turns": 20,
+      "trim_to": 10,
+      "stream_tts": true,
+      "config": "demo",
+      "mode": "cpu",
+      "num_ctx": 8192,
+      "num_predict": 512,
+      "a3": "app",
+      "stt": {
+        "model": "fw-medium",
+        "hints": "none",
+        "window": "full",
+        "vad": false
+      }
+    },
+    "ready": true,
+    "speakers": 10
+  },
+  "stream": 0,
+  "turns": [
+    {
+      "kind": "text",
+      "input": "아이스 아메리카노 큰 걸로 두 잔이랑 치즈케이크 하나요",
+      "transcript": "아이스 아메리카노 큰 걸로 두 잔이랑 치즈케이크 하나요",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "아메리카노",
+            "quantity": 2,
+            "size": "large",
+            "temperature": "iced"
+          }
+        },
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "치즈케이크",
+            "quantity": 1
+          }
+        }
+      ],
+      "reply": "네, 아이스 아메리카노 큰 사이즈 두 잔, 치즈케이크 한 개요. 더 필요하신 거 있으세요?",
+      "kinds": [
+        "add",
+        "add"
+      ],
+      "order": [
+        "아이스 아메리카노 큰 사이즈 두 잔",
+        "치즈케이크 한 개"
+      ],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": null,
+        "llm_s": 4.6,
+        "tts_s": 1.112,
+        "first_audio_s": 5.718,
+        "total_s": 5.718,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.007,
+        "prompt_tokens": 4199,
+        "prompt_s": 1.057,
+        "gen_tokens": 55,
+        "gen_s": 3.5,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 5.746,
+      "client_first_audio_s": 5.746,
+      "reply_audio_s": 7.13,
+      "reply_sr": 44100,
+      "error": null
+    },
+    {
+      "kind": "text",
+      "input": "녹차라떼 있으면 녹차라떼, 없으면 그냥 카페라떼로 주세요",
+      "transcript": "녹차라떼 있으면 녹차라떼, 없으면 그냥 카페라떼로 주세요",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "카페라떼"
+          }
+        }
+      ],
+      "reply": "따뜻한 거요, 아이스요?",
+      "kinds": [
+        "ask_temp"
+      ],
+      "order": [
+        "아이스 아메리카노 큰 사이즈 두 잔",
+        "치즈케이크 한 개"
+      ],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": null,
+        "llm_s": 6.041,
+        "tts_s": 0.0,
+        "first_audio_s": 6.044,
+        "total_s": 6.044,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.144,
+        "prompt_tokens": 4415,
+        "prompt_s": 4.742,
+        "gen_tokens": 17,
+        "gen_s": 1.118,
+        "prompt_messages": 8,
+        "history_turns": 2
+      },
+      "client_wall_s": 6.07,
+      "client_first_audio_s": 6.07,
+      "reply_audio_s": 2.0,
+      "reply_sr": 44100,
+      "error": null
+    },
+    {
+      "kind": "text",
+      "input": "첫 번째 아메리카노에 샷 하나 추가해 주세요",
+      "transcript": "첫 번째 아메리카노에 샷 하나 추가해 주세요",
+      "tool_calls": [
+        {
+          "name": "modify_item",
+          "arguments": {
+            "changes": {
+              "shots_delta": 1
+            },
+            "item_index": 1
+          }
+        }
+      ],
+      "reply": "네, 아메리카노는 샷 하나 추가할게요.",
+      "kinds": [
+        "modify"
+      ],
+      "order": [
+        "아이스 아메리카노 큰 사이즈 한 샷 추가 두 잔",
+        "치즈케이크 한 개"
+      ],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": null,
+        "llm_s": 5.156,
+        "tts_s": 1.086,
+        "first_audio_s": 6.244,
+        "total_s": 6.244,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.018,
+        "prompt_tokens": 4560,
+        "prompt_s": 3.735,
+        "gen_tokens": 23,
+        "gen_s": 1.355,
+        "prompt_messages": 12,
+        "history_turns": 3
+      },
+      "client_wall_s": 6.263,
+      "client_first_audio_s": 6.263,
+      "reply_audio_s": 3.48,
+      "reply_sr": 44100,
+      "error": null
+    },
+    {
+      "kind": "text",
+      "input": "디카페인으로도 되나요?",
+      "transcript": "디카페인으로도 되나요?",
+      "tool_calls": [
+        {
+          "name": "ask_clarification",
+          "arguments": {
+            "question": "죄송합니다, 디카페인은 제공하지 않습니다.",
+            "reason": "off_menu"
+          }
+        }
+      ],
+      "reply": "죄송합니다, 디카페인은 제공하지 않습니다.",
+      "kinds": [
+        "ask"
+      ],
+      "order": [
+        "아이스 아메리카노 큰 사이즈 한 샷 추가 두 잔",
+        "치즈케이크 한 개"
+      ],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": null,
+        "llm_s": 6.877,
+        "tts_s": 1.247,
+        "first_audio_s": 8.128,
+        "total_s": 8.128,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.024,
+        "prompt_tokens": 4708,
+        "prompt_s": 3.933,
+        "gen_tokens": 34,
+        "gen_s": 2.889,
+        "prompt_messages": 16,
+        "history_turns": 4
+      },
+      "client_wall_s": 8.142,
+      "client_first_audio_s": 8.142,
+      "reply_audio_s": 3.64,
+      "reply_sr": 44100,
+      "error": null
+    },
+    {
+      "kind": "text",
+      "input": "이제 주문할게요, 포장해 주세요",
+      "transcript": "이제 주문할게요, 포장해 주세요",
+      "tool_calls": [
+        {
+          "name": "confirm_order",
+          "arguments": {
+            "dine_option": "takeout"
+          }
+        }
+      ],
+      "reply": "아이스 아메리카노 큰 사이즈 한 샷 추가 두 잔, 치즈케이크 한 개요. 포장으로 주문할까요?",
+      "kinds": [
+        "readback"
+      ],
+      "order": [
+        "아이스 아메리카노 큰 사이즈 한 샷 추가 두 잔",
+        "치즈케이크 한 개"
+      ],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": null,
+        "llm_s": 5.708,
+        "tts_s": 1.792,
+        "first_audio_s": 7.508,
+        "total_s": 7.508,
+        "audio_in_s": null,
+        "audio_parts": 1,
+        "load_s": 0.058,
+        "prompt_tokens": 4858,
+        "prompt_s": 4.427,
+        "gen_tokens": 18,
+        "gen_s": 1.164,
+        "prompt_messages": 20,
+        "history_turns": 5
+      },
+      "client_wall_s": 7.523,
+      "client_first_audio_s": 7.523,
+      "reply_audio_s": 7.67,
+      "reply_sr": 44100,
+      "error": null
+    },
+    {
+      "kind": "audio",
+      "input": "builtin/01.wav (정답: 아이스 아메리카노 큰 걸로 두 잔이요)",
+      "transcript": "아이스 아메리카노 큰 걸로 두 잔요.",
+      "tool_calls": [
+        {
+          "name": "add_item",
+          "arguments": {
+            "menu": "아메리카노",
+            "quantity": 2,
+            "size": "large",
+            "temperature": "iced"
+          }
+        }
+      ],
+      "reply": "네, 아이스 아메리카노 큰 사이즈 두 잔이요. 더 필요하신 거 있으세요?",
+      "kinds": [
+        "add"
+      ],
+      "order": [
+        "아이스 아메리카노 큰 사이즈 두 잔"
+      ],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.448,
+        "llm_s": 2.851,
+        "tts_s": 1.332,
+        "first_audio_s": 7.636,
+        "total_s": 7.636,
+        "audio_in_s": 5.451,
+        "audio_parts": 1,
+        "load_s": 0.01,
+        "prompt_tokens": 4194,
+        "prompt_s": 0.655,
+        "gen_tokens": 34,
+        "gen_s": 2.156,
+        "prompt_messages": 3,
+        "history_turns": 1
+      },
+      "client_wall_s": 7.673,
+      "client_first_audio_s": 7.673,
+      "reply_audio_s": 5.79,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "아이스 아메리카노 큰 걸로 두 잔이요"
+    },
+    {
+      "kind": "audio",
+      "input": "builtin/07.wav (정답: 캐리어 좀 담아주세요)",
+      "transcript": "페리얼 좀 담아주세요.",
+      "tool_calls": [
+        {
+          "name": "ask_clarification",
+          "arguments": {
+            "question": "죄송합니다, 페리얼이 무엇인지 잘 모르겠어요. 다시 말씀해 주시겠어요?",
+            "reason": "ambiguous"
+          }
+        }
+      ],
+      "reply": "죄송합니다, 페리얼이 무엇인지 잘 모르겠어요. 다시 말씀해 주시겠어요?",
+      "kinds": [
+        "ask"
+      ],
+      "order": [
+        "아이스 아메리카노 큰 사이즈 두 잔"
+      ],
+      "confirmed": false,
+      "dine_option": null,
+      "staff_called": false,
+      "timings": {
+        "stt_s": 3.224,
+        "llm_s": 7.663,
+        "tts_s": 1.577,
+        "first_audio_s": 12.467,
+        "total_s": 12.467,
+        "audio_in_s": 4.555,
+        "audio_parts": 1,
+        "load_s": 0.011,
+        "prompt_tokens": 4335,
+        "prompt_s": 3.919,
+        "gen_tokens": 45,
+        "gen_s": 3.706,
+        "prompt_messages": 7,
+        "history_turns": 2
+      },
+      "client_wall_s": 12.491,
+      "client_first_audio_s": 12.491,
+      "reply_audio_s": 6.02,
+      "reply_sr": 44100,
+      "error": null,
+      "reference": "캐리어 좀 담아주세요"
+    }
+  ],
+  "heami_preview": {
+    "tts_s": 0.136,
+    "audio": [
+      6.1,
+      22050
+    ],
+    "voice": {
+      "engine": "heami",
+      "sid": 0,
+      "steps": 4
+    }
+  }
+}

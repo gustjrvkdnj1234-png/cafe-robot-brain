@@ -1,0 +1,139 @@
+{
+  "cafe_v1": {
+    "strict": [
+      113,
+      113,
+      113
+    ],
+    "mean": 113.0,
+    "min": 113,
+    "max": 113,
+    "flips": [],
+    "calls_differ": 0
+  },
+  "cafe_demo1124": {
+    "strict": [
+      112,
+      112,
+      112
+    ],
+    "mean": 112.0,
+    "min": 112,
+    "max": 112,
+    "flips": [],
+    "calls_differ": 0
+  },
+  "cafe_demo1125": {
+    "strict": [
+      110,
+      110,
+      110
+    ],
+    "mean": 110.0,
+    "min": 110,
+    "max": 110,
+    "flips": [],
+    "calls_differ": 0
+  },
+  "cafe_demo1125_noro": {
+    "strict": [
+      112
+    ],
+    "mean": 112.0,
+    "min": 112,
+    "max": 112,
+    "flips": [],
+    "calls_differ": 0
+  },
+  "cafe_demo1125_norule": {
+    "strict": [
+      111
+    ],
+    "mean": 111.0,
+    "min": 111,
+    "max": 111,
+    "flips": [],
+    "calls_differ": 0
+  },
+  "cafe_lost_every_run": [
+    "B1-3",
+    "D1-2",
+    "T1-1"
+  ],
+  "cafe_gained_every_run": [
+    "O2-2"
+  ],
+  "live_v1": {
+    "strict": [
+      12,
+      12,
+      12
+    ],
+    "mean": 12.0,
+    "min": 12,
+    "max": 12,
+    "flips": [],
+    "calls_differ": 0
+  },
+  "live_demo1124": {
+    "strict": [
+      12,
+      12,
+      12
+    ],
+    "mean": 12.0,
+    "min": 12,
+    "max": 12,
+    "flips": [],
+    "calls_differ": 0
+  },
+  "live_demo1125": {
+    "strict": [
+      10,
+      10,
+      10
+    ],
+    "mean": 10.0,
+    "min": 10,
+    "max": 10,
+    "flips": [],
+    "calls_differ": 0
+  },
+  "live_demo1125_noro": {
+    "strict": [
+      12
+    ],
+    "mean": 12.0,
+    "min": 12,
+    "max": 12,
+    "flips": [],
+    "calls_differ": 0
+  },
+  "live_demo1125_norule": {
+    "strict": [
+      11
+    ],
+    "mean": 11.0,
+    "min": 11,
+    "max": 11,
+    "flips": [],
+    "calls_differ": 0
+  },
+  "live_lost_every_run": [
+    "L12",
+    "L13",
+    "L16"
+  ],
+  "live_gained_every_run": [
+    "L20"
+  ],
+  "power": {
+    "always_ac": true,
+    "modes": [
+      "balanced (default)"
+    ],
+    "plans": [
+      "381b4222-f694-41f0-9685-ff5bb260df2e"
+    ]
+  }
+}

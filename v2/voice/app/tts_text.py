@@ -97,3 +97,15 @@ def normalize(text: str) -> str:
     s = re.sub(r",\s*,+", ",", s)
     s = re.sub(r"([,.?!])(?=[가-힣A-Za-z])", r"\1 ", s)
     return s.strip(" ,")
+
+
+MIN_FIRST = 4   # a first piece shorter than this (e.g. "네.") is joined with the next sentence
+
+
+def sentences(text: str) -> list[str]:
+    """D3: split normalized spoken text at sentence ends (. ? ! followed by a space), so the first sentence can be
+    synthesized and played while the rest is still being synthesized. Very short first pieces stay joined."""
+    parts = [p.strip() for p in re.split(r"(?<=[.?!])\s+", text.strip()) if p.strip()]
+    if len(parts) > 1 and len(re.sub(r"\W", "", parts[0])) < MIN_FIRST:
+        parts = [parts[0] + " " + parts[1]] + parts[2:]
+    return parts or [text]

@@ -57,6 +57,29 @@ def log_tasks(offset: int) -> list:
     return [t for t in tasks if "eval_tokens" in t]
 
 
+def post_turn(base: str, sess: str, text: str, stream: int) -> tuple[dict, float, float]:
+    """One typed turn. Returns (turn, client first-audio s, client all-audio s). With stream=1 the server answers
+    NDJSON (first line = turn with the first sentence's audio, last line = done + final timings)."""
+    t = time.perf_counter()
+    r = requests.post(f"{base}/api/turn/text", params={"stream": stream}, json={"session": sess, "text": text},
+                      timeout=600, stream=True)
+    r.raise_for_status()
+    if "ndjson" not in r.headers.get("content-type", ""):
+        d = r.json()
+        wall = time.perf_counter() - t
+        return d, wall, wall
+    d, first = None, None
+    for line in r.iter_lines():
+        if not line:
+            continue
+        m = json.loads(line)
+        if d is None:
+            d, first = m, time.perf_counter() - t
+        elif m.get("done"):
+            d["timings"] = m["timings"]
+    return d, first, time.perf_counter() - t
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--label", required=True)
@@ -64,6 +87,9 @@ def main():
     ap.add_argument("--script", choices=sorted(SCRIPTS), default="s8")
     ap.add_argument("--from-log", help="replay the transcripts of this session id (prefix) from app/logs instead")
     ap.add_argument("--warmup", action="store_true", help="one throwaway turn first (e.g. after a mode switch)")
+    ap.add_argument("--stream", type=int, choices=[0, 1], default=None,
+                    help="D3: 1 = first sentence's audio first (NDJSON), 0 = whole reply at once; default = server setting")
+    ap.add_argument("--tts-reset", action="store_true", help="empty the TTS cache first (fixed replies are prewarmed again)")
     ap.add_argument("--settings", help='JSON for /api/settings before the run, e.g. {"history":"text","layout":"deploy","max_turns":0}')
     a = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")
@@ -73,6 +99,8 @@ def main():
     h = requests.get(f"{base}/api/health", timeout=5).json()
     if not h.get("ready"):
         sys.exit(f"app not ready: {h}")
+    if a.tts_reset:
+        requests.post(f"{base}/api/settings", json={"tts_cache": "reset"}, timeout=300)   # returns after the prewarm
     if a.warmup:
         w = requests.post(f"{base}/api/new_session", json={}, timeout=5).json()["session"]
         requests.post(f"{base}/api/turn/text", json={"session": w, "text": "안녕하세요"}, timeout=900)
@@ -83,13 +111,13 @@ def main():
     texts = from_log(a.from_log) if a.from_log else SCRIPTS[a.script]
     if not texts:
         sys.exit(f"no transcripts for session {a.from_log}")
+    stream = a.stream if a.stream is not None else int(bool(h.get("settings", {}).get("stream_tts")))
     for text in texts:
-        t = time.perf_counter()
-        d = requests.post(f"{base}/api/turn/text", json={"session": sess, "text": text}, timeout=600).json()
+        d, first_s, all_s = post_turn(base, sess, text, stream)
         rows.append({"input": text, "tool_calls": d["tool_calls"], "content": d["content"], "reply": d["reply"],
                      "kinds": d["kinds"], "order": d["order"], "timings": d["timings"],
                      "confirmed": d.get("confirmed"), "phase": d.get("phase"), "dine_option": d.get("dine_option"),
-                     "client_s": round(time.perf_counter() - t, 3)})
+                     "client_first_audio_s": round(first_s, 3), "client_s": round(all_s, 3)})
         tt = d["timings"]
         print(f"{text} | {json.dumps(d['tool_calls'], ensure_ascii=False)[:110]} | content={d['content'][:40]!r} | "
               f"{d['reply'][:50]} | prompt {tt.get('prompt_tokens')} tok {tt.get('prompt_s')} s | llm {tt.get('llm_s')}",
@@ -104,7 +132,7 @@ def main():
         print(f"note: {len(tasks)} llama-server tasks for {len(rows)} turns; cache columns left empty")
     free = sum("free_text" in r["kinds"] for r in rows)
     h = requests.get(f"{base}/api/health", timeout=5).json()
-    res = {"label": a.label, "script": f"log:{a.from_log}" if a.from_log else a.script, "settings": h.get("settings"), "free_text_turns": free, "turns": rows}
+    res = {"label": a.label, "stream": stream, "script": f"log:{a.from_log}" if a.from_log else a.script, "settings": h.get("settings"), "free_text_turns": free, "turns": rows}
     out = VOICE / "results"
     (out / f"app_script_{a.label}.json").write_text(json.dumps(res, ensure_ascii=False, indent=2), encoding="utf-8")
     s = h.get("settings") or {}
@@ -112,8 +140,10 @@ def main():
          f"- 설정: 기록 형식 `{s.get('history')}`, 배치 `{s.get('layout')}`, 기록 상한 {s.get('max_turns')}턴"
          f"(넘으면 {s.get('trim_to')}턴으로 줄임), 설정 `{s.get('config')}`, 모드 `{s.get('mode')}`, num_ctx {s.get('num_ctx')}",
          f"- 도구 없이 말로만 답한 턴: {free}/{len(rows)}", "",
-         "| # | 손님 | 도구 호출 | 답 | 주문 | 확정 상태 | 프롬프트 토큰 (재사용 / 새로 계산) | prompt_s | gen_s | llm_s | total_s |",
-         "|---|---|---|---|---|---|---|---:|---:|---:|---:|"]
+         f"- 첫 문장 먼저 보내기(D3): {'켬' if stream else '끔'}. first_audio_s = 요청부터 첫 소리 준비까지, "
+         "total_s = 모든 소리 준비까지(서버).", "",
+         "| # | 손님 | 도구 호출 | 답 | 주문 | 확정 상태 | 프롬프트 토큰 (재사용 / 새로 계산) | prompt_s | gen_s | llm_s | first_audio_s | total_s |",
+         "|---|---|---|---|---|---|---|---:|---:|---:|---:|---:|"]
     for i, r in enumerate(rows, 1):
         calls = "; ".join(f"{c['name']}({json.dumps(c['arguments'], ensure_ascii=False)})" for c in r["tool_calls"]) or "(없음)"
         c = r.get("cache")
@@ -125,7 +155,7 @@ def main():
         reply = r["reply"].replace(chr(10), " / ")
         L.append(f"| {i} | {r['input']} | `{calls}` | {reply} | {' / '.join(r['order']) or '-'} | {state} | "
                  f"{cache} | {r['timings'].get('prompt_s')} | {r['timings'].get('gen_s')} | {r['timings'].get('llm_s')} | "
-                 f"{r['timings'].get('total_s')} |")
+                 f"{r['timings'].get('first_audio_s')} | {r['timings'].get('total_s')} |")
     (out / f"app_script_{a.label}.md").write_text("\n".join(L) + "\n", encoding="utf-8")
     print("\n".join(L[:4]))
 

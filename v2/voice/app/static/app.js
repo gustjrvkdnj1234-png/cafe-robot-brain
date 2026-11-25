@@ -3,7 +3,8 @@
 const $ = (id) => document.getElementById(id);
 const TAIL_MS = 300;          // keep recording this long after release
 const MIN_MS = 350;           // ignore shorter presses
-let session = null, busy = false, lastAudio = null, player = null;
+let session = null, busy = false, lastAudio = [], player = null;
+let queue = [], turnSeq = 0;               // D3: sentences of the current reply still to play (first one plays at once)
 let rec = null;               // {stream, recorder, chunks, ctx, timer, start, cancelled}
 let pressing = false, opening = false;
 
@@ -24,7 +25,7 @@ function notice(m) {
 }
 
 async function newSession(showNotice) {
-  if (player) player.pause();
+  turnSeq++; stopAudio();
   const prev = session;
   session = (await api("/api/new_session", { previous: prev })).session;
   $("heard").textContent = "버튼을 누르고 주문해 보세요"; $("heard").className = "bubble empty";
@@ -32,9 +33,9 @@ async function newSession(showNotice) {
   $("calls").textContent = "-"; $("staff").classList.add("hidden"); $("confirmed").classList.add("hidden");
   $("kindTag").classList.add("hidden");
   $("history").innerHTML = '<span class="hint">아직 대화가 없어요</span>';
-  renderOrder([]); ["tStt", "tLlm", "tTts", "tTotal", "tClient"].forEach(i => $(i).textContent = "-");
+  renderOrder([]); ["tStt", "tLlm", "tTts", "tFirst", "tTotal", "tClient"].forEach(i => $(i).textContent = "-");
   $("tokinfo").textContent = ""; $("inputKind").textContent = ""; $("replay").classList.add("hidden");
-  lastAudio = null; say("");
+  lastAudio = []; say("");
   if (showNotice) notice("🧑 새 손님이에요. 주문 내역과 대화를 모두 비웠어요.");
 }
 
@@ -45,10 +46,53 @@ function renderOrder(lines) {
     li.innerHTML = `<span class="n">${i + 1}.</span>`; li.append(document.createTextNode(t)); ul.append(li); });
 }
 
-function play(src) {
-  if (player) player.pause();
+function stopAudio() { queue = []; if (player) { player.pause(); player.currentTime = 0; } }
+function playNext() {
+  if (!queue.length) { player = null; return; }
+  player = new Audio(queue.shift());
+  player.onended = playNext;
+  player.play().catch(e => say("자동 재생이 막혔어요: " + e.message));
+}
+function play(srcs) {            // one data URL or a list (sentences played in order)
+  stopAudio();
+  queue = [].concat(srcs || []).filter(Boolean);
+  playNext();
+}
+function enqueue(src) {          // a later sentence of the reply that is playing (or has just ended)
   if (!src) return;
-  player = new Audio(src); player.play().catch(e => say("자동 재생이 막혔어요: " + e.message));
+  queue.push(src);
+  if (!player || player.ended) playNext();
+}
+
+// D3: a turn answers as NDJSON: the turn with the first sentence's audio, then one line per further
+// sentence, then {"done": true, "timings": ...}. The first line is shown and played at once, later ones queued.
+// turnSeq changes on barge-in, new customer and every new turn, so late sentences of an old reply are dropped.
+async function turnApi(path, body, raw, t0) {
+  const opt = { method: "POST" };
+  if (raw) { opt.body = body; opt.headers = { "Content-Type": raw }; }
+  else { opt.body = JSON.stringify(body); opt.headers = { "Content-Type": "application/json" }; }
+  const r = await fetch(path + (path.includes("?") ? "&" : "?") + "stream=1", opt);
+  if (!r.ok) { const d = await r.json().catch(() => ({})); throw new Error(d.detail || ("HTTP " + r.status)); }
+  if (!(r.headers.get("content-type") || "").includes("ndjson")) { show(await r.json(), t0); return; }
+  const reader = r.body.getReader(), dec = new TextDecoder();
+  let buf = "", first = true; const seq = ++turnSeq;
+  const handle = (line) => {
+    if (!line.trim()) return;
+    const d = JSON.parse(line);
+    if (first) { first = false; show(d, t0); setBusy(false); return; }   // the customer may talk again now
+    if (seq !== turnSeq) return;   // a newer turn started: drop this reply's later sentences
+    if (d.audio) { lastAudio.push(d.audio); enqueue(d.audio); }
+    if (d.done) { $("tTotal").textContent = fmt(d.timings.total_s); $("tClient").textContent = fmt((performance.now() - t0) / 1000);
+                  if (d.error) say(d.error); }
+  };
+  for (;;) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    let i;
+    while ((i = buf.indexOf("\n")) >= 0) { handle(buf.slice(0, i)); buf = buf.slice(i + 1); }
+  }
+  handle(buf);
 }
 
 const KIND_KO = { readback: "주문 확인 질문", ask_dine: "매장/포장 질문", confirm: "주문 확정", locked: "확정 후 변경 → 직원",
@@ -75,6 +119,7 @@ function show(d, t0) {
   if (d.staff_called) { $("staffReason").textContent = d.staff_reason; $("staff").classList.remove("hidden"); }
   const t = d.timings;
   $("tStt").textContent = fmt(t.stt_s); $("tLlm").textContent = fmt(t.llm_s); $("tTts").textContent = fmt(t.tts_s);
+  $("tFirst").textContent = fmt(t.first_audio_s);
   $("tTotal").textContent = fmt(t.total_s); $("tClient").textContent = fmt((performance.now() - t0) / 1000);
   $("tokinfo").textContent = t.prompt_tokens ? `프롬프트 ${t.prompt_tokens}토큰 (처리 ${fmt(t.prompt_s)}) · 생성 ${t.gen_tokens}토큰` : "";
   const h = $("history"); if (h.querySelector(".hint")) h.innerHTML = "";
@@ -82,7 +127,7 @@ function show(d, t0) {
   const a = document.createElement("div"); a.className = "a"; a.textContent = "🤖 " + d.reply; h.append(a);
   h.scrollTop = h.scrollHeight;
   say(d.error || "");
-  lastAudio = d.audio; $("replay").classList.toggle("hidden", !d.audio);
+  lastAudio = d.audio ? [d.audio] : []; $("replay").classList.toggle("hidden", !d.audio);
   play(d.audio);
 }
 
@@ -99,7 +144,7 @@ function setBusy(b) { busy = b; $("send").disabled = b; setTalk(b ? "busy" : "id
 async function sendText() {
   const text = $("textIn").value.trim(); if (!text || busy) return;
   setBusy(true); const t0 = performance.now();
-  try { show(await api("/api/turn/text", { session, text }), t0); $("textIn").value = ""; }
+  try { await turnApi("/api/turn/text", { session, text }, null, t0); $("textIn").value = ""; }
   catch (e) { say("오류: " + e.message); } finally { setBusy(false); }
 }
 
@@ -113,7 +158,7 @@ function release(r) {
 
 async function startRec() {
   if (busy || rec || opening) return;
-  if (player) player.pause();
+  stopAudio();
   opening = true; setTalk("prep"); say("");
   let stream;
   try {
@@ -148,12 +193,12 @@ async function stopRec() {
   if (dur < MIN_MS + TAIL_MS) { setTalk("idle"); say("너무 짧아요. 말하는 동안 버튼을 누르고 있어 주세요."); return; }
   const blob = new Blob(r.chunks, { type: r.recorder.mimeType || "audio/webm" });
   setBusy(true); const t0 = performance.now();
-  try { show(await api("/api/turn/audio?session=" + session, blob, blob.type || "audio/webm"), t0); }
+  try { await turnApi("/api/turn/audio?session=" + session, blob, blob.type || "audio/webm", t0); }
   catch (e) { say("오류: " + e.message); } finally { setBusy(false); }
 }
 
 function bargeIn() {   // customer starts talking: stop the robot's voice at once
-  if (player && !player.paused) { player.pause(); player.currentTime = 0; }
+  turnSeq++; stopAudio();
 }
 
 function press() {

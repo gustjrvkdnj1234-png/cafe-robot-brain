@@ -27,6 +27,13 @@ class Readback(unittest.TestCase):
         r = replies.build_reply(CONFIRM, "", [AA], phase="ordering", dine="takeout")
         self.assertEqual(say(r), "아이스 아메리카노 한 잔이요. 포장으로 주문할까요?")
 
+    def test_add_and_done_in_one_turn_reads_back_once(self):
+        calls = [{"name": "add_item", "arguments": {"menu": "바닐라라떼", "temperature": "iced"}},
+                 {"name": "confirm_order", "arguments": {"dine_option": "takeout"}}]
+        r = replies.build_reply(calls, "", [], phase="ordering", dine="takeout")
+        self.assertEqual(r["phase"], "awaiting")
+        self.assertEqual(say(r), "네, 아이스 바닐라라떼 한 잔이요. 포장으로 주문할까요?")
+
     def test_yes_without_dine_asks_again(self):
         r = replies.build_reply(CONFIRM, "", [AA], phase="awaiting", dine=None)
         self.assertFalse(r["confirmed"])
